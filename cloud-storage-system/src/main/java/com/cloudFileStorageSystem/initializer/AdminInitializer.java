@@ -5,7 +5,6 @@ import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.UsersRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 public class AdminInitializer {
 
     private final UsersRepository usersRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void createAdmin() {

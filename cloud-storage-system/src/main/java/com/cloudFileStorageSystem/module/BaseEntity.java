@@ -24,10 +24,19 @@ public abstract class BaseEntity {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+
+        if (this instanceof AuditableEntity auditable) {
+            auditable.setCreatedBy("SYSTEM");
+            auditable.setUpdatedBy("SYSTEM");
+        }
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+
+        if (this instanceof AuditableEntity auditable) {
+            auditable.setUpdatedBy("SYSTEM");
+        }
     }
 }

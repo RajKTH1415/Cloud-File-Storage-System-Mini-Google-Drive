@@ -53,6 +53,8 @@ public class UserServiceImpl implements UserService {
                 .lastName(user.getLastName())
                 .role(user.getRole())
                 .emailVerified(user.getEmailVerified())
+                .createdBy(user.getCreatedBy())
+                .updatedBy(user.getUpdatedBy())
                 .build();
     }
 }
