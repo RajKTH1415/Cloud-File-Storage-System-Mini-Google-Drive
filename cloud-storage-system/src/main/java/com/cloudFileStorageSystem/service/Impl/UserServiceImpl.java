@@ -3,6 +3,7 @@ package com.cloudFileStorageSystem.service.Impl;
 import com.cloudFileStorageSystem.dtos.request.UserRegistrationRequest;
 import com.cloudFileStorageSystem.dtos.response.UserResponse;
 import com.cloudFileStorageSystem.enums.Role;
+import com.cloudFileStorageSystem.exception.ResourceAlreadyExistsException;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.UsersRepository;
 import com.cloudFileStorageSystem.service.UserService;
@@ -21,11 +22,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse registerUser(UserRegistrationRequest userRegistrationRequest) {
 
-        if (usersRepository.existsByUsername(userRegistrationRequest.getUsername())){
-            throw new RuntimeException("Username already exists");
+        if (usersRepository.existsByUsername(userRegistrationRequest.getUsername())) {
+            throw new ResourceAlreadyExistsException(
+                    "Username '" + userRegistrationRequest.getUsername() + "' already exists");
         }
+
         if (usersRepository.existsByEmail(userRegistrationRequest.getEmail())) {
-            throw new RuntimeException("Email Already Exists");
+            throw new ResourceAlreadyExistsException(
+                    "Email '" + userRegistrationRequest.getEmail() + "' already exists");
         }
         Users users = Users.builder()
                 .firstName(userRegistrationRequest.getFirstName())
