@@ -3,24 +3,24 @@ package com.cloudFileStorageSystem.initializer;
 import com.cloudFileStorageSystem.enums.Role;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.UsersRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-public class AdminInitializer {
+public class AdminInitializer implements CommandLineRunner {
 
     private final UsersRepository usersRepository;
 
-    @PostConstruct
-    public void createAdmin() {
+    @Override
+    public void run(String... args) {
 
-        System.out.println("AdminInitializer Started");
+        log.info("AdminInitializer Started");
 
         if (!usersRepository.existsByEmail("admin@cloudstorage.com")) {
-
-            System.out.println("Creating Admin User...");
 
             Users admin = Users.builder()
                     .firstName("System")
@@ -28,6 +28,7 @@ public class AdminInitializer {
                     .username("admin")
                     .email("admin@cloudstorage.com")
                     .password("Admin@123")
+                    .phoneNumber("9931522260")
                     .role(Role.ADMIN)
                     .emailVerified(true)
                     .enabled(true)
@@ -35,7 +36,7 @@ public class AdminInitializer {
 
             usersRepository.save(admin);
 
-            System.out.println("Admin Created Successfully");
+            log.info("Admin Created Successfully");
         }
     }
 }
