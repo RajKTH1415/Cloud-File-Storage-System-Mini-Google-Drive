@@ -14,11 +14,13 @@ import com.cloudFileStorageSystem.service.AuthService;
 import com.cloudFileStorageSystem.service.TokenBlacklistService;
 import com.cloudFileStorageSystem.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -40,10 +42,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest request, HttpServletRequest httpServletRequest) {
-
+        log.info("Login attempt received. Identifier={}, IP={}", request.getIdentifier(), httpServletRequest.getRemoteAddr());
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                         request.getIdentifier(),
                         request.getPassword()));
+        log.info("Authentication successful for identifier={}",
+                request.getIdentifier());
 
         Users user = usersRepository
                 .findByUsernameOrEmailOrPhoneNumber(
@@ -51,8 +55,12 @@ public class AuthServiceImpl implements AuthService {
                         request.getIdentifier(),
                         request.getIdentifier()
                 )
-                .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                .orElseThrow(() -> {
+                    log.warn("User not found. Identifier={}",
+                            request.getIdentifier());
+                    return new RuntimeException("User not found");});
+
+        log.debug("User found. UserId={}, Username={}, Role={}", user.getId(), user.getUsername(), user.getRole());
 
         String accessToken =
                 jwtUtil.generateAccessToken(user);
@@ -60,10 +68,16 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken =
                 jwtUtil.generateRefreshToken(user);
 
+        log.info("JWT tokens generated successfully for userId={}",
+                user.getId());
         TokenData tokens = TokenData.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+
+        log.info("Login completed successfully. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
 
         return LoginResponse.builder()
                 .username(user.getUsername())

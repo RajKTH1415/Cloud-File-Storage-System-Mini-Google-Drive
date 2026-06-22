@@ -10,10 +10,12 @@ import com.cloudFileStorageSystem.module.TokenData;
 import com.cloudFileStorageSystem.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -27,7 +29,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpServletRequest) {
+        log.info("POST {} invoked for identifier={}", httpServletRequest.getRequestURI(), request.getIdentifier());
         LoginResponse response = authService.login(request, httpServletRequest);
+        log.info("Login API completed successfully for username={}", response.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Login successful", httpServletRequest.getRequestURI(), response));
     }
     @PostMapping("/logout")
