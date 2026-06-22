@@ -26,14 +26,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
-
 
     private  final OtpRepository otpRepository;
     private final EmailService emailService;

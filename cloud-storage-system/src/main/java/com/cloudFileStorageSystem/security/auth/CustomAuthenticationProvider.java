@@ -2,6 +2,7 @@ package com.cloudFileStorageSystem.security.auth;
 
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.UsersRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -28,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throws AuthenticationException {
 
         String identifier = authentication.getName();
-        String password = authentication.getCredentials().toString();
+        String password = Objects.requireNonNull(authentication.getCredentials()).toString();
 
         Users user;
 
@@ -63,7 +65,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     }
 
     @Override
-    public boolean supports(Class<?> authentication) {
+    public boolean supports(@NonNull Class<?> authentication) {
         return UsernamePasswordAuthenticationToken.class
                 .isAssignableFrom(authentication);
     }

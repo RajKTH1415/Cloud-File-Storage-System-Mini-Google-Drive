@@ -23,7 +23,6 @@ public class AuthController {
         this.authService = authService;
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpServletRequest) {
         log.info("POST {} invoked for identifier={}", httpServletRequest.getRequestURI(), request.getIdentifier());
@@ -31,6 +30,7 @@ public class AuthController {
         log.info("Login API completed successfully for username={}", response.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Login successful", httpServletRequest.getRequestURI(), response));
     }
+
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<?>> logout(@RequestBody RefreshTokenRequest request, HttpServletRequest servletRequest, @RequestHeader("Authorization") String authorizationHeader) {
         String accessToken = authorizationHeader.replace("Bearer ", "");
@@ -39,6 +39,7 @@ public class AuthController {
         log.info("Logout completed successfully");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(),"Logout successful", servletRequest.getRequestURI(), logoutResponse));
     }
+
     @PostMapping("/refresh-token")
     public ResponseEntity<ApiResponse<TokenResponse>> refreshToken(@RequestBody RefreshTokenRequest request, HttpServletRequest httpServletRequest) {
         log.info("Refresh token request received. URI={}, IP={}", httpServletRequest.getRequestURI(), httpServletRequest.getRemoteAddr());
