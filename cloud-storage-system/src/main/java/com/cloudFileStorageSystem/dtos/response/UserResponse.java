@@ -14,9 +14,6 @@ import lombok.Data;
         "username",
         "email",
         "role",
-        "emailVerified",
-        "createdBy",
-        "updatedBy"
 
 })
 public class UserResponse {
@@ -27,7 +24,4 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private Role role;
-    private Boolean emailVerified;
-    private String createdBy;
-    private String updatedBy;
 }
