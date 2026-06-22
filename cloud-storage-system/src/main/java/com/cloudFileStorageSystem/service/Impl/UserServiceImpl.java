@@ -7,14 +7,17 @@ import com.cloudFileStorageSystem.exception.ResourceAlreadyExistsException;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.UsersRepository;
 import com.cloudFileStorageSystem.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final PasswordEncoder passwordEncoder;
     private final UsersRepository usersRepository;
 
-    public UserServiceImpl(UsersRepository usersRepository) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, UsersRepository usersRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.usersRepository = usersRepository;
     }
 
@@ -36,7 +39,7 @@ public class UserServiceImpl implements UserService {
                 .lastName(userRegistrationRequest.getLastName())
                 .username(userRegistrationRequest.getUsername())
                 .email(userRegistrationRequest.getEmail())
-                .password(userRegistrationRequest.getPassword())
+                .password(passwordEncoder.encode(userRegistrationRequest.getPassword()))
                 .phoneNumber(userRegistrationRequest.getPhoneNumber())
                 .role(Role.USER)
                 .emailVerified(false)

@@ -1,0 +1,133 @@
+package com.cloudFileStorageSystem.service.Impl;
+
+import com.cloudFileStorageSystem.dtos.request.LoginRequest;
+import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
+import com.cloudFileStorageSystem.dtos.response.LoginResponse;
+import com.cloudFileStorageSystem.dtos.response.TokenResponse;
+import com.cloudFileStorageSystem.module.RefreshToken;
+import com.cloudFileStorageSystem.module.TokenData;
+import com.cloudFileStorageSystem.module.Users;
+import com.cloudFileStorageSystem.repository.RefreshTokenRepository;
+import com.cloudFileStorageSystem.repository.UsersRepository;
+import com.cloudFileStorageSystem.service.AuthService;
+import com.cloudFileStorageSystem.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthServiceImpl implements AuthService {
+
+
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UsersRepository usersRepository;
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+
+    public AuthServiceImpl(RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.usersRepository = usersRepository;
+        this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager;
+    }
+
+
+    @Override
+    public LoginResponse login(LoginRequest request, HttpServletRequest httpServletRequest) {
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                        request.getIdentifier(),
+                        request.getPassword()));
+
+        Users user = usersRepository
+                .findByUsernameOrEmailOrPhoneNumber(
+                        request.getIdentifier(),
+                        request.getIdentifier(),
+                        request.getIdentifier()
+                )
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        String accessToken =
+                jwtUtil.generateAccessToken(user);
+
+        String refreshToken =
+                jwtUtil.generateRefreshToken(user);
+
+        TokenData tokens = TokenData.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+
+        return LoginResponse.builder()
+                .username(user.getUsername())
+                .fullName(user.getFirstName() + " " + user.getLastName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .tokens(tokens)
+                .build();
+    }
+
+    @Override
+    public TokenResponse refreshToken(
+            RefreshTokenRequest request,
+            HttpServletRequest httpServletRequest) {
+
+        String refreshToken = request.getRefreshToken();
+
+        RefreshToken storedToken =
+                refreshTokenRepository
+                        .findByToken(refreshToken)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Refresh token not found"));
+
+        if (storedToken.getRevoked()) {
+            throw new RuntimeException(
+                    "Refresh token revoked");
+        }
+
+        if (!jwtUtil.isTokenValid(refreshToken)) {
+            throw new RuntimeException(
+                    "Refresh token expired");
+        }
+
+        Long userId =
+                jwtUtil.extractUserId(refreshToken);
+
+        Users user =
+                usersRepository.findById(userId)
+                        .orElseThrow(() ->
+                                new RuntimeException("User not found"));
+
+        // Revoke old refresh token
+        storedToken.setRevoked(true);
+        refreshTokenRepository.save(storedToken);
+
+        // Generate new tokens
+        String newAccessToken =
+                jwtUtil.generateAccessToken(user);
+
+        String newRefreshToken =
+                jwtUtil.generateRefreshToken(user);
+
+        // Save new refresh token
+        RefreshToken newToken =
+                RefreshToken.builder()
+                        .userId(user.getId())
+                        .token(newRefreshToken)
+                        .expiryDate(
+                                jwtUtil.extractExpiration(
+                                        newRefreshToken))
+                        .revoked(false)
+                        .build();
+
+        refreshTokenRepository.save(newToken);
+
+        return TokenResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .build();
+    }
+}
