@@ -212,13 +212,20 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public OtpResponse forgotPassword(ForgotPasswordRequest request) {
 
+        log.info("Forgot password request received for email: {}", request.getEmail());
+
         Users user = usersRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> {
+                    log.warn("Forgot password requested for non-existing email: {}", request.getEmail());
+                    return new RuntimeException("User not found");
+                });
 
         otpRepository.deleteByUserAndPurpose(
                 user,
                 OtpPurpose.FORGOT_PASSWORD
         );
+
+        log.info("Existing forgot-password OTPs removed for user: {}", user.getEmail());
 
         String otpCode = String.format(
                 "%06d",
@@ -238,17 +245,25 @@ public class AuthServiceImpl implements AuthService {
 
         otpRepository.save(otp);
 
+        log.info(
+                "Forgot-password OTP generated for user: {} with expiry at {}",
+                user.getEmail(),
+                expiryTime
+        );
+
         emailService.sendOtpEmail(
                 user.getEmail(),
                 otpCode
         );
 
+        log.info("Forgot-password OTP email sent successfully to: {}", user.getEmail());
+
         return OtpResponse.builder()
                 .email(user.getEmail())
                 .expiryMinutes(otpExpiryMinutes)
+                .emailSent(true)
                 .build();
     }
-
     @Override
     @Transactional
     public LogoutResponse logout(String accessToken, String refreshToken) {
