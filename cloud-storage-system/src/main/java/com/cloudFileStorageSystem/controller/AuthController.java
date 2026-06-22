@@ -1,12 +1,9 @@
 package com.cloudFileStorageSystem.controller;
 
+import com.cloudFileStorageSystem.dtos.request.ForgotPasswordRequest;
 import com.cloudFileStorageSystem.dtos.request.LoginRequest;
 import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
-import com.cloudFileStorageSystem.dtos.response.ApiResponse;
-import com.cloudFileStorageSystem.dtos.response.LoginResponse;
-import com.cloudFileStorageSystem.dtos.response.LogoutResponse;
-import com.cloudFileStorageSystem.dtos.response.TokenResponse;
-import com.cloudFileStorageSystem.module.TokenData;
+import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -48,5 +45,11 @@ public class AuthController {
         TokenResponse response = authService.refreshToken(request, httpServletRequest);
         log.info("Token refresh completed successfully");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Token refreshed successfully", httpServletRequest.getRequestURI(), response));
+    }
+
+    @PostMapping("/forgot-password/email")
+    public ResponseEntity<ApiResponse<OtpResponse>> forgotPasswordEmail(@Valid @RequestBody ForgotPasswordRequest request, HttpServletRequest servletRequest) {
+        OtpResponse response = authService.forgotPassword(request);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "OTP sent successfully", servletRequest.getRequestURI(), response));
     }
 }

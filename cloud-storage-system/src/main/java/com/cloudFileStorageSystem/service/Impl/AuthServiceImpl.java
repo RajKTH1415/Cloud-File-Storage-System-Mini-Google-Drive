@@ -1,37 +1,55 @@
 package com.cloudFileStorageSystem.service.Impl;
 
+import com.cloudFileStorageSystem.dtos.request.ForgotPasswordRequest;
 import com.cloudFileStorageSystem.dtos.request.LoginRequest;
 import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
 import com.cloudFileStorageSystem.dtos.response.LoginResponse;
 import com.cloudFileStorageSystem.dtos.response.LogoutResponse;
+import com.cloudFileStorageSystem.dtos.response.OtpResponse;
 import com.cloudFileStorageSystem.dtos.response.TokenResponse;
+import com.cloudFileStorageSystem.enums.OtpPurpose;
+import com.cloudFileStorageSystem.module.Otp;
 import com.cloudFileStorageSystem.module.RefreshToken;
 import com.cloudFileStorageSystem.module.TokenData;
 import com.cloudFileStorageSystem.module.Users;
+import com.cloudFileStorageSystem.repository.OtpRepository;
 import com.cloudFileStorageSystem.repository.RefreshTokenRepository;
 import com.cloudFileStorageSystem.repository.UsersRepository;
 import com.cloudFileStorageSystem.service.AuthService;
+import com.cloudFileStorageSystem.service.EmailService;
 import com.cloudFileStorageSystem.service.TokenBlacklistService;
 import com.cloudFileStorageSystem.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
 
+    private  final OtpRepository otpRepository;
+    private final EmailService emailService;
     private final TokenBlacklistService tokenBlacklistService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UsersRepository usersRepository;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
-    public AuthServiceImpl(TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+
+    @Value("${otp.expiry.minutes}")
+    private int otpExpiryMinutes;
+
+    public AuthServiceImpl(OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+        this.otpRepository = otpRepository;
+        this.emailService = emailService;
         this.tokenBlacklistService = tokenBlacklistService;
         this.refreshTokenRepository = refreshTokenRepository;
         this.usersRepository = usersRepository;
@@ -188,6 +206,46 @@ public class AuthServiceImpl implements AuthService {
         return TokenResponse.builder()
                 .accessToken(newAccessToken)
                 .refreshToken(newRefreshToken)
+                .build();
+    }
+    @Override
+    @Transactional
+    public OtpResponse forgotPassword(ForgotPasswordRequest request) {
+
+        Users user = usersRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        otpRepository.deleteByUserAndPurpose(
+                user,
+                OtpPurpose.FORGOT_PASSWORD
+        );
+
+        String otpCode = String.format(
+                "%06d",
+                ThreadLocalRandom.current().nextInt(100000, 1000000)
+        );
+
+        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(10);
+
+        Otp otp = Otp.builder()
+                .user(user)
+                .otpCode(otpCode)
+                .purpose(OtpPurpose.FORGOT_PASSWORD)
+                .verified(false)
+                .attemptCount(0)
+                .expiryTime(expiryTime)
+                .build();
+
+        otpRepository.save(otp);
+
+        emailService.sendOtpEmail(
+                user.getEmail(),
+                otpCode
+        );
+
+        return OtpResponse.builder()
+                .email(user.getEmail())
+                .expiryMinutes(otpExpiryMinutes)
                 .build();
     }
 
