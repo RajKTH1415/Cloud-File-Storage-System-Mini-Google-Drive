@@ -93,21 +93,38 @@ public class AuthServiceImpl implements AuthService {
             RefreshTokenRequest request,
             HttpServletRequest httpServletRequest) {
 
+        log.info("Refresh token process started");
+
         String refreshToken = request.getRefreshToken();
 
         RefreshToken storedToken =
                 refreshTokenRepository
                         .findByToken(refreshToken)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Refresh token not found"));
+                        .orElseThrow(() -> {
+                            log.warn("Refresh token not found");
+                            return new RuntimeException(
+                                    "Refresh token not found");
+                        });
+
+        log.debug("Refresh token located. TokenId={}, UserId={}",
+                storedToken.getId(),
+                storedToken.getUserId());
 
         if (storedToken.getRevoked()) {
+            log.warn("Attempt to use revoked refresh token. TokenId={}, UserId={}",
+                    storedToken.getId(),
+                    storedToken.getUserId());
+
             throw new RuntimeException(
                     "Refresh token revoked");
         }
 
         if (!jwtUtil.isTokenValid(refreshToken)) {
+
+            log.warn("Expired refresh token detected. TokenId={}, UserId={}",
+                    storedToken.getId(),
+                    storedToken.getUserId());
+
             throw new RuntimeException(
                     "Refresh token expired");
         }
@@ -115,14 +132,28 @@ public class AuthServiceImpl implements AuthService {
         Long userId =
                 jwtUtil.extractUserId(refreshToken);
 
+        log.debug("User ID extracted from refresh token. UserId={}",
+                userId);
+
         Users user =
                 usersRepository.findById(userId)
-                        .orElseThrow(() ->
-                                new RuntimeException("User not found"));
+                        .orElseThrow(() -> {
+                            log.warn("User not found for refresh token. UserId={}",
+                                    userId);
+                            return new RuntimeException("User not found");
+                        });
+
+        log.debug("User located successfully. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
 
         // Revoke old refresh token
         storedToken.setRevoked(true);
         refreshTokenRepository.save(storedToken);
+
+        log.info("Old refresh token revoked. TokenId={}, UserId={}",
+                storedToken.getId(),
+                user.getId());
 
         // Generate new tokens
         String newAccessToken =
@@ -130,6 +161,9 @@ public class AuthServiceImpl implements AuthService {
 
         String newRefreshToken =
                 jwtUtil.generateRefreshToken(user);
+
+        log.info("New JWT tokens generated. UserId={}",
+                user.getId());
 
         // Save new refresh token
         RefreshToken newToken =
@@ -143,6 +177,13 @@ public class AuthServiceImpl implements AuthService {
                         .build();
 
         refreshTokenRepository.save(newToken);
+
+        log.info("New refresh token saved. TokenId={}, UserId={}",
+                newToken.getId(),
+                user.getId());
+
+        log.info("Token refresh completed successfully. UserId={}",
+                user.getId());
 
         return TokenResponse.builder()
                 .accessToken(newAccessToken)
