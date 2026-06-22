@@ -71,7 +71,6 @@ public class SecurityConfig {
                                         ReferrerPolicyHeaderWriter
                                                 .ReferrerPolicy.NO_REFERRER)))
                 .formLogin(form -> form.disable())
-                .oauth2Login(Customizer.withDefaults())   // here need to implement customizer implementation instead of default one
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
