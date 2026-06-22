@@ -154,20 +154,35 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public LogoutResponse logout(String accessToken, String refreshToken) {
 
+        log.info("Logout process started");
+
         // Blacklist access token
         tokenBlacklistService.blacklistToken(accessToken);
+
+        log.debug("Access token blacklisted successfully");
 
         // Revoke refresh token
         RefreshToken token =
                 refreshTokenRepository
                         .findByToken(refreshToken)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Invalid refresh token"));
+                        .orElseThrow(() -> {
+                            log.warn("Logout failed. Invalid refresh token");
+                            return new RuntimeException("Invalid refresh token");
+                        });
 
+        log.debug("Refresh token found. TokenId={}, UserId={}",
+                token.getId(),
+                token.getUserId());
 
         token.setRevoked(true);
         refreshTokenRepository.save(token);
+
+        log.info("Refresh token revoked successfully. TokenId={}, UserId={}",
+                token.getId(),
+                token.getUserId());
+
+        log.info("Logout completed successfully. UserId={}",
+                token.getUserId());
 
         return LogoutResponse.builder()
                 .loggedOut(true)

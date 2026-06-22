@@ -37,7 +37,9 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<?>> logout(@RequestBody RefreshTokenRequest request, HttpServletRequest servletRequest, @RequestHeader("Authorization") String authorizationHeader) {
         String accessToken = authorizationHeader.replace("Bearer ", "");
+        log.info("Logout request received. URI={}, IP={}", servletRequest.getRequestURI(), servletRequest.getRemoteAddr());
         LogoutResponse logoutResponse = authService.logout(accessToken, request.getRefreshToken());
+        log.info("Logout completed successfully");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(),"Logout successful", servletRequest.getRequestURI(), logoutResponse));
     }
     @PostMapping("/refresh-token")
