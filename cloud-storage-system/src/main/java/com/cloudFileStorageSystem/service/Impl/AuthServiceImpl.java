@@ -27,6 +27,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -41,6 +42,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
+    @Value("${jwt.refresh-token-validity}")
+    private long refreshTokenValidity;
 
     @Value("${otp.expiry.minutes}")
     private int otpExpiryMinutes;
@@ -83,6 +86,32 @@ public class AuthServiceImpl implements AuthService {
 
         String refreshToken =
                 jwtUtil.generateRefreshToken(user);
+
+        // Revoke previous active refresh tokens
+        refreshTokenRepository
+                .findByUserIdAndRevokedFalse(user.getId())
+                .forEach(token -> {
+                    token.setRevoked(true);
+                    refreshTokenRepository.save(token);
+                });
+
+        // Save new refresh token
+        RefreshToken refreshTokenEntity = RefreshToken.builder()
+                .userId(user.getId())
+                .token(refreshToken)
+                .expiryDate(
+                        new Date(System.currentTimeMillis() + refreshTokenValidity)
+                )
+                .revoked(false)
+                .build();
+
+        refreshTokenRepository.save(refreshTokenEntity);
+
+        refreshTokenRepository.save(refreshTokenEntity);
+
+        log.info("Refresh token saved successfully. UserId={}",
+                user.getId());
+
 
         log.info("JWT tokens generated successfully for userId={}",
                 user.getId());
