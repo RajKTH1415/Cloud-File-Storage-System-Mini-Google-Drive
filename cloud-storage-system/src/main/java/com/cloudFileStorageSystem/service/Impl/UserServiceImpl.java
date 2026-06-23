@@ -4,23 +4,33 @@ import com.cloudFileStorageSystem.dtos.request.UserRegistrationRequest;
 import com.cloudFileStorageSystem.dtos.response.UserResponse;
 import com.cloudFileStorageSystem.enums.Role;
 import com.cloudFileStorageSystem.exception.ResourceAlreadyExistsException;
+import com.cloudFileStorageSystem.module.EmailVerificationToken;
 import com.cloudFileStorageSystem.module.Users;
+import com.cloudFileStorageSystem.repository.EmailVerificationTokenRepository;
 import com.cloudFileStorageSystem.repository.UsersRepository;
+import com.cloudFileStorageSystem.service.EmailService;
 import com.cloudFileStorageSystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsersRepository usersRepository;
+    private final EmailService emailService;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, UsersRepository usersRepository) {
+    public UserServiceImpl(EmailVerificationTokenRepository emailVerificationTokenRepository, PasswordEncoder passwordEncoder, UsersRepository usersRepository, EmailService emailService) {
+        this.emailVerificationTokenRepository = emailVerificationTokenRepository;
         this.passwordEncoder = passwordEncoder;
         this.usersRepository = usersRepository;
+        this.emailService = emailService;
     }
 
 
@@ -71,6 +81,25 @@ public class UserServiceImpl implements UserService {
                 users.getUsername());
 
         Users savedUser = usersRepository.save(users);
+
+        String emailToken = UUID.randomUUID().toString();
+
+        EmailVerificationToken verificationToken =
+                EmailVerificationToken.builder()
+                        .token(emailToken)
+                        .user(savedUser)
+                        .expiryDate(LocalDateTime.now().plusMinutes(15))
+                        .used(false)
+                        .resendCount(0)
+                        .build();
+
+        emailVerificationTokenRepository .save(verificationToken);
+
+        // Send verification email
+        emailService.sendVerificationEmail(
+                savedUser.getEmail(),
+                emailToken
+        );
 
         log.info("User registered successfully. UserId={}, Username={}, Role={}",
                 savedUser.getId(),

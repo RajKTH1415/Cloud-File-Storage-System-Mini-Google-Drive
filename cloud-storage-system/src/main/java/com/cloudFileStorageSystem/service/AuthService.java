@@ -20,4 +20,6 @@ public interface AuthService {
 
 
     LogoutResponse logout(String accessToken, String refreshToken);
+
+    void verifyEmail(String token);
 }

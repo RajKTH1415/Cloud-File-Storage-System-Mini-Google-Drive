@@ -4,6 +4,8 @@ import com.cloudFileStorageSystem.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(
         name = "users",
@@ -51,4 +53,11 @@ public class Users extends AuditableEntity {
 
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
+
+    @Column(name = "account_non_locked", nullable = false)
+    @Builder.Default
+    private Boolean accountNonLocked = true;
+
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
 }

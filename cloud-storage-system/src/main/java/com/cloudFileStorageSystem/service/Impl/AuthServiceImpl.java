@@ -8,10 +8,8 @@ import com.cloudFileStorageSystem.dtos.response.LogoutResponse;
 import com.cloudFileStorageSystem.dtos.response.OtpResponse;
 import com.cloudFileStorageSystem.dtos.response.TokenResponse;
 import com.cloudFileStorageSystem.enums.OtpPurpose;
-import com.cloudFileStorageSystem.module.Otp;
-import com.cloudFileStorageSystem.module.RefreshToken;
-import com.cloudFileStorageSystem.module.TokenData;
-import com.cloudFileStorageSystem.module.Users;
+import com.cloudFileStorageSystem.module.*;
+import com.cloudFileStorageSystem.repository.EmailVerificationTokenRepository;
 import com.cloudFileStorageSystem.repository.OtpRepository;
 import com.cloudFileStorageSystem.repository.RefreshTokenRepository;
 import com.cloudFileStorageSystem.repository.UsersRepository;
@@ -34,6 +32,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
     private  final OtpRepository otpRepository;
     private final EmailService emailService;
     private final TokenBlacklistService tokenBlacklistService;
@@ -48,7 +47,8 @@ public class AuthServiceImpl implements AuthService {
     @Value("${otp.expiry.minutes}")
     private int otpExpiryMinutes;
 
-    public AuthServiceImpl(OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+    public AuthServiceImpl(EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+        this.emailVerificationTokenRepository = emailVerificationTokenRepository;
         this.otpRepository = otpRepository;
         this.emailService = emailService;
         this.tokenBlacklistService = tokenBlacklistService;
@@ -60,11 +60,21 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public LoginResponse login(LoginRequest request, HttpServletRequest httpServletRequest) {
-        log.info("Login attempt received. Identifier={}, IP={}", request.getIdentifier(), httpServletRequest.getRemoteAddr());
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+    @Transactional
+    public LoginResponse login(LoginRequest request,
+                               HttpServletRequest httpServletRequest) {
+
+        log.info("Login attempt received. Identifier={}, IP={}",
+                request.getIdentifier(),
+                httpServletRequest.getRemoteAddr());
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
                         request.getIdentifier(),
-                        request.getPassword()));
+                        request.getPassword()
+                )
+        );
+
         log.info("Authentication successful for identifier={}",
                 request.getIdentifier());
 
@@ -77,17 +87,40 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> {
                     log.warn("User not found. Identifier={}",
                             request.getIdentifier());
-                    return new RuntimeException("User not found");});
+                    return new RuntimeException("User not found");
+                });
 
-        log.debug("User found. UserId={}, Username={}, Role={}", user.getId(), user.getUsername(), user.getRole());
+        log.debug("User found. UserId={}, Username={}, Role={}",
+                user.getId(),
+                user.getUsername(),
+                user.getRole());
 
-        String accessToken =
-                jwtUtil.generateAccessToken(user);
+        if (!Boolean.TRUE.equals(user.getEmailVerified())) {
+            log.warn("Login blocked. Email not verified. UserId={}",
+                    user.getId());
 
-        String refreshToken =
-                jwtUtil.generateRefreshToken(user);
+            throw new RuntimeException(
+                    "Please verify your email before logging in"
+            );
+        }
 
-        // Revoke previous active refresh tokens
+
+        if (!user.getEnabled()) {
+            throw new RuntimeException(
+                    "Account has been disabled"
+            );
+        }
+
+        if (!user.getAccountNonLocked()) {
+            throw new RuntimeException(
+                    "Account is locked"
+            );
+        }
+
+        String accessToken = jwtUtil.generateAccessToken(user);
+        String refreshToken = jwtUtil.generateRefreshToken(user);
+
+        // Revoke existing refresh tokens
         refreshTokenRepository
                 .findByUserIdAndRevokedFalse(user.getId())
                 .forEach(token -> {
@@ -95,26 +128,26 @@ public class AuthServiceImpl implements AuthService {
                     refreshTokenRepository.save(token);
                 });
 
-        // Save new refresh token
         RefreshToken refreshTokenEntity = RefreshToken.builder()
                 .userId(user.getId())
                 .token(refreshToken)
                 .expiryDate(
-                        new Date(System.currentTimeMillis() + refreshTokenValidity)
+                        new Date(System.currentTimeMillis()
+                                + refreshTokenValidity)
                 )
                 .revoked(false)
                 .build();
 
-        refreshTokenRepository.save(refreshTokenEntity);
-
+        // Save only once
         refreshTokenRepository.save(refreshTokenEntity);
 
         log.info("Refresh token saved successfully. UserId={}",
                 user.getId());
 
+        // Update last login
+        user.setLastLoginAt(LocalDateTime.now());
+        usersRepository.save(user);
 
-        log.info("JWT tokens generated successfully for userId={}",
-                user.getId());
         TokenData tokens = TokenData.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -329,5 +362,41 @@ public class AuthServiceImpl implements AuthService {
                 .loggedOut(true)
                 .tokenRevoked(true)
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void verifyEmail(String token) {
+
+        EmailVerificationToken verificationToken =
+                emailVerificationTokenRepository.findByToken(token)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Invalid verification token"));
+
+        if (verificationToken.isUsed()) {
+
+            throw new RuntimeException(
+                    "Verification token already used");
+        }
+
+        if (verificationToken.getExpiryDate()
+                .isBefore(java.time.LocalDateTime.now())) {
+
+            throw new RuntimeException(
+                    "Verification token expired"
+            );
+        }
+
+        Users user = verificationToken.getUser();
+
+        user.setEnabled(true);
+        user.setEmailVerified(true);
+
+        usersRepository.save(user);
+
+        verificationToken.setUsed(true);
+
+        emailVerificationTokenRepository.save(verificationToken);
     }
 }
