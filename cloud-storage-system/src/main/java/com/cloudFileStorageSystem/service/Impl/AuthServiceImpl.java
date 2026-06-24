@@ -1,13 +1,9 @@
 package com.cloudFileStorageSystem.service.Impl;
 
 import com.cloudFileStorageSystem.config.SecurityProperties;
-import com.cloudFileStorageSystem.dtos.request.ForgotPasswordRequest;
-import com.cloudFileStorageSystem.dtos.request.LoginRequest;
-import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
-import com.cloudFileStorageSystem.dtos.request.VerifyEmailOtpRequest;
+import com.cloudFileStorageSystem.dtos.request.*;
 import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.enums.AttemptStatus;
-import com.cloudFileStorageSystem.enums.AuditAction;
 import com.cloudFileStorageSystem.enums.OtpPurpose;
 import com.cloudFileStorageSystem.module.*;
 import com.cloudFileStorageSystem.repository.*;
@@ -19,17 +15,13 @@ import com.cloudFileStorageSystem.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -37,7 +29,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AuthServiceImpl implements AuthService {
 
 
-//   private final PasswordResetOtpRepository passwordResetOtpRepository;
+    private final PasswordHistoryRepository passwordHistoryRepository;
+   private final PasswordResetOtpRepository passwordResetOtpRepository;
     private final SecurityProperties securityProperties;
     private final AuditLogRepository auditLogRepository;
     private final LoginAttemptRepository loginAttemptRepository;
@@ -58,7 +51,9 @@ public class AuthServiceImpl implements AuthService {
     private int otpExpiryMinutes;
 
 
-    public AuthServiceImpl( SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil) {
+    public AuthServiceImpl(PasswordHistoryRepository passwordHistoryRepository, PasswordResetOtpRepository passwordResetOtpRepository, SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil) {
+        this.passwordHistoryRepository = passwordHistoryRepository;
+        this.passwordResetOtpRepository = passwordResetOtpRepository;
         this.securityProperties = securityProperties;
         this.auditLogRepository = auditLogRepository;
         this.loginAttemptRepository = loginAttemptRepository;
@@ -725,6 +720,7 @@ public class AuthServiceImpl implements AuthService {
                 .otpCode(otpCode)
                 .purpose(OtpPurpose.FORGOT_PASSWORD)
                 .verified(false)
+                .email(user.getEmail())
                 .attemptCount(0)
                 .expiryTime(expiryTime)
                 .build();
@@ -868,4 +864,145 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+
+    @Override
+    @Transactional
+    public ResetPasswordResponse resetPassword(
+            ResetPasswordRequest request,
+            HttpServletRequest httpServletRequest) {
+
+        String ip = getClientIp(httpServletRequest);
+        String device = getDevice(httpServletRequest);
+
+        // 1. GET VERIFIED OTP
+        Otp savedOtp =
+                otpRepository
+                        .findTopByEmailAndPurposeOrderByCreatedAtDesc(
+                                request.getEmail(),
+                                OtpPurpose.FORGOT_PASSWORD
+                        )
+                        .orElseThrow(() ->
+                                new RuntimeException("OTP not found"));
+
+        // 2. OTP VERIFIED CHECK
+        if (!Boolean.TRUE.equals(savedOtp.getVerified())) {
+            throw new RuntimeException(
+                    "OTP verification required");
+        }
+
+        // 3. OTP EXPIRY CHECK
+        if (savedOtp.getExpiryTime()
+                .isBefore(LocalDateTime.now())) {
+
+            throw new RuntimeException(
+                    "OTP expired");
+        }
+
+        // 4. USER CHECK
+        Users user =
+                usersRepository
+                        .findByEmail(request.getEmail())
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "User not found"));
+
+        // 5. PASSWORD MATCH CHECK
+        if (!request.getNewPassword()
+                .equals(request.getConfirmPassword())) {
+
+            throw new RuntimeException(
+                    "Passwords do not match");
+        }
+
+        // 6. PREVENT CURRENT PASSWORD REUSE
+        if (passwordEncoder.matches(
+                request.getNewPassword(),
+                user.getPassword())) {
+
+            throw new RuntimeException(
+                    "New password cannot be same as current password");
+        }
+
+        // 7. PASSWORD HISTORY CHECK
+        int limit =
+                securityProperties.getPasswordHistoryLimit();
+
+        List<PasswordHistory> lastPasswords =
+                passwordHistoryRepository
+                        .findTop5ByEmailOrderByChangedAtDesc(
+                                user.getEmail());
+
+        for (PasswordHistory history :
+                lastPasswords.stream()
+                        .limit(limit)
+                        .toList()) {
+
+            if (passwordEncoder.matches(
+                    request.getNewPassword(),
+                    history.getPasswordHash())) {
+
+                throw new RuntimeException(
+                        "You cannot reuse last "
+                                + limit
+                                + " passwords");
+            }
+        }
+
+        // 8. UPDATE PASSWORD
+        String encodedPassword =
+                passwordEncoder.encode(
+                        request.getNewPassword());
+
+        user.setPassword(encodedPassword);
+
+        usersRepository.save(user);
+
+        // 9. SAVE PASSWORD HISTORY
+        PasswordHistory passwordHistory =
+                new PasswordHistory();
+
+        passwordHistory.setEmail(
+                user.getEmail());
+
+        passwordHistory.setPasswordHash(
+                encodedPassword);
+
+        passwordHistory.setChangedAt(
+                LocalDateTime.now());
+
+        passwordHistoryRepository.save(
+                passwordHistory);
+
+        // 10. REVOKE ALL ACTIVE REFRESH TOKENS
+        List<RefreshToken> tokens =
+                refreshTokenRepository
+                        .findByUserIdAndRevokedFalse(
+                                user.getId());
+
+        tokens.forEach(token ->
+                token.setRevoked(true));
+
+        refreshTokenRepository.saveAll(
+                tokens);
+
+        // 11. MARK OTP AS CONSUMED
+        savedOtp.setVerified(false);
+
+        otpRepository.save(savedOtp);
+
+        // 12. AUDIT LOG
+        auditService.log(
+                user.getEmail(),
+                "PASSWORD_RESET",
+                ip,
+                device,
+                "Password changed successfully"
+        );
+
+        // 13. RESPONSE
+        return ResetPasswordResponse.builder()
+                .passwordUpdated(true)
+                .tokensRevoked(true)
+                .build();
+    }
 }

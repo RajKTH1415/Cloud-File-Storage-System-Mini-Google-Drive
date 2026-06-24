@@ -1,11 +1,9 @@
 package com.cloudFileStorageSystem.service;
 
-import com.cloudFileStorageSystem.dtos.request.ForgotPasswordRequest;
-import com.cloudFileStorageSystem.dtos.request.LoginRequest;
-import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
-import com.cloudFileStorageSystem.dtos.request.VerifyEmailOtpRequest;
+import com.cloudFileStorageSystem.dtos.request.*;
 import com.cloudFileStorageSystem.dtos.response.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 
 public interface AuthService {
@@ -22,4 +20,10 @@ public interface AuthService {
     void verifyEmail(String token);
 
     EmailOtpVerifyResponse verifyEmailPasswordOtp(VerifyEmailOtpRequest verifyEmailOtpRequest);
+
+    ResetPasswordResponse resetPassword(
+            ResetPasswordRequest request,
+            HttpServletRequest httpServletRequest
+    );
 }
+

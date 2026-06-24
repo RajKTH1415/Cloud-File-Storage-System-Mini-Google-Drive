@@ -27,6 +27,9 @@ public class Otp extends AuditableEntity{
     @Column(name = "purpose", nullable = false, length = 30)
     private OtpPurpose purpose;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Column(name = "is_verified", nullable = false)
     private Boolean verified;
 

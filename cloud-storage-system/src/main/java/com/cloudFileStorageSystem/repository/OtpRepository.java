@@ -22,4 +22,10 @@ public interface OtpRepository extends JpaRepository<Otp, Long> {
             OtpPurpose purpose
     );
 
+    Optional<Otp> findTopByEmailAndPurposeOrderByCreatedAtDesc(
+            String email,
+            OtpPurpose purpose
+    );
+
+    Optional<Otp>findTopByEmailAndVerifiedTrueOrderByIdDesc(String email);
 }

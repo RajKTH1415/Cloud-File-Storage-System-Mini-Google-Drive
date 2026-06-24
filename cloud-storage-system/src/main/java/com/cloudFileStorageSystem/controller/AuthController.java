@@ -1,9 +1,6 @@
 package com.cloudFileStorageSystem.controller;
 
-import com.cloudFileStorageSystem.dtos.request.ForgotPasswordRequest;
-import com.cloudFileStorageSystem.dtos.request.LoginRequest;
-import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
-import com.cloudFileStorageSystem.dtos.request.VerifyEmailOtpRequest;
+import com.cloudFileStorageSystem.dtos.request.*;
 import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,6 +64,11 @@ public class AuthController {
     public ResponseEntity<ApiResponse<EmailOtpVerifyResponse>> EmailVerifyOtp(@RequestBody VerifyEmailOtpRequest verifyEmailOtpRequest, HttpServletRequest servletRequest) {
         EmailOtpVerifyResponse otpVerifyResponse = authService.verifyEmailPasswordOtp(verifyEmailOtpRequest);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "OTP verified successfully", servletRequest.getRequestURI(), otpVerifyResponse));
+    }
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<ResetPasswordResponse>> resetPassword(@RequestBody ResetPasswordRequest request, HttpServletRequest servletRequest) {
+        ResetPasswordResponse resetPasswordResponse = authService.resetPassword(request, servletRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully. Please login again.", servletRequest.getRequestURI(), resetPasswordResponse));
     }
 
 
