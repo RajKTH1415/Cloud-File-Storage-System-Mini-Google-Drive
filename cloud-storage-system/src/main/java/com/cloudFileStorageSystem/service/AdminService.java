@@ -1,7 +1,9 @@
 package com.cloudFileStorageSystem.service;
 
+import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
+
 public interface AdminService {
 
-    void unlockUser(Long userId);
+    UnlockUserResponse unlockUser(Long userId);
 
 }

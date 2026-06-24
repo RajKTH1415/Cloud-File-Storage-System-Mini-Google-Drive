@@ -2,6 +2,7 @@ package com.cloudFileStorageSystem.controller;
 
 
 import com.cloudFileStorageSystem.dtos.response.ApiResponse;
+import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,8 @@ public class AdminController {
     }
 
     @PostMapping("/users/{id}/unlock")
-    public ResponseEntity<?> unlockUser(@PathVariable Long id, HttpServletRequest request) {
-        adminService.unlockUser(id);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User unlocked successfully", request.getRequestURI(), null));
+    public ResponseEntity<ApiResponse<UnlockUserResponse>> unlockUser(@PathVariable Long id, HttpServletRequest request) {
+        UnlockUserResponse unlockUserResponse =  adminService.unlockUser(id);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User unlocked successfully", request.getRequestURI(), unlockUserResponse));
     }
 }

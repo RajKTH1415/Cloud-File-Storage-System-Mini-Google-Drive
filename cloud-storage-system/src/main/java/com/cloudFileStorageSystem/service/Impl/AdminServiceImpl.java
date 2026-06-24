@@ -2,6 +2,7 @@ package com.cloudFileStorageSystem.service.Impl;
 
 
 
+import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.module.AuditLog;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.AuditLogRepository;
@@ -28,7 +29,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public void unlockUser(Long userId) {
+    public UnlockUserResponse unlockUser(Long userId) {
 
         Users user =
                 usersRepository.findById(userId)
@@ -58,5 +59,14 @@ public class AdminServiceImpl implements AdminService {
         );
 
         auditLogRepository.save(auditLog);
+
+        return UnlockUserResponse.builder()
+                .userId(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .accountNonLocked(user.isAccountNonLocked())
+                .failedAttempts(user.getFailedAttempts())
+                .unlockedAt(LocalDateTime.now())
+                .build();
     }
 }

@@ -43,6 +43,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .builder()
                 .username(user.getId().toString())
                 .password(user.getPassword())
+                .authorities(
+                        new SimpleGrantedAuthority(
+                                "ROLE_" + user.getRole().name()
+                        )
+                )
                 .build();
     }
 }

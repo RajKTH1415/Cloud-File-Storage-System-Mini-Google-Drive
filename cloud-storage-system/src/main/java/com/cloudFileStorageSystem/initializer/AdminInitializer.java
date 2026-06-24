@@ -6,14 +6,21 @@ import com.cloudFileStorageSystem.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class AdminInitializer implements CommandLineRunner {
 
+    private final PasswordEncoder passwordEncoder;
+
     private final UsersRepository usersRepository;
+
+    public AdminInitializer(PasswordEncoder passwordEncoder, UsersRepository usersRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.usersRepository = usersRepository;
+    }
 
     @Override
     public void run(String... args) {
@@ -27,7 +34,9 @@ public class AdminInitializer implements CommandLineRunner {
                     .lastName("Admin")
                     .username("admin")
                     .email("admin@cloudstorage.com")
-                    .password("Admin@123")
+                    .password(
+                            passwordEncoder.encode("Admin@123")
+                    )
                     .phoneNumber("9931522260")
                     .role(Role.ADMIN)
                     .emailVerified(true)
