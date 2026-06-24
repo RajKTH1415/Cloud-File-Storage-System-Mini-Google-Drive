@@ -1069,6 +1069,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public ResendVerificationEmailResponse resendVerificationEmail(String email) {
         Users user = usersRepository.findByEmail(email)
                 .orElseThrow(() ->
@@ -1110,6 +1111,7 @@ public class AuthServiceImpl implements AuthService {
         // ================= DELETE OLD TOKENS =================
 
         emailVerificationTokenRepository.deleteByUser(user);
+        emailVerificationTokenRepository.flush();
 
         // ================= GENERATE NEW TOKEN =================
 
@@ -1140,6 +1142,54 @@ public class AuthServiceImpl implements AuthService {
                 .expiryMinutes(15)
                 .build();
 
+    }
+
+    @Override
+    @Transactional
+    public OtpResponse resendPasswordOtp(String email) {
+
+        Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        // Delete previous forgot-password OTPs
+        otpRepository.deleteByUserAndPurpose(
+                user,
+                OtpPurpose.FORGOT_PASSWORD
+        );
+
+        String otpCode = String.format(
+                "%06d",
+                ThreadLocalRandom.current()
+                        .nextInt(100000, 1000000)
+        );
+
+        LocalDateTime expiryTime =
+                LocalDateTime.now()
+                        .plusMinutes(otpExpiryMinutes);
+
+        Otp otp = Otp.builder()
+                .user(user)
+                .email(user.getEmail())
+                .otpCode(otpCode)
+                .purpose(OtpPurpose.FORGOT_PASSWORD)
+                .verified(false)
+                .attemptCount(0)
+                .expiryTime(expiryTime)
+                .build();
+
+        otpRepository.save(otp);
+
+        emailService.sendOtpEmail(
+                user.getEmail(),
+                otpCode
+        );
+
+        return OtpResponse.builder()
+                .email(user.getEmail())
+                .expiryMinutes(otpExpiryMinutes)
+                .emailSent(true)
+                .build();
     }
 
     private void savePasswordHistory(

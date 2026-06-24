@@ -66,6 +66,11 @@ public class AuthController {
         log.info("Forgot password API completed successfully for email: {}", request.getEmail());
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "OTP sent successfully", servletRequest.getRequestURI(), response));
     }
+    @PostMapping("/resend-password-otp")
+    public ResponseEntity<ApiResponse<OtpResponse>> resendPasswordOtp(@Valid @RequestBody ForgotPasswordRequest request, HttpServletRequest httpServletRequest) {
+        OtpResponse response = authService.resendPasswordOtp(request.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "OTP resent successfully", httpServletRequest.getRequestURI(), response));
+    }
 
     @PostMapping("/verify-password-otp")
     public ResponseEntity<ApiResponse<EmailOtpVerifyResponse>> EmailVerifyOtp(@RequestBody VerifyEmailOtpRequest verifyEmailOtpRequest, HttpServletRequest servletRequest) {

@@ -36,5 +36,7 @@ public interface AuthService {
 
     ResendVerificationEmailResponse resendVerificationEmail(String email);
 
+    OtpResponse resendPasswordOtp(String email);
+
 }
 
