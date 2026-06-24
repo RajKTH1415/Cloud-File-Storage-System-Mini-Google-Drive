@@ -68,29 +68,39 @@ public class AuthController {
     }
     @PostMapping("/resend-password-otp")
     public ResponseEntity<ApiResponse<OtpResponse>> resendPasswordOtp(@Valid @RequestBody ForgotPasswordRequest request, HttpServletRequest httpServletRequest) {
+        log.info("Received resend password OTP request for email: {}", request.getEmail());
         OtpResponse response = authService.resendPasswordOtp(request.getEmail());
+        log.info("Password OTP resent successfully for email: {}", request.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "OTP resent successfully", httpServletRequest.getRequestURI(), response));
     }
 
     @PostMapping("/verify-password-otp")
     public ResponseEntity<ApiResponse<EmailOtpVerifyResponse>> EmailVerifyOtp(@RequestBody VerifyEmailOtpRequest verifyEmailOtpRequest, HttpServletRequest servletRequest) {
+        log.info("Received password OTP verification request for email: {}", verifyEmailOtpRequest.getEmail());
         EmailOtpVerifyResponse otpVerifyResponse = authService.verifyEmailPasswordOtp(verifyEmailOtpRequest);
+        log.info("Password OTP verified successfully for email: {}", verifyEmailOtpRequest.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "OTP verified successfully", servletRequest.getRequestURI(), otpVerifyResponse));
     }
     @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<ResetPasswordResponse>> resetPassword(@RequestBody ResetPasswordRequest request, HttpServletRequest servletRequest) {
+        log.info("Received password reset request for email: {}", request.getEmail());
         ResetPasswordResponse resetPasswordResponse = authService.resetPassword(request, servletRequest);
+        log.info("Password reset completed successfully for email: {}", request.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully. Please login again.", servletRequest.getRequestURI(), resetPasswordResponse));
     }
     @PostMapping("/change-password")
     public ResponseEntity<ApiResponse<ChangePasswordResponse>> changePassword(@Valid @RequestBody ChangePasswordRequest request, HttpServletRequest httpRequest) {
+        log.info("Received change password request");
         ChangePasswordResponse response = authService.changePassword(request, httpRequest);
+        log.info("Password changed successfully");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully", httpRequest.getRequestURI(), response));
     }
 
     @GetMapping("/login-history")
     public ResponseEntity<?> getLoginHistory(@RequestParam Long userId, HttpServletRequest httpServletRequest) {
+        log.info("Received login history request for userId: {}", userId);
         List<LoginHistoryResponse> historyResponses = authService.getLoginHistory(userId);
+        log.info("Successfully fetched {} login history records for userId: {}", historyResponses.size(), userId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Login history fetched successfully", httpServletRequest.getRequestURI(), historyResponses));
     }
 
