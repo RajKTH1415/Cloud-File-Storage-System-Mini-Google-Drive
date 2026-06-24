@@ -48,16 +48,30 @@ public class Users extends AuditableEntity {
     @Column(name = "role", nullable = false, length = 20)
     private Role role;
 
-    @Column(name = "email_verified", nullable = false)
-    private Boolean emailVerified = false;
-
-    @Column(name = "enabled", nullable = false)
-    private Boolean enabled = true;
-
-    @Column(name = "account_non_locked", nullable = false)
-    @Builder.Default
-    private Boolean accountNonLocked = true;
-
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
+
+    @Builder.Default
+    @Column(name = "phone_verified", nullable = false)
+    private boolean phoneVerified = false;
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
+    @Builder.Default
+    @Column(name = "account_non_locked", nullable = false)
+    private boolean accountNonLocked = true;
+
+    @Builder.Default
+    @Column(name = "failed_attempts", nullable = false)
+    private int failedAttempts = 0;
+
+    @Builder.Default
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled = true;
+
+    @Builder.Default
+    @Column(name = "email_verified", nullable = false)
+    private boolean emailVerified = false;
 }
+

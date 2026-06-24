@@ -1,5 +1,6 @@
 package com.cloudFileStorageSystem.service.Impl;
 
+import com.cloudFileStorageSystem.config.SecurityProperties;
 import com.cloudFileStorageSystem.dtos.request.ForgotPasswordRequest;
 import com.cloudFileStorageSystem.dtos.request.LoginRequest;
 import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
@@ -7,12 +8,12 @@ import com.cloudFileStorageSystem.dtos.response.LoginResponse;
 import com.cloudFileStorageSystem.dtos.response.LogoutResponse;
 import com.cloudFileStorageSystem.dtos.response.OtpResponse;
 import com.cloudFileStorageSystem.dtos.response.TokenResponse;
+import com.cloudFileStorageSystem.enums.AttemptStatus;
+import com.cloudFileStorageSystem.enums.AuditAction;
 import com.cloudFileStorageSystem.enums.OtpPurpose;
 import com.cloudFileStorageSystem.module.*;
-import com.cloudFileStorageSystem.repository.EmailVerificationTokenRepository;
-import com.cloudFileStorageSystem.repository.OtpRepository;
-import com.cloudFileStorageSystem.repository.RefreshTokenRepository;
-import com.cloudFileStorageSystem.repository.UsersRepository;
+import com.cloudFileStorageSystem.repository.*;
+import com.cloudFileStorageSystem.service.AuditService;
 import com.cloudFileStorageSystem.service.AuthService;
 import com.cloudFileStorageSystem.service.EmailService;
 import com.cloudFileStorageSystem.service.TokenBlacklistService;
@@ -22,16 +23,27 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
+
+    private final SecurityProperties securityProperties;
+    private final AuditLogRepository auditLogRepository;
+    private final LoginAttemptRepository loginAttemptRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuditService auditService;
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
     private  final OtpRepository otpRepository;
     private final EmailService emailService;
@@ -47,7 +59,16 @@ public class AuthServiceImpl implements AuthService {
     @Value("${otp.expiry.minutes}")
     private int otpExpiryMinutes;
 
-    public AuthServiceImpl(EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+
+    @Value("${security.lock-time-minutes}")
+    private int lockTimeMinutes;
+
+    public AuthServiceImpl(SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+        this.securityProperties = securityProperties;
+        this.auditLogRepository = auditLogRepository;
+        this.loginAttemptRepository = loginAttemptRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.auditService = auditService;
         this.emailVerificationTokenRepository = emailVerificationTokenRepository;
         this.otpRepository = otpRepository;
         this.emailService = emailService;
@@ -60,111 +81,522 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    @Transactional
-    public LoginResponse login(LoginRequest request,
-                               HttpServletRequest httpServletRequest) {
+    public LoginResponse login(LoginRequest request, HttpServletRequest httpServletRequest) {
 
-        log.info("Login attempt received. Identifier={}, IP={}",
-                request.getIdentifier(),
-                httpServletRequest.getRemoteAddr());
+        String identifier = request.getIdentifier();
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getIdentifier(),
-                        request.getPassword()
-                )
-        );
-
-        log.info("Authentication successful for identifier={}",
-                request.getIdentifier());
+        log.info("========== LOGIN START ==========");
+        log.info("Identifier: {}", identifier);
 
         Users user = usersRepository
                 .findByUsernameOrEmailOrPhoneNumber(
-                        request.getIdentifier(),
-                        request.getIdentifier(),
-                        request.getIdentifier()
+                        identifier,
+                        identifier,
+                        identifier
                 )
                 .orElseThrow(() -> {
-                    log.warn("User not found. Identifier={}",
-                            request.getIdentifier());
-                    return new RuntimeException("User not found");
+
+                    log.warn("User NOT FOUND for identifier={}", identifier);
+
+                    saveUnknownUserAttempt(
+                            identifier,
+                            httpServletRequest,
+                            "USER_NOT_FOUND"
+                    );
+                    saveAuditLog(
+                            identifier,
+                            "LOGIN_FAILED",
+                            httpServletRequest,
+                            "User not found"
+                    );
+
+                    return new RuntimeException(
+                            "Invalid username/email/phone or password"
+                    );
                 });
 
-        log.debug("User found. UserId={}, Username={}, Role={}",
-                user.getId(),
+        log.info(
+                "User Found -> username={}, email={}, failedAttempts={}, accountNonLocked={}, emailVerified={}, enabled={}",
                 user.getUsername(),
-                user.getRole());
+                user.getEmail(),
+                user.getFailedAttempts(),
+                user.isAccountNonLocked(),
+                user.isEmailVerified(),
+                user.isEnabled()
+        );
 
-        if (!Boolean.TRUE.equals(user.getEmailVerified())) {
-            log.warn("Login blocked. Email not verified. UserId={}",
-                    user.getId());
+        validateAccountStatus(user);
+
+        boolean passwordMatched =
+                passwordEncoder.matches(
+                        request.getPassword(),
+                        user.getPassword()
+                );
+
+        log.info("Password Match Result: {}", passwordMatched);
+
+        if (!passwordMatched) {
+
+            log.warn(
+                    "Password mismatch for username={}",
+                    user.getUsername()
+            );
+
+            processFailedLogin(
+                    user,
+                    request,
+                    httpServletRequest
+            );
+
+            log.warn(
+                    "Throwing Invalid Credentials Exception for username={}",
+                    user.getUsername()
+            );
 
             throw new RuntimeException(
-                    "Please verify your email before logging in"
+                    "Invalid username/email/phone or password"
             );
         }
 
+        log.info(
+                "Password verified successfully for username={}",
+                user.getUsername()
+        );
 
-        if (!user.getEnabled()) {
-            throw new RuntimeException(
-                    "Account has been disabled"
-            );
-        }
+        resetFailedAttempts(user);
 
-        if (!user.getAccountNonLocked()) {
-            throw new RuntimeException(
-                    "Account is locked"
-            );
-        }
-
-        String accessToken = jwtUtil.generateAccessToken(user);
-        String refreshToken = jwtUtil.generateRefreshToken(user);
-
-        // Revoke existing refresh tokens
-        refreshTokenRepository
-                .findByUserIdAndRevokedFalse(user.getId())
-                .forEach(token -> {
-                    token.setRevoked(true);
-                    refreshTokenRepository.save(token);
-                });
-
-        RefreshToken refreshTokenEntity = RefreshToken.builder()
-                .userId(user.getId())
-                .token(refreshToken)
-                .expiryDate(
-                        new Date(System.currentTimeMillis()
-                                + refreshTokenValidity)
-                )
-                .revoked(false)
-                .build();
-
-        // Save only once
-        refreshTokenRepository.save(refreshTokenEntity);
-
-        log.info("Refresh token saved successfully. UserId={}",
-                user.getId());
-
-        // Update last login
         user.setLastLoginAt(LocalDateTime.now());
+
         usersRepository.save(user);
 
-        TokenData tokens = TokenData.builder()
+        log.info(
+                "User updated after successful login. failedAttempts={}, locked={}",
+                user.getFailedAttempts(),
+                !user.isAccountNonLocked()
+        );
+
+        saveSuccessfulAttempt(
+                user,
+                request.getIdentifier(),
+                httpServletRequest
+        );
+        saveAuditLog(
+                user.getEmail(),
+                "LOGIN_SUCCESS",
+                httpServletRequest,
+                "User logged in successfully"
+        );
+        String accessToken =
+                jwtUtil.generateAccessToken(user);
+
+        String refreshToken =
+                jwtUtil.generateRefreshToken(user);
+
+        log.info(
+                "Tokens generated successfully for username={}",
+                user.getUsername()
+        );
+
+        RefreshToken refreshTokenEntity =
+                RefreshToken.builder()
+                        .userId(user.getId())
+                        .token(refreshToken)
+                        .expiryDate(
+                                new Date(
+                                        System.currentTimeMillis()
+                                                + refreshTokenValidity
+                                )
+                        )
+                        .revoked(false)
+                        .build();
+
+        refreshTokenRepository.save(refreshTokenEntity);
+
+        refreshTokenRepository.save(
+                refreshTokenEntity
+        );
+
+        TokenData tokenData = TokenData.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
 
-        log.info("Login completed successfully. UserId={}, Username={}",
-                user.getId(),
-                user.getUsername());
+        log.info(
+                "Login completed successfully for username={}",
+                user.getUsername()
+        );
+
+        log.info("========== LOGIN END ==========");
 
         return LoginResponse.builder()
                 .username(user.getUsername())
-                .fullName(user.getFirstName() + " " + user.getLastName())
+                .fullName(
+                        user.getFirstName()
+                                + " "
+                                + user.getLastName()
+                )
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
-                .tokens(tokens)
+                .tokens(tokenData)
                 .build();
     }
+    private void validateAccountStatus(Users user) {
+
+        log.info(
+                "Validating account status -> username={}, enabled={}, emailVerified={}, accountNonLocked={}, lockedUntil={}",
+                user.getUsername(),
+                user.isEnabled(),
+                user.isEmailVerified(),
+                user.isAccountNonLocked(),
+                user.getLockedUntil()
+        );
+
+        if (!user.isEnabled()) {
+            log.error("Account Disabled");
+            throw new RuntimeException("Account is disabled");
+        }
+
+        if (!user.isEmailVerified()) {
+            log.error("Email Not Verified");
+            throw new RuntimeException(
+                    "Please verify your email first"
+            );
+        }
+
+        if (!user.isAccountNonLocked()) {
+
+            if (user.getLockedUntil() != null &&
+                    user.getLockedUntil().isAfter(LocalDateTime.now())) {
+
+                log.error(
+                        "Account currently locked until {}",
+                        user.getLockedUntil()
+                );
+
+                throw new RuntimeException(
+                        "Account locked until "
+                                + user.getLockedUntil()
+                );
+            }
+
+            log.info(
+                    "Lock expired. Unlocking account."
+            );
+
+            user.setFailedAttempts(0);
+            user.setAccountNonLocked(true);
+            user.setLockedUntil(null);
+
+            usersRepository.save(user);
+            AuditLog auditLog = new AuditLog();
+
+            auditLog.setIdentifier(user.getEmail());
+            auditLog.setAction("ACCOUNT_UNLOCKED");
+            auditLog.setTimestamp(LocalDateTime.now());
+            auditLog.setDetails("Account automatically unlocked after lock period");
+
+            auditLogRepository.save(auditLog);
+        }
+    }
+
+    private void processFailedLogin(
+            Users user,
+            LoginRequest request,
+            HttpServletRequest servletRequest) {
+
+        log.warn(
+                "processFailedLogin START for username={}",
+                user.getUsername()
+        );
+
+        int attempts = user.getFailedAttempts() + 1;
+
+        log.warn(
+                "Previous Attempts={}, New Attempts={}",
+                user.getFailedAttempts(),
+                attempts
+        );
+
+        user.setFailedAttempts(attempts);
+
+        boolean locked = false;
+
+        if (attempts >= securityProperties.getMaxFailedAttempts()) {
+
+            log.error(
+                    "Account LOCKED for username={}",
+                    user.getUsername()
+            );
+
+            user.setAccountNonLocked(false);
+
+            user.setLockedUntil(
+                    LocalDateTime.now()
+                            .plusMinutes(
+                                    securityProperties.getLockTimeMinutes()
+                            )
+            );
+
+            locked = true;
+        }
+
+        Users savedUser = usersRepository.save(user);
+
+        log.info(
+                "User Saved -> failedAttempts={}, accountNonLocked={}, lockedUntil={}",
+                savedUser.getFailedAttempts(),
+                savedUser.isAccountNonLocked(),
+                savedUser.getLockedUntil()
+        );
+
+        LoginAttempt attempt = new LoginAttempt();
+
+        attempt.setEmail(user.getEmail());
+        attempt.setPhoneNumber(user.getPhoneNumber());
+        attempt.setLoginIdentifier(request.getIdentifier());
+
+        attempt.setIdentifierType(
+                getIdentifierType(
+                        request.getIdentifier()
+                )
+        );
+
+        attempt.setIpAddress(
+                getClientIp(servletRequest)
+        );
+
+        attempt.setUserAgent(
+                getDevice(servletRequest)
+        );
+
+        attempt.setAttemptStatus(
+                AttemptStatus.FAILED
+        );
+
+        attempt.setFailureReason(
+                locked
+                        ? "ACCOUNT_LOCKED"
+                        : "INVALID_PASSWORD"
+        );
+
+        attempt.setFailedAttempts(attempts);
+
+        attempt.setAccountLocked(locked);
+
+        if (locked) {
+            attempt.setLockTime(
+                    user.getLockedUntil()
+            );
+        }
+
+        loginAttemptRepository.save(attempt);
+
+        saveAuditLog(
+                request.getIdentifier(),
+                locked ? "ACCOUNT_LOCKED" : "LOGIN_FAILED",
+                servletRequest,
+                locked
+                        ? "Account locked after maximum failed attempts"
+                        : "Invalid password"
+        );
+
+        log.info(
+                "LoginAttempt Saved -> identifier={}, attempts={}, locked={}",
+                request.getIdentifier(),
+                attempts,
+                locked
+        );
+
+        log.warn(
+                "processFailedLogin END for username={}",
+                user.getUsername()
+        );
+    }
+
+    private void resetFailedAttempts(
+            Users user) {
+
+        user.setFailedAttempts(0);
+        user.setAccountNonLocked(true);
+        user.setLockedUntil(null);
+    }
+
+    private void saveSuccessfulAttempt(
+            Users user,
+            String loginIdentifier,
+            HttpServletRequest request) {
+
+        LoginAttempt attempt =
+                new LoginAttempt();
+
+        attempt.setEmail(user.getEmail());
+
+        attempt.setPhoneNumber(
+                user.getPhoneNumber()
+        );
+
+        attempt.setLoginIdentifier(
+                loginIdentifier
+        );
+
+        attempt.setIdentifierType(
+                getIdentifierType(loginIdentifier)
+        );
+
+
+        attempt.setIpAddress(
+                getClientIp(request)
+        );
+
+        attempt.setUserAgent(
+                getDevice(request)
+        );
+
+        attempt.setAttemptStatus(
+                AttemptStatus.SUCCESS
+        );
+
+        attempt.setFailedAttempts(0);
+
+        attempt.setAccountLocked(false);
+
+        loginAttemptRepository.save(attempt);
+
+
+    }
+    private void saveUnknownUserAttempt(
+            String identifier,
+            HttpServletRequest request,
+            String reason) {
+
+        LoginAttempt attempt =
+                new LoginAttempt();
+
+        attempt.setLoginIdentifier(
+                identifier
+        );
+
+        attempt.setIdentifierType(
+                getIdentifierType(
+                        identifier
+                )
+        );
+
+        attempt.setIpAddress(
+                getClientIp(request)
+        );
+
+        attempt.setUserAgent(
+                getDevice(request)
+        );
+
+        attempt.setAttemptStatus(
+                AttemptStatus.FAILED
+        );
+
+        attempt.setFailureReason(reason);
+
+        loginAttemptRepository.save(attempt);
+    }
+    private String getIdentifierType(
+            String identifier) {
+
+        if (identifier.contains("@")) {
+            return "EMAIL";
+        }
+
+        if (identifier.matches("\\d+")) {
+            return "PHONE";
+        }
+
+        return "USERNAME";
+    }
+
+    private void saveAuditLog(
+            String identifier,
+            String action,
+            HttpServletRequest request,
+            String details) {
+
+        AuditLog auditLog = new AuditLog();
+
+        auditLog.setIdentifier(identifier);
+        auditLog.setAction(action);
+
+        auditLog.setIpAddress(
+                getClientIp(request)
+        );
+
+        auditLog.setTimestamp(LocalDateTime.now());
+        auditLog.setDetails(details);
+
+        auditLogRepository.save(auditLog);
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader != null && !xfHeader.isEmpty()
+                && !"unknown".equalsIgnoreCase(xfHeader)) {
+            return xfHeader.split(",")[0];
+        }
+
+        String ip = request.getRemoteAddr();
+        if ("0:0:0:0:0:0:0:1".equals(ip)) {
+            try {
+                ip = java.net.InetAddress.getLocalHost().getHostAddress();
+            } catch (Exception e) {
+                ip = "127.0.0.1";
+            }
+        }
+        return ip;
+    }
+
+    private String getDevice(HttpServletRequest request) {
+        String ua = request.getHeader("User-Agent");
+        if (ua == null || ua.isBlank()) {
+            return "UNKNOWN";
+        }
+
+        String browser = "Browser";
+        String os = "OS";
+        String deviceType = "Desktop";
+
+        if (ua.contains("Edg")) {
+            browser = "Edge";
+        } else if (ua.contains("Chrome") && !ua.contains("Edg")) {
+            browser = "Chrome";
+        } else if (ua.contains("Firefox")) {
+            browser = "Firefox";
+        } else if (ua.contains("Safari") && !ua.contains("Chrome")) {
+            browser = "Safari";
+        }
+
+        if (ua.contains("Windows")) {
+            os = "Windows";
+        } else if (ua.contains("Android")) {
+            os = "Android";
+        } else if (ua.contains("iPhone") || ua.contains("iOS")) {
+            os = "iOS";
+        } else if (ua.contains("Mac")) {
+            os = "Mac";
+        } else if (ua.contains("Linux")) {
+            os = "Linux";
+        }
+
+        if (ua.contains("Mobile")) {
+            deviceType = "Mobile";
+        } else if (ua.contains("Tablet")) {
+            deviceType = "Tablet";
+        }
+
+        return browser + " | " + os + " | " + deviceType;
+        }
+
+    /*-==============================================*/
+
+
+
+
 
     @Override
     public TokenResponse refreshToken(
@@ -399,4 +831,5 @@ public class AuthServiceImpl implements AuthService {
 
         emailVerificationTokenRepository.save(verificationToken);
     }
+
 }

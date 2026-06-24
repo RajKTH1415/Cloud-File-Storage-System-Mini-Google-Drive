@@ -1,6 +1,7 @@
 package com.cloudFileStorageSystem.security;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.UsersRepository;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .builder()
                 .username(user.getId().toString())
                 .password(user.getPassword())
+                .authorities(new SimpleGrantedAuthority("ROLE_"+user.getRole()))
                 .build();
     }
 
