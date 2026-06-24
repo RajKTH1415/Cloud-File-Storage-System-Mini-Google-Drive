@@ -1,7 +1,5 @@
 package com.cloudFileStorageSystem.service.Impl;
 
-
-
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.module.AuditLog;
 import com.cloudFileStorageSystem.module.Users;
@@ -9,19 +7,23 @@ import com.cloudFileStorageSystem.repository.AuditLogRepository;
 import com.cloudFileStorageSystem.repository.UsersRepository;
 import com.cloudFileStorageSystem.service.AdminService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 public class AdminServiceImpl implements AdminService {
 
     private final UsersRepository usersRepository;
     private final AuditLogRepository auditLogRepository;
 
-
     public AdminServiceImpl(
-            UsersRepository usersRepository, AuditLogRepository auditLogRepository) {
+            UsersRepository usersRepository,
+            AuditLogRepository auditLogRepository) {
 
         this.usersRepository = usersRepository;
         this.auditLogRepository = auditLogRepository;
@@ -31,34 +33,70 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public UnlockUserResponse unlockUser(Long userId) {
 
-        Users user =
-                usersRepository.findById(userId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "User not found"));
+        log.info("Unlock user request received for userId={}", userId);
+
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.error("User not found. userId={}", userId);
+                    return new RuntimeException("User not found");
+                });
 
         if (user.isAccountNonLocked()) {
+
+            log.warn(
+                    "Unlock operation skipped. User already unlocked. userId={}, email={}",
+                    user.getId(),
+                    user.getEmail()
+            );
+
             throw new RuntimeException(
-                    "User account is already unlocked");
+                    "User account is already unlocked"
+            );
         }
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String adminUsername = authentication.getName();
+
+        log.info("Admin '{}' is unlocking user '{}' (userId={})",
+                adminUsername,
+                user.getEmail(),
+                user.getId());
 
         user.setAccountNonLocked(true);
         user.setFailedAttempts(0);
         user.setLockedUntil(null);
 
-
         usersRepository.save(user);
 
-        AuditLog auditLog = new AuditLog();
+        log.info(
+                "User account unlocked successfully. userId={}, email={}",
+                user.getId(),
+                user.getEmail()
+        );
 
+        AuditLog auditLog = new AuditLog();
         auditLog.setIdentifier(user.getEmail());
         auditLog.setAction("ACCOUNT_UNLOCKED_BY_ADMIN");
         auditLog.setTimestamp(LocalDateTime.now());
+
         auditLog.setDetails(
-                "Account unlocked by administrator"
+                String.format(
+                        "Admin '%s' unlocked account '%s' (User ID: %d)",
+                        adminUsername,
+                        user.getEmail(),
+                        user.getId()
+                )
         );
 
         auditLogRepository.save(auditLog);
+
+        log.info(
+                "Audit log saved for unlock operation. userId={}, admin={}",
+                user.getId(),
+                adminUsername
+        );
 
         return UnlockUserResponse.builder()
                 .userId(user.getId())
