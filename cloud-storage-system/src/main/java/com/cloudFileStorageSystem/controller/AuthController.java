@@ -50,12 +50,16 @@ public class AuthController {
 
     @GetMapping("/verify-email")
     public ResponseEntity<ApiResponse<String>> verifyEmail(@RequestParam String token, HttpServletRequest request) {
+        log.info("Received email verification request");
         authService.verifyEmail(token);
+        log.info("Email verified successfully");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Email verified successfully", request.getRequestURI(), "Account activated"));
     }
     @PostMapping("/resend-verification-email")
     public ResponseEntity<ApiResponse<ResendVerificationEmailResponse>> resendVerificationEmail(@RequestBody @Valid ResendVerificationRequest request, HttpServletRequest httpServletRequest) {
-        ResendVerificationEmailResponse resendVerificationEmailResponse =  authService.resendVerificationEmail(request.getEmail());
+        log.info("Received resend verification email request for email: {}", request.getEmail());
+        ResendVerificationEmailResponse resendVerificationEmailResponse = authService.resendVerificationEmail(request.getEmail());
+        log.info("Verification email resent successfully for email: {}", request.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Verification email resent successfully", httpServletRequest.getRequestURI(), resendVerificationEmailResponse));
     }
 
