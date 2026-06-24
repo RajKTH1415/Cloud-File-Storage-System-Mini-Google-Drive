@@ -25,5 +25,9 @@ public interface AuthService {
             ResetPasswordRequest request,
             HttpServletRequest httpServletRequest
     );
+    ChangePasswordResponse changePassword(
+            ChangePasswordRequest request,
+            HttpServletRequest httpRequest
+    );
 }
 

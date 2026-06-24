@@ -30,14 +30,14 @@ public class AuthServiceImpl implements AuthService {
 
 
     private final PasswordHistoryRepository passwordHistoryRepository;
-   private final PasswordResetOtpRepository passwordResetOtpRepository;
+    private final PasswordResetOtpRepository passwordResetOtpRepository;
     private final SecurityProperties securityProperties;
     private final AuditLogRepository auditLogRepository;
     private final LoginAttemptRepository loginAttemptRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditService auditService;
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
-    private  final OtpRepository otpRepository;
+    private final OtpRepository otpRepository;
     private final EmailService emailService;
     private final TokenBlacklistService tokenBlacklistService;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -49,6 +49,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Value("${otp.expiry.minutes}")
     private int otpExpiryMinutes;
+
+    @Value("${security.password-history-limit}")
+    private int passwordHistoryLimit;
 
 
     public AuthServiceImpl(PasswordHistoryRepository passwordHistoryRepository, PasswordResetOtpRepository passwordResetOtpRepository, SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil) {
@@ -229,6 +232,7 @@ public class AuthServiceImpl implements AuthService {
                 .tokens(tokenData)
                 .build();
     }
+
     private void validateAccountStatus(Users user) {
 
         log.info(
@@ -453,6 +457,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     }
+
     private void saveUnknownUserAttempt(
             String identifier,
             HttpServletRequest request,
@@ -487,6 +492,7 @@ public class AuthServiceImpl implements AuthService {
 
         loginAttemptRepository.save(attempt);
     }
+
     private String getIdentifierType(
             String identifier) {
 
@@ -579,12 +585,9 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return browser + " | " + os + " | " + deviceType;
-        }
+    }
 
     /*-==============================================*/
-
-
-
 
 
     @Override
@@ -689,6 +692,7 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(newRefreshToken)
                 .build();
     }
+
     @Override
     @Transactional
     public OtpResponse forgotPassword(ForgotPasswordRequest request) {
@@ -746,6 +750,7 @@ public class AuthServiceImpl implements AuthService {
                 .emailSent(true)
                 .build();
     }
+
     @Override
     @Transactional
     public LogoutResponse logout(String accessToken, String refreshToken) {
@@ -927,10 +932,16 @@ public class AuthServiceImpl implements AuthService {
         int limit =
                 securityProperties.getPasswordHistoryLimit();
 
+//        List<PasswordHistory> lastPasswords =
+//                passwordHistoryRepository
+//                        .findTop5ByUserIdOrderByChangedAtDesc(
+//                                user.getEmail());
+
+        String userId = String.valueOf(user.getId());
+
         List<PasswordHistory> lastPasswords =
                 passwordHistoryRepository
-                        .findTop5ByEmailOrderByChangedAtDesc(
-                                user.getEmail());
+                        .findTop5ByUserIdOrderByChangedAtDesc(userId);
 
         for (PasswordHistory history :
                 lastPasswords.stream()
@@ -958,17 +969,12 @@ public class AuthServiceImpl implements AuthService {
         usersRepository.save(user);
 
         // 9. SAVE PASSWORD HISTORY
-        PasswordHistory passwordHistory =
-                new PasswordHistory();
+        PasswordHistory passwordHistory = new PasswordHistory();
 
-        passwordHistory.setEmail(
-                user.getEmail());
+        passwordHistory.setUserId(String.valueOf(user.getId()));
+        passwordHistory.setPasswordHash(encodedPassword);
 
-        passwordHistory.setPasswordHash(
-                encodedPassword);
-
-        passwordHistory.setChangedAt(
-                LocalDateTime.now());
+        passwordHistory.setChangedAt(LocalDateTime.now());
 
         passwordHistoryRepository.save(
                 passwordHistory);
@@ -1004,5 +1010,80 @@ public class AuthServiceImpl implements AuthService {
                 .passwordUpdated(true)
                 .tokensRevoked(true)
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public ChangePasswordResponse changePassword(ChangePasswordRequest request, HttpServletRequest httpRequest) {
+
+        String token = resolveToken(httpRequest);
+        Long userId = jwtUtil.extractUserId(token);
+
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 1. Verify current password
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        // 2. New password should not match old password
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new RuntimeException("New password cannot be same as current password");
+        }
+
+        String uid = String.valueOf(user.getId());
+
+        // 3. Password history validation
+        validatePasswordHistory(uid, request.getNewPassword());
+
+        // 4. Save current password to history
+        savePasswordHistory(uid, user.getPassword());
+
+        // 5. Update password
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        usersRepository.save(user);
+
+        return ChangePasswordResponse.builder()
+                .message("Password changed successfully")
+                .build();
+    }
+    private void savePasswordHistory(
+            String userId,
+            String passwordHash) {
+
+        PasswordHistory history = new PasswordHistory();
+
+        history.setUserId(userId);
+        history.setPasswordHash(passwordHash);
+        history.setChangedAt(LocalDateTime.now());
+
+        passwordHistoryRepository.save(history);
+    }
+
+    private void validatePasswordHistory(String userId, String newPassword) {
+
+        List<PasswordHistory> histories =
+                passwordHistoryRepository
+                        .findTop5ByUserIdOrderByChangedAtDesc(userId);
+
+        for (PasswordHistory history : histories) {
+
+            if (passwordEncoder.matches(newPassword, history.getPasswordHash())) {
+                throw new RuntimeException(
+                        "You cannot reuse your last " + passwordHistoryLimit + " passwords"
+                );
+            }
+        }
+    }
+    private String resolveToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+
+        if (header == null || !header.startsWith("Bearer ")) {
+            throw new RuntimeException("Missing or invalid Authorization header");
+        }
+
+        return header.substring(7);
     }
 }

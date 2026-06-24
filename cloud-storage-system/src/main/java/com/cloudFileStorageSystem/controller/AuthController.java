@@ -70,6 +70,11 @@ public class AuthController {
         ResetPasswordResponse resetPasswordResponse = authService.resetPassword(request, servletRequest);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully. Please login again.", servletRequest.getRequestURI(), resetPasswordResponse));
     }
+    @PostMapping("/change-password")
+    public ResponseEntity<ApiResponse<ChangePasswordResponse>> changePassword(@Valid @RequestBody ChangePasswordRequest request, HttpServletRequest httpRequest) {
+        ChangePasswordResponse response = authService.changePassword(request, httpRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully", httpRequest.getRequestURI(), response));
+    }
 
 
 }
