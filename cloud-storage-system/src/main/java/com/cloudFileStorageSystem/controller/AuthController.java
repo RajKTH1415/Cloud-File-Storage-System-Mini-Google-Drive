@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -74,6 +76,11 @@ public class AuthController {
     public ResponseEntity<ApiResponse<ChangePasswordResponse>> changePassword(@Valid @RequestBody ChangePasswordRequest request, HttpServletRequest httpRequest) {
         ChangePasswordResponse response = authService.changePassword(request, httpRequest);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully", httpRequest.getRequestURI(), response));
+    }
+        @GetMapping("/login-history")
+    public ResponseEntity<?> getLoginHistory(@RequestParam Long userId, HttpServletRequest httpServletRequest) {
+        List<LoginHistoryResponse> historyResponses = authService.getLoginHistory(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Login history fetched successfully", httpServletRequest.getRequestURI(), historyResponses));
     }
 
 

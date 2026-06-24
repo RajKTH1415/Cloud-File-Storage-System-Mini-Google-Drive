@@ -5,6 +5,8 @@ import com.cloudFileStorageSystem.dtos.response.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 public interface AuthService {
 
@@ -29,5 +31,7 @@ public interface AuthService {
             ChangePasswordRequest request,
             HttpServletRequest httpRequest
     );
+
+    List<LoginHistoryResponse> getLoginHistory(Long userId);
 }
 

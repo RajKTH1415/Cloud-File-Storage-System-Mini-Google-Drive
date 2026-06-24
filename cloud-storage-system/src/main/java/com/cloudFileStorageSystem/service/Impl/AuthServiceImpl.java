@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -1049,6 +1050,21 @@ public class AuthServiceImpl implements AuthService {
                 .message("Password changed successfully")
                 .build();
     }
+
+    @Override
+    public List<LoginHistoryResponse> getLoginHistory(Long userId) {
+
+        return loginAttemptRepository.findByUserIdOrderByAttemptTimeDesc(String.valueOf(userId))
+                .stream()
+                .map(attempt -> new LoginHistoryResponse(
+                        attempt.getAttemptStatus().name(),
+                        attempt.getIpAddress(),
+                        attempt.getDeviceInfo(),
+                        attempt.getAttemptTime()
+                ))
+                .collect(Collectors.toList());
+    }
+
     private void savePasswordHistory(
             String userId,
             String passwordHash) {

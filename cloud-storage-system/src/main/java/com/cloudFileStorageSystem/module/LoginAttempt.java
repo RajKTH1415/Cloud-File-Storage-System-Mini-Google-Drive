@@ -21,6 +21,9 @@ public class LoginAttempt {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     @Column(name = "phone_number")
     private String phoneNumber;
 
