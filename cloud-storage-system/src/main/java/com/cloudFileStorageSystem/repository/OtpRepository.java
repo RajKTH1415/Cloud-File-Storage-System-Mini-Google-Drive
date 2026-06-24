@@ -6,6 +6,7 @@ import com.cloudFileStorageSystem.module.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
@@ -27,5 +28,6 @@ public interface OtpRepository extends JpaRepository<Otp, Long> {
             OtpPurpose purpose
     );
 
-    Optional<Otp>findTopByEmailAndVerifiedTrueOrderByIdDesc(String email);
+
+    void deleteByExpiryTimeBefore(LocalDateTime now);
 }
