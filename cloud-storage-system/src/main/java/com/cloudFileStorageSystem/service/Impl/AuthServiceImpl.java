@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -1065,6 +1066,80 @@ public class AuthServiceImpl implements AuthService {
                         attempt.getAttemptTime()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ResendVerificationEmailResponse resendVerificationEmail(String email) {
+        Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        // Email already verified
+        if (user.isEmailVerified()) {
+            throw new RuntimeException(
+                    "Email already verified");
+        }
+
+        // ================= MAX 3 EMAILS PER HOUR =================
+
+        long resendCount =
+                emailVerificationTokenRepository.countByUserAndCreatedAtAfter(
+                        user,
+                        LocalDateTime.now().minusHours(1));
+
+        if (resendCount >= 3) {
+            throw new RuntimeException(
+                    "Maximum resend attempts reached. Try again after 1 hour.");
+        }
+
+        // ================= 60-SECOND COOLDOWN =================
+
+        EmailVerificationToken latestToken =
+                emailVerificationTokenRepository
+                        .findTopByUserOrderByCreatedAtDesc(user)
+                        .orElse(null);
+
+        if (latestToken != null &&
+                latestToken.getCreatedAt()
+                        .plusSeconds(60)
+                        .isAfter(LocalDateTime.now())) {
+
+            throw new RuntimeException(
+                    "Please wait 60 seconds before requesting another verification email.");
+        }
+        // ================= DELETE OLD TOKENS =================
+
+        emailVerificationTokenRepository.deleteByUser(user);
+
+        // ================= GENERATE NEW TOKEN =================
+
+        String token = UUID.randomUUID().toString();
+
+        EmailVerificationToken verificationToken =
+                EmailVerificationToken.builder()
+                        .token(token)
+                        .user(user)
+                        .used(false)
+                        .expiryDate(LocalDateTime.now().plusMinutes(15))
+                        .build();
+
+        emailVerificationTokenRepository.save(verificationToken);
+
+        // ================= SEND EMAIL =================
+
+        emailService.sendVerificationEmail(
+                user.getEmail(),
+                token
+        );
+
+        // ================= RESPONSE =================
+
+        return ResendVerificationEmailResponse.builder()
+                .emailSent(true)
+                .email(user.getEmail())
+                .expiryMinutes(15)
+                .build();
+
     }
 
     private void savePasswordHistory(

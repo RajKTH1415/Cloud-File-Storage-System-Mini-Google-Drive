@@ -53,6 +53,11 @@ public class AuthController {
         authService.verifyEmail(token);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Email verified successfully", request.getRequestURI(), "Account activated"));
     }
+    @PostMapping("/resend-verification-email")
+    public ResponseEntity<ApiResponse<ResendVerificationEmailResponse>> resendVerificationEmail(@RequestBody @Valid ResendVerificationRequest request, HttpServletRequest httpServletRequest) {
+        ResendVerificationEmailResponse resendVerificationEmailResponse =  authService.resendVerificationEmail(request.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Verification email resent successfully", httpServletRequest.getRequestURI(), resendVerificationEmailResponse));
+    }
 
     @PostMapping("/forgot-password/email")
     public ResponseEntity<ApiResponse<OtpResponse>> forgotPasswordEmail(@Valid @RequestBody ForgotPasswordRequest request, HttpServletRequest servletRequest) {

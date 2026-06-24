@@ -33,5 +33,8 @@ public interface AuthService {
     );
 
     List<LoginHistoryResponse> getLoginHistory(Long userId);
+
+    ResendVerificationEmailResponse resendVerificationEmail(String email);
+
 }
 
