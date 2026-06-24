@@ -4,10 +4,8 @@ import com.cloudFileStorageSystem.config.SecurityProperties;
 import com.cloudFileStorageSystem.dtos.request.ForgotPasswordRequest;
 import com.cloudFileStorageSystem.dtos.request.LoginRequest;
 import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
-import com.cloudFileStorageSystem.dtos.response.LoginResponse;
-import com.cloudFileStorageSystem.dtos.response.LogoutResponse;
-import com.cloudFileStorageSystem.dtos.response.OtpResponse;
-import com.cloudFileStorageSystem.dtos.response.TokenResponse;
+import com.cloudFileStorageSystem.dtos.request.VerifyEmailOtpRequest;
+import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.enums.AttemptStatus;
 import com.cloudFileStorageSystem.enums.AuditAction;
 import com.cloudFileStorageSystem.enums.OtpPurpose;
@@ -39,6 +37,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AuthServiceImpl implements AuthService {
 
 
+//   private final PasswordResetOtpRepository passwordResetOtpRepository;
     private final SecurityProperties securityProperties;
     private final AuditLogRepository auditLogRepository;
     private final LoginAttemptRepository loginAttemptRepository;
@@ -51,7 +50,6 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UsersRepository usersRepository;
     private final JwtUtil jwtUtil;
-    private final AuthenticationManager authenticationManager;
 
     @Value("${jwt.refresh-token-validity}")
     private long refreshTokenValidity;
@@ -60,10 +58,7 @@ public class AuthServiceImpl implements AuthService {
     private int otpExpiryMinutes;
 
 
-    @Value("${security.lock-time-minutes}")
-    private int lockTimeMinutes;
-
-    public AuthServiceImpl(SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+    public AuthServiceImpl( SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil) {
         this.securityProperties = securityProperties;
         this.auditLogRepository = auditLogRepository;
         this.loginAttemptRepository = loginAttemptRepository;
@@ -76,7 +71,6 @@ public class AuthServiceImpl implements AuthService {
         this.refreshTokenRepository = refreshTokenRepository;
         this.usersRepository = usersRepository;
         this.jwtUtil = jwtUtil;
-        this.authenticationManager = authenticationManager;
     }
 
 
@@ -724,7 +718,7 @@ public class AuthServiceImpl implements AuthService {
                 ThreadLocalRandom.current().nextInt(100000, 1000000)
         );
 
-        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(10);
+        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(otpExpiryMinutes);
 
         Otp otp = Otp.builder()
                 .user(user)
@@ -830,6 +824,48 @@ public class AuthServiceImpl implements AuthService {
         verificationToken.setUsed(true);
 
         emailVerificationTokenRepository.save(verificationToken);
+    }
+
+    @Override
+    @Transactional
+    public EmailOtpVerifyResponse verifyEmailPasswordOtp(
+            VerifyEmailOtpRequest request) {
+
+        String email = request.getEmail()
+                .trim()
+                .toLowerCase();
+
+        String otpCode = request.getOtp()
+                .trim();
+
+        Otp otpEntity = otpRepository
+                .findByUserEmailAndOtpCodeAndPurpose(
+                        email,
+                        otpCode,
+                        OtpPurpose.FORGOT_PASSWORD
+                )
+                .orElseThrow(() ->
+                        new RuntimeException("Invalid OTP"));
+
+        if (Boolean.TRUE.equals(otpEntity.getVerified())) {
+            throw new RuntimeException("OTP already verified");
+        }
+
+        if (otpEntity.getExpiryTime()
+                .isBefore(LocalDateTime.now())) {
+
+            throw new RuntimeException("OTP expired");
+        }
+
+        otpEntity.setVerified(true);
+
+        otpRepository.save(otpEntity);
+
+        return EmailOtpVerifyResponse.builder()
+                .verified(true)
+                .email(email)
+                .canResetPassword(true)
+                .build();
     }
 
 }

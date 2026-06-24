@@ -11,13 +11,15 @@ import java.util.Optional;
 @Repository
 public interface OtpRepository extends JpaRepository<Otp, Long> {
 
-    Optional<Otp> findTopByUserAndPurposeOrderByIdDesc(
-            Users user,
-            OtpPurpose purpose
-    );
-
     void deleteByUserAndPurpose(
             Users user,
             OtpPurpose purpose
     );
+
+    Optional<Otp> findByUserEmailAndOtpCodeAndPurpose(
+            String email,
+            String otpCode,
+            OtpPurpose purpose
+    );
+
 }

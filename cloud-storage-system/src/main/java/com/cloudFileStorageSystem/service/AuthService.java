@@ -3,10 +3,8 @@ package com.cloudFileStorageSystem.service;
 import com.cloudFileStorageSystem.dtos.request.ForgotPasswordRequest;
 import com.cloudFileStorageSystem.dtos.request.LoginRequest;
 import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
-import com.cloudFileStorageSystem.dtos.response.LoginResponse;
-import com.cloudFileStorageSystem.dtos.response.LogoutResponse;
-import com.cloudFileStorageSystem.dtos.response.OtpResponse;
-import com.cloudFileStorageSystem.dtos.response.TokenResponse;
+import com.cloudFileStorageSystem.dtos.request.VerifyEmailOtpRequest;
+import com.cloudFileStorageSystem.dtos.response.*;
 import jakarta.servlet.http.HttpServletRequest;
 
 
@@ -22,4 +20,6 @@ public interface AuthService {
     LogoutResponse logout(String accessToken, String refreshToken);
 
     void verifyEmail(String token);
+
+    EmailOtpVerifyResponse verifyEmailPasswordOtp(VerifyEmailOtpRequest verifyEmailOtpRequest);
 }

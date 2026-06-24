@@ -3,6 +3,7 @@ package com.cloudFileStorageSystem.controller;
 import com.cloudFileStorageSystem.dtos.request.ForgotPasswordRequest;
 import com.cloudFileStorageSystem.dtos.request.LoginRequest;
 import com.cloudFileStorageSystem.dtos.request.RefreshTokenRequest;
+import com.cloudFileStorageSystem.dtos.request.VerifyEmailOtpRequest;
 import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,6 +49,12 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Token refreshed successfully", httpServletRequest.getRequestURI(), response));
     }
 
+    @GetMapping("/verify-email")
+    public ResponseEntity<ApiResponse<String>> verifyEmail(@RequestParam String token, HttpServletRequest request) {
+        authService.verifyEmail(token);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Email verified successfully", request.getRequestURI(), "Account activated"));
+    }
+
     @PostMapping("/forgot-password/email")
     public ResponseEntity<ApiResponse<OtpResponse>> forgotPasswordEmail(@Valid @RequestBody ForgotPasswordRequest request, HttpServletRequest servletRequest) {
         log.info("Forgot password API called for email: {}", request.getEmail());
@@ -56,9 +63,11 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "OTP sent successfully", servletRequest.getRequestURI(), response));
     }
 
-    @GetMapping("/verify-email")
-    public ResponseEntity<ApiResponse<String>> verifyEmail(@RequestParam String token, HttpServletRequest request) {
-        authService.verifyEmail(token);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Email verified successfully", request.getRequestURI(), "Account activated"));
+    @PostMapping("/verify-password-otp")
+    public ResponseEntity<ApiResponse<EmailOtpVerifyResponse>> EmailVerifyOtp(@RequestBody VerifyEmailOtpRequest verifyEmailOtpRequest, HttpServletRequest servletRequest) {
+        EmailOtpVerifyResponse otpVerifyResponse = authService.verifyEmailPasswordOtp(verifyEmailOtpRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "OTP verified successfully", servletRequest.getRequestURI(), otpVerifyResponse));
     }
+
+
 }
