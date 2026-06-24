@@ -345,6 +345,7 @@ public class AuthServiceImpl implements AuthService {
 
         LoginAttempt attempt = new LoginAttempt();
 
+        attempt.setUserId(user.getId());
         attempt.setEmail(user.getEmail());
         attempt.setPhoneNumber(user.getPhoneNumber());
         attempt.setLoginIdentifier(request.getIdentifier());
@@ -420,8 +421,9 @@ public class AuthServiceImpl implements AuthService {
             String loginIdentifier,
             HttpServletRequest request) {
 
-        LoginAttempt attempt =
-                new LoginAttempt();
+        LoginAttempt attempt = new LoginAttempt();
+
+        attempt.setUserId(user.getId());
 
         attempt.setEmail(user.getEmail());
 
@@ -464,8 +466,8 @@ public class AuthServiceImpl implements AuthService {
             HttpServletRequest request,
             String reason) {
 
-        LoginAttempt attempt =
-                new LoginAttempt();
+        LoginAttempt attempt = new LoginAttempt();
+        attempt.setUserId(null);
 
         attempt.setLoginIdentifier(
                 identifier

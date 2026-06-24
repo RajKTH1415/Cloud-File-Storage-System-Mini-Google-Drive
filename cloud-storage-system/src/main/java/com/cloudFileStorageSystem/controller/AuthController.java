@@ -77,7 +77,8 @@ public class AuthController {
         ChangePasswordResponse response = authService.changePassword(request, httpRequest);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully", httpRequest.getRequestURI(), response));
     }
-        @GetMapping("/login-history")
+
+    @GetMapping("/login-history")
     public ResponseEntity<?> getLoginHistory(@RequestParam Long userId, HttpServletRequest httpServletRequest) {
         List<LoginHistoryResponse> historyResponses = authService.getLoginHistory(userId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Login history fetched successfully", httpServletRequest.getRequestURI(), historyResponses));
