@@ -1,5 +1,6 @@
 package com.cloudFileStorageSystem.service.Impl;
 
+import com.cloudFileStorageSystem.dtos.response.LockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UsersResponse;
 import com.cloudFileStorageSystem.enums.Role;
@@ -164,6 +165,73 @@ public class AdminServiceImpl implements AdminService {
 
         return mapToUserResponse(updatedUser);
 
+    }
+
+    @Override
+    @Transactional
+    public LockUserResponse lockUser(Long userId) {
+
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found with id: " + userId));
+
+        // Prevent locking default admin
+        if ("admin".equalsIgnoreCase(user.getUsername())) {
+            throw new IllegalArgumentException(
+                    "Default admin account cannot be locked");
+        }
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        Long currentAdminId =
+                Long.parseLong(authentication.getName());
+
+        // Prevent self-lock
+        if (user.getId().equals(currentAdminId)) {
+            throw new IllegalArgumentException(
+                    "You cannot lock your own account");
+        }
+
+        // Already locked
+        if (!user.isAccountNonLocked()) {
+            throw new IllegalArgumentException(
+                    "User account is already locked");
+        }
+
+        user.setAccountNonLocked(false);
+
+        // Admin lock = indefinite lock
+        user.setLockedUntil(null);
+
+        usersRepository.save(user);
+
+        AuditLog auditLog = new AuditLog();
+
+        auditLog.setIdentifier(user.getEmail());
+        auditLog.setAction("ACCOUNT_LOCKED_BY_ADMIN");
+        auditLog.setTimestamp(LocalDateTime.now());
+
+        auditLog.setDetails(
+                String.format(
+                        "Admin '%s' locked account '%s' (User ID: %d)",
+                        authentication.getName(),
+                        user.getEmail(),
+                        user.getId()
+                )
+        );
+
+        auditLogRepository.save(auditLog);
+
+        return LockUserResponse.builder()
+                .userId(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .accountNonLocked(false)
+                .lockedUntil(user.getLockedUntil())
+                .lockedAt(LocalDateTime.now())
+                .build();
     }
 
 

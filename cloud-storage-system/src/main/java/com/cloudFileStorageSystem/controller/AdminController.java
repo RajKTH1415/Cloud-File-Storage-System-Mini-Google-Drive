@@ -3,6 +3,7 @@ package com.cloudFileStorageSystem.controller;
 
 import com.cloudFileStorageSystem.dtos.request.UpdateUserRoleRequest;
 import com.cloudFileStorageSystem.dtos.response.ApiResponse;
+import com.cloudFileStorageSystem.dtos.response.LockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UsersResponse;
 import com.cloudFileStorageSystem.service.AdminService;
@@ -56,5 +57,13 @@ public class AdminController {
         log.info("Role updated successfully. userId={}, role={}", id, request.getRole());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User role updated successfully", servletRequest.getRequestURI(), response));
 
+    }
+
+    @PatchMapping("/users/{id}/lock")
+    public ResponseEntity<ApiResponse<LockUserResponse>> lockUser(@PathVariable Long id, HttpServletRequest request) {
+        log.info("Lock user request received for userId={}", id);
+        LockUserResponse response = adminService.lockUser(id);
+        log.info("User locked successfully. userId={}", id);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User locked successfully", request.getRequestURI(), response));
     }
 }

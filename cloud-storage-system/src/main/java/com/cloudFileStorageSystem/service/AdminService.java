@@ -1,5 +1,6 @@
 package com.cloudFileStorageSystem.service;
 
+import com.cloudFileStorageSystem.dtos.response.LockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UsersResponse;
 import com.cloudFileStorageSystem.enums.Role;
@@ -15,5 +16,7 @@ public interface AdminService {
     UsersResponse getUserById(Long userId);
 
     UsersResponse updateUserRole(Long userId, Role role);
+
+    LockUserResponse lockUser(Long userId);
 
 }
