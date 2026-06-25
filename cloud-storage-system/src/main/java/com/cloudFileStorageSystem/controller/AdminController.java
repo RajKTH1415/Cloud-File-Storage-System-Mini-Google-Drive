@@ -82,4 +82,12 @@ public class AdminController {
         log.info("User disabled successfully. userId={}", id);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User disabled successfully", request.getRequestURI(), response));
     }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<ApiResponse<UsersResponse>> deleteUser(@PathVariable Long id, HttpServletRequest request) {
+        log.info("Delete user request received. userId={}", id);
+        UsersResponse response = adminService.deleteUser(id);
+        log.info("User deleted (soft delete) successfully. userId={}", id);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User deleted successfully", request.getRequestURI(), response));
+    }
 }

@@ -22,4 +22,6 @@ public interface AdminService {
 
     UsersResponse disableUser(Long userId);
 
+    UsersResponse deleteUser(Long userId);
+
 }

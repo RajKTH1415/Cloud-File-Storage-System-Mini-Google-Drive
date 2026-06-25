@@ -1,6 +1,7 @@
 package com.cloudFileStorageSystem.module;
 
 import com.cloudFileStorageSystem.enums.Role;
+import com.cloudFileStorageSystem.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -73,5 +74,9 @@ public class Users extends AuditableEntity {
     @Builder.Default
     @Column(name = "email_verified", nullable = false)
     private boolean emailVerified = false;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private UserStatus status = UserStatus.ACTIVE;
 }
 

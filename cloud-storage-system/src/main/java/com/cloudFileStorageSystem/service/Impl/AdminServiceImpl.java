@@ -4,6 +4,7 @@ import com.cloudFileStorageSystem.dtos.response.LockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UsersResponse;
 import com.cloudFileStorageSystem.enums.Role;
+import com.cloudFileStorageSystem.enums.UserStatus;
 import com.cloudFileStorageSystem.module.AuditLog;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.AuditLogRepository;
@@ -254,6 +255,7 @@ public class AdminServiceImpl implements AdminService {
                     "User account is already enabled");
         }
 
+        user.setStatus(UserStatus.ACTIVE);
         user.setEnabled(true);
 
         Users updatedUser = usersRepository.save(user);
@@ -314,6 +316,7 @@ public class AdminServiceImpl implements AdminService {
 
         // 🚨 Core change
         user.setEnabled(false);
+        user.setStatus(UserStatus.DISABLED);
 
         // Optional hardening (recommended in real systems)
         user.setAccountNonLocked(false);
@@ -330,6 +333,62 @@ public class AdminServiceImpl implements AdminService {
         auditLog.setDetails(
                 String.format(
                         "Admin '%s' disabled account '%s' (User ID: %d)",
+                        adminName,
+                        user.getEmail(),
+                        user.getId()
+                )
+        );
+
+        auditLogRepository.save(auditLog);
+
+        return mapToUserResponse(updatedUser);
+    }
+
+    @Override
+    @Transactional
+    public UsersResponse deleteUser(Long userId) {
+
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found with id: " + userId));
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String adminName = authentication.getName();
+
+        // 🚫 Prevent deleting default admin
+        if ("admin".equalsIgnoreCase(user.getUsername())) {
+            throw new IllegalArgumentException(
+                    "Default admin account cannot be deleted");
+        }
+
+        // 🚫 Already deleted
+        if (user.getStatus() == UserStatus.DELETED) {
+            throw new IllegalArgumentException("User is already deleted");
+        }
+
+        // 🚫 Prevent self-delete
+        if (user.getUsername().equals(adminName)) {
+            throw new IllegalArgumentException(
+                    "You cannot delete your own account");
+        }
+
+        // 🧠 SOFT DELETE
+        user.setStatus(UserStatus.DELETED);
+        user.setEnabled(false);
+        user.setAccountNonLocked(false);
+
+        Users updatedUser = usersRepository.save(user);
+
+        // 📜 Audit log
+        AuditLog auditLog = new AuditLog();
+        auditLog.setIdentifier(user.getEmail());
+        auditLog.setAction("ACCOUNT_DELETED_BY_ADMIN");
+        auditLog.setTimestamp(LocalDateTime.now());
+        auditLog.setDetails(
+                String.format(
+                        "Admin '%s' deleted account '%s' (User ID: %d)",
                         adminName,
                         user.getEmail(),
                         user.getId()
