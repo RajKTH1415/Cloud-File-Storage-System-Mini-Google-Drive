@@ -2,6 +2,7 @@ package com.cloudFileStorageSystem.service.Impl;
 
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UsersResponse;
+import com.cloudFileStorageSystem.enums.Role;
 import com.cloudFileStorageSystem.module.AuditLog;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.AuditLogRepository;
@@ -127,6 +128,44 @@ public class AdminServiceImpl implements AdminService {
 
         return mapToUserResponse(user);
     }
+
+    @Override
+    @Transactional
+    public UsersResponse updateUserRole(Long userId, Role role) {
+
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found with id: " + userId));
+        if ("admin".equalsIgnoreCase(user.getUsername())) {
+            throw new IllegalArgumentException(
+                    "Default admin role cannot be modified");
+        }
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String currentAdmin = authentication.getName();
+        if (user.getUsername().equals(currentAdmin)
+                && role == Role.USER) {
+
+            throw new IllegalArgumentException(
+                    "You cannot remove your own admin role");
+        }
+
+        if (user.getRole() == role) {
+            throw new IllegalArgumentException(
+                    "User already has role: " + role);
+        }
+
+        user.setRole(role);
+
+        Users updatedUser = usersRepository.save(user);
+
+        return mapToUserResponse(updatedUser);
+
+    }
+
 
     private UsersResponse mapToUserResponse(Users user) {
 

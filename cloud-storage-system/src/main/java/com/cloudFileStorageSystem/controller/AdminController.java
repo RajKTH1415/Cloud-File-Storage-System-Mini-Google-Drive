@@ -1,11 +1,13 @@
 package com.cloudFileStorageSystem.controller;
 
 
+import com.cloudFileStorageSystem.dtos.request.UpdateUserRoleRequest;
 import com.cloudFileStorageSystem.dtos.response.ApiResponse;
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UsersResponse;
 import com.cloudFileStorageSystem.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,5 +48,13 @@ public class AdminController {
         log.info("Fetching user with id={}", id);
         UsersResponse user = adminService.getUserById(id);
         return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User fetched successfully", request.getRequestURI(), user));
+    }
+    @PutMapping("/users/{id}/role")
+    public ResponseEntity<ApiResponse<UsersResponse>> updateUserRole(@PathVariable Long id, @Valid @RequestBody UpdateUserRoleRequest request, HttpServletRequest servletRequest) {
+        log.info("Role update request received. userId={}, role={}", id, request.getRole());
+        UsersResponse response = adminService.updateUserRole(id, request.getRole());
+        log.info("Role updated successfully. userId={}, role={}", id, request.getRole());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User role updated successfully", servletRequest.getRequestURI(), response));
+
     }
 }
