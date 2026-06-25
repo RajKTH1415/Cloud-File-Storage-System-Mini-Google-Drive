@@ -117,6 +117,17 @@ public class AdminServiceImpl implements AdminService {
                 .map(this::mapToUserResponse)
                 .toList();
     }
+
+    @Override
+    public UsersResponse getUserById(Long userId) {
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found with id: " + userId));
+
+        return mapToUserResponse(user);
+    }
+
     private UsersResponse mapToUserResponse(Users user) {
 
         return UsersResponse.builder()

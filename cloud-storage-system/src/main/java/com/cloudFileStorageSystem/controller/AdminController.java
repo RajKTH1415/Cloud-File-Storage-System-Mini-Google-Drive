@@ -33,11 +33,18 @@ public class AdminController {
         log.info("User unlocked successfully for userId: {}", id);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User unlocked successfully", request.getRequestURI(), unlockUserResponse));
     }
+
     @GetMapping("/users")
     public ResponseEntity<ApiResponse<List<UsersResponse>>> getAllUsers(HttpServletRequest request) {
         log.info("Fetching all users");
         List<UsersResponse> users = adminService.getAllUsers();
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Users fetched successfully", request.getRequestURI(), users)
-        );
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Users fetched successfully", request.getRequestURI(), users));
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<ApiResponse<UsersResponse>> getUserById(@PathVariable Long id, HttpServletRequest request) {
+        log.info("Fetching user with id={}", id);
+        UsersResponse user = adminService.getUserById(id);
+        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User fetched successfully", request.getRequestURI(), user));
     }
 }

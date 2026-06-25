@@ -11,4 +11,6 @@ public interface AdminService {
 
     List<UsersResponse> getAllUsers();
 
+    UsersResponse getUserById(Long userId);
+
 }
