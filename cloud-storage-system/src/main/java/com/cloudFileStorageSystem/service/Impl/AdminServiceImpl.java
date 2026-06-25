@@ -1,6 +1,7 @@
 package com.cloudFileStorageSystem.service.Impl;
 
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
+import com.cloudFileStorageSystem.dtos.response.UsersResponse;
 import com.cloudFileStorageSystem.module.AuditLog;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.AuditLogRepository;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -105,6 +107,31 @@ public class AdminServiceImpl implements AdminService {
                 .accountNonLocked(user.isAccountNonLocked())
                 .failedAttempts(user.getFailedAttempts())
                 .unlockedAt(LocalDateTime.now())
+                .build();
+    }
+
+    @Override
+    public List<UsersResponse> getAllUsers() {
+        return usersRepository.findAll()
+                .stream()
+                .map(this::mapToUserResponse)
+                .toList();
+    }
+    private UsersResponse mapToUserResponse(Users user) {
+
+        return UsersResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole())
+                .enabled(user.isEnabled())
+                .emailVerified(user.isEmailVerified())
+                .accountNonLocked(user.isAccountNonLocked())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build();
     }
 }
