@@ -30,7 +30,7 @@ public class AdminInitializer implements CommandLineRunner {
         if (!usersRepository.existsByEmail("admin@cloudstorage.com")) {
 
             Users admin = Users.builder()
-                    .firstName("System")
+                    .firstName("ADMIN")
                     .lastName("Admin")
                     .username("admin")
                     .email("admin@cloudstorage.com")
