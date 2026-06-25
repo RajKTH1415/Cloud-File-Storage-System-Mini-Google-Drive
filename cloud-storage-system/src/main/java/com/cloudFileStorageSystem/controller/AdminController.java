@@ -2,10 +2,7 @@ package com.cloudFileStorageSystem.controller;
 
 
 import com.cloudFileStorageSystem.dtos.request.UpdateUserRoleRequest;
-import com.cloudFileStorageSystem.dtos.response.ApiResponse;
-import com.cloudFileStorageSystem.dtos.response.LockUserResponse;
-import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
-import com.cloudFileStorageSystem.dtos.response.UsersResponse;
+import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -27,6 +24,15 @@ public class AdminController {
 
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
+    }
+
+
+    @GetMapping("/stats")
+    public ResponseEntity<ApiResponse<AdminStatsResponse>> getStats(HttpServletRequest request) {
+        log.info("Admin stats request received");
+        AdminStatsResponse response = adminService.getAdminStats();
+        log.info("Admin stats fetched successfully");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Admin stats fetched successfully", request.getRequestURI(), response));
     }
 
     @PostMapping("/users/{id}/unlock")

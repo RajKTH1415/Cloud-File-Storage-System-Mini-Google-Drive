@@ -1,5 +1,6 @@
 package com.cloudFileStorageSystem.service;
 
+import com.cloudFileStorageSystem.dtos.response.AdminStatsResponse;
 import com.cloudFileStorageSystem.dtos.response.LockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UsersResponse;
@@ -23,5 +24,7 @@ public interface AdminService {
     UsersResponse disableUser(Long userId);
 
     UsersResponse deleteUser(Long userId);
+
+    AdminStatsResponse getAdminStats();
 
 }

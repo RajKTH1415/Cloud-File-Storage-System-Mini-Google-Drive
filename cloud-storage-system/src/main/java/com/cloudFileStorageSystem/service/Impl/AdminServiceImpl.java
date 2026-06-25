@@ -1,5 +1,6 @@
 package com.cloudFileStorageSystem.service.Impl;
 
+import com.cloudFileStorageSystem.dtos.response.AdminStatsResponse;
 import com.cloudFileStorageSystem.dtos.response.LockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
 import com.cloudFileStorageSystem.dtos.response.UsersResponse;
@@ -398,6 +399,27 @@ public class AdminServiceImpl implements AdminService {
         auditLogRepository.save(auditLog);
 
         return mapToUserResponse(updatedUser);
+    }
+
+    @Override
+    public AdminStatsResponse getAdminStats() {
+
+        List<Users> users = usersRepository.findAll();
+
+        long totalUsers = users.size();
+
+        long activeUsers = usersRepository.countByStatus(UserStatus.ACTIVE);
+
+        long lockedUsers = usersRepository.countByStatus(UserStatus.LOCKED);
+
+        long deletedUsers = usersRepository.countByStatus(UserStatus.DELETED);
+
+        return AdminStatsResponse.builder()
+                .totalUsers(totalUsers)
+                .activeUsers(activeUsers)
+                .lockedUsers(lockedUsers)
+                .deletedUsers(deletedUsers)
+                .build();
     }
 
 
