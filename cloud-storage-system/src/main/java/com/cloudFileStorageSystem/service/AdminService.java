@@ -18,5 +18,6 @@ public interface AdminService {
     UsersResponse updateUserRole(Long userId, Role role);
 
     LockUserResponse lockUser(Long userId);
+    UsersResponse enableUser(Long userId);
 
 }

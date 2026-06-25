@@ -66,4 +66,13 @@ public class AdminController {
         log.info("User locked successfully. userId={}", id);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User locked successfully", request.getRequestURI(), response));
     }
+
+    @PatchMapping("/users/{id}/enable")
+    public ResponseEntity<ApiResponse<UsersResponse>> enableUser(@PathVariable Long id, HttpServletRequest request) {
+        log.info("Enable user request received. userId={}", id);
+        UsersResponse response = adminService.enableUser(id);
+        log.info("User enabled successfully. userId={}", id);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User enabled successfully", request.getRequestURI(), response)
+        );
+    }
 }

@@ -234,6 +234,53 @@ public class AdminServiceImpl implements AdminService {
                 .build();
     }
 
+    @Override
+    @Transactional
+    public UsersResponse enableUser(Long userId) {
+
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found with id: " + userId));
+
+        // Default admin protection
+        if ("admin".equalsIgnoreCase(user.getUsername())) {
+            throw new IllegalArgumentException(
+                    "Default admin account is always enabled");
+        }
+
+        if (user.isEnabled()) {
+            throw new IllegalArgumentException(
+                    "User account is already enabled");
+        }
+
+        user.setEnabled(true);
+
+        Users updatedUser = usersRepository.save(user);
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        AuditLog auditLog = new AuditLog();
+
+        auditLog.setAction("ACCOUNT_ENABLED_BY_ADMIN");
+        auditLog.setIdentifier(user.getEmail());
+        auditLog.setTimestamp(LocalDateTime.now());
+
+        auditLog.setDetails(
+                String.format(
+                        "Admin '%s' enabled account '%s' (User ID: %d)",
+                        authentication.getName(),
+                        user.getEmail(),
+                        user.getId()
+                )
+        );
+
+        auditLogRepository.save(auditLog);
+
+        return mapToUserResponse(updatedUser);
+    }
+
 
     private UsersResponse mapToUserResponse(Users user) {
 
