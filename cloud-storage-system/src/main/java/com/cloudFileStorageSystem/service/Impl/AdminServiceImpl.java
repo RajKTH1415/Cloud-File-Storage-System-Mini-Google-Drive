@@ -281,6 +281,66 @@ public class AdminServiceImpl implements AdminService {
         return mapToUserResponse(updatedUser);
     }
 
+    @Override
+    @Transactional
+    public UsersResponse disableUser(Long userId) {
+
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found with id: " + userId));
+
+        // Prevent disabling default admin
+        if ("admin".equalsIgnoreCase(user.getUsername())) {
+            throw new IllegalArgumentException(
+                    "Default admin account cannot be disabled");
+        }
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String adminName = authentication.getName();
+
+        // Already disabled
+        if (!user.isEnabled()) {
+            throw new IllegalArgumentException(
+                    "User account is already disabled");
+        }
+
+        // Optional safety: prevent self-disable
+        if (user.getUsername().equals(adminName)) {
+            throw new IllegalArgumentException(
+                    "You cannot disable your own account");
+        }
+
+        // 🚨 Core change
+        user.setEnabled(false);
+
+        // Optional hardening (recommended in real systems)
+        user.setAccountNonLocked(false);
+        user.setFailedAttempts(0);
+        user.setLockedUntil(null);
+
+        Users updatedUser = usersRepository.save(user);
+
+        // Audit log
+        AuditLog auditLog = new AuditLog();
+        auditLog.setIdentifier(user.getEmail());
+        auditLog.setAction("ACCOUNT_DISABLED_BY_ADMIN");
+        auditLog.setTimestamp(LocalDateTime.now());
+        auditLog.setDetails(
+                String.format(
+                        "Admin '%s' disabled account '%s' (User ID: %d)",
+                        adminName,
+                        user.getEmail(),
+                        user.getId()
+                )
+        );
+
+        auditLogRepository.save(auditLog);
+
+        return mapToUserResponse(updatedUser);
+    }
+
 
     private UsersResponse mapToUserResponse(Users user) {
 

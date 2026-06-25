@@ -20,4 +20,6 @@ public interface AdminService {
     LockUserResponse lockUser(Long userId);
     UsersResponse enableUser(Long userId);
 
+    UsersResponse disableUser(Long userId);
+
 }
