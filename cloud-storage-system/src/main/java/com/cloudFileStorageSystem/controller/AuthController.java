@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Login successful", httpServletRequest.getRequestURI(), response));
     }
 
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<?>> logout(@RequestBody RefreshTokenRequest request, HttpServletRequest servletRequest, @RequestHeader("Authorization") String authorizationHeader) {
         String accessToken = authorizationHeader.replace("Bearer ", "");
@@ -55,6 +57,7 @@ public class AuthController {
         log.info("Email verified successfully");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Email verified successfully", request.getRequestURI(), "Account activated"));
     }
+
     @PostMapping("/resend-verification-email")
     public ResponseEntity<ApiResponse<ResendVerificationEmailResponse>> resendVerificationEmail(@RequestBody @Valid ResendVerificationRequest request, HttpServletRequest httpServletRequest) {
         log.info("Received resend verification email request for email: {}", request.getEmail());
@@ -70,6 +73,7 @@ public class AuthController {
         log.info("Forgot password API completed successfully for email: {}", request.getEmail());
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "OTP sent successfully", servletRequest.getRequestURI(), response));
     }
+
     @PostMapping("/resend-password-otp")
     public ResponseEntity<ApiResponse<OtpResponse>> resendPasswordOtp(@Valid @RequestBody ForgotPasswordRequest request, HttpServletRequest httpServletRequest) {
         log.info("Received resend password OTP request for email: {}", request.getEmail());
@@ -85,6 +89,7 @@ public class AuthController {
         log.info("Password OTP verified successfully for email: {}", verifyEmailOtpRequest.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "OTP verified successfully", servletRequest.getRequestURI(), otpVerifyResponse));
     }
+
     @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<ResetPasswordResponse>> resetPassword(@RequestBody ResetPasswordRequest request, HttpServletRequest servletRequest) {
         log.info("Received password reset request for email: {}", request.getEmail());
@@ -92,6 +97,8 @@ public class AuthController {
         log.info("Password reset completed successfully for email: {}", request.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully. Please login again.", servletRequest.getRequestURI(), resetPasswordResponse));
     }
+
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping("/change-password")
     public ResponseEntity<ApiResponse<ChangePasswordResponse>> changePassword(@Valid @RequestBody ChangePasswordRequest request, HttpServletRequest httpRequest) {
         log.info("Received change password request");
@@ -100,6 +107,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully", httpRequest.getRequestURI(), response));
     }
 
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/login-history")
     public ResponseEntity<?> getLoginHistory(@RequestParam Long userId, HttpServletRequest httpServletRequest) {
         log.info("Received login history request for userId: {}", userId);

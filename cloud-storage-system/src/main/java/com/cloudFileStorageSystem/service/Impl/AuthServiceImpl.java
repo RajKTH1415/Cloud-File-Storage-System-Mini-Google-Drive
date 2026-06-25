@@ -7,6 +7,7 @@ import com.cloudFileStorageSystem.enums.AttemptStatus;
 import com.cloudFileStorageSystem.enums.OtpPurpose;
 import com.cloudFileStorageSystem.module.*;
 import com.cloudFileStorageSystem.repository.*;
+import com.cloudFileStorageSystem.security.CustomUserDetailsService;
 import com.cloudFileStorageSystem.service.AuditService;
 import com.cloudFileStorageSystem.service.AuthService;
 import com.cloudFileStorageSystem.service.EmailService;
@@ -15,6 +16,9 @@ import com.cloudFileStorageSystem.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UsersRepository usersRepository;
     private final JwtUtil jwtUtil;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Value("${jwt.refresh-token-validity}")
     private long refreshTokenValidity;
@@ -56,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
     private int passwordHistoryLimit;
 
 
-    public AuthServiceImpl(PasswordHistoryRepository passwordHistoryRepository, PasswordResetOtpRepository passwordResetOtpRepository, SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil) {
+    public AuthServiceImpl(PasswordHistoryRepository passwordHistoryRepository, PasswordResetOtpRepository passwordResetOtpRepository, SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
         this.passwordHistoryRepository = passwordHistoryRepository;
         this.passwordResetOtpRepository = passwordResetOtpRepository;
         this.securityProperties = securityProperties;
@@ -71,6 +76,7 @@ public class AuthServiceImpl implements AuthService {
         this.refreshTokenRepository = refreshTokenRepository;
         this.usersRepository = usersRepository;
         this.jwtUtil = jwtUtil;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
 
@@ -1053,11 +1059,29 @@ public class AuthServiceImpl implements AuthService {
                 .message("Password changed successfully")
                 .build();
     }
-
     @Override
     public List<LoginHistoryResponse> getLoginHistory(Long userId) {
 
-        return loginAttemptRepository.findByUserIdOrderByAttemptTimeDesc(String.valueOf(userId))
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        UserDetails userDetails =
+                (UserDetails) authentication.getPrincipal();
+
+        Long currentUserId =
+                Long.parseLong(userDetails.getUsername());
+
+        boolean isAdmin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin && !currentUserId.equals(userId)) {
+            throw new RuntimeException(
+                    "You can only view your own login history");
+        }
+
+        return loginAttemptRepository
+                .findByUserIdOrderByAttemptTimeDesc(String.valueOf(userId))
                 .stream()
                 .map(attempt -> new LoginHistoryResponse(
                         attempt.getAttemptStatus().name(),
@@ -1065,9 +1089,8 @@ public class AuthServiceImpl implements AuthService {
                         attempt.getDeviceInfo(),
                         attempt.getAttemptTime()
                 ))
-                .collect(Collectors.toList());
+                .toList();
     }
-
     @Override
     @Transactional
     public ResendVerificationEmailResponse resendVerificationEmail(String email) {
