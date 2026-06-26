@@ -110,10 +110,10 @@ public class AuthController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/login-history")
     public ResponseEntity<?> getLoginHistory(@RequestParam Long userId, HttpServletRequest httpServletRequest) {
-        log.info("Received login history request for userId: {}", userId);
+        log.info("[LOGIN_HISTORY] Login history request received. UserId={}, IP={}, URI={}", userId, httpServletRequest.getRemoteAddr(), httpServletRequest.getRequestURI());
         List<LoginHistoryResponse> historyResponses = authService.getLoginHistory(userId);
-        log.info("Successfully fetched {} login history records for userId: {}", historyResponses.size(), userId);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Login history fetched successfully", httpServletRequest.getRequestURI(), historyResponses));
+        log.info("[LOGIN_HISTORY] Login history fetched successfully. UserId={}, Records={}", userId, historyResponses.size());
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Login history fetched successfully", httpServletRequest.getRequestURI(), historyResponses));
     }
 
 }

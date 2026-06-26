@@ -1254,6 +1254,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public List<LoginHistoryResponse> getLoginHistory(Long userId) {
 
+        log.info(
+                "[LOGIN_HISTORY] Login history retrieval started. RequestedUserId={}",
+                userId);
+
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
@@ -1263,26 +1267,49 @@ public class AuthServiceImpl implements AuthService {
         Long currentUserId =
                 Long.parseLong(userDetails.getUsername());
 
-        boolean isAdmin = authentication.getAuthorities()
-                .stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+        boolean isAdmin =
+                authentication.getAuthorities()
+                        .stream()
+                        .anyMatch(auth ->
+                                auth.getAuthority().equals("ROLE_ADMIN"));
+
+        log.debug(
+                "[LOGIN_HISTORY] CurrentUserId={}, IsAdmin={}",
+                currentUserId,
+                isAdmin);
 
         if (!isAdmin && !currentUserId.equals(userId)) {
+
+            log.warn(
+                    "[LOGIN_HISTORY] Unauthorized login history access attempt. RequestedUserId={}, CurrentUserId={}",
+                    userId,
+                    currentUserId);
+
             throw new RuntimeException(
                     "You can only view your own login history");
         }
 
-        return loginAttemptRepository
-                .findByUserIdOrderByAttemptTimeDesc(String.valueOf(userId))
-                .stream()
-                .map(attempt -> new LoginHistoryResponse(
-                        attempt.getAttemptStatus().name(),
-                        attempt.getIpAddress(),
-                        attempt.getDeviceInfo(),
-                        attempt.getAttemptTime()
-                ))
-                .toList();
+        List<LoginHistoryResponse> history =
+                loginAttemptRepository
+                        .findByUserIdOrderByAttemptTimeDesc(
+                                String.valueOf(userId))
+                        .stream()
+                        .map(attempt -> new LoginHistoryResponse(
+                                attempt.getAttemptStatus().name(),
+                                attempt.getIpAddress(),
+                                attempt.getDeviceInfo(),
+                                attempt.getAttemptTime()
+                        ))
+                        .toList();
+
+        log.info(
+                "[LOGIN_HISTORY] Login history retrieved successfully. UserId={}, Records={}",
+                userId,
+                history.size());
+
+        return history;
     }
+
     @Override
     @Transactional
     public ResendVerificationEmailResponse resendVerificationEmail(String email) {
