@@ -101,10 +101,10 @@ public class AuthController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping("/change-password")
     public ResponseEntity<ApiResponse<ChangePasswordResponse>> changePassword(@Valid @RequestBody ChangePasswordRequest request, HttpServletRequest httpRequest) {
-        log.info("Received change password request");
+        log.info("[CHANGE_PASSWORD] Change password request received. IP={}, URI={}", httpRequest.getRemoteAddr(), httpRequest.getRequestURI());
         ChangePasswordResponse response = authService.changePassword(request, httpRequest);
-        log.info("Password changed successfully");
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully", httpRequest.getRequestURI(), response));
+        log.info("[CHANGE_PASSWORD] Password changed successfully.");
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully", httpRequest.getRequestURI(), response));
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN')")

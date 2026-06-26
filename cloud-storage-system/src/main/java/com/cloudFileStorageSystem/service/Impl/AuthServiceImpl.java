@@ -1147,41 +1147,110 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public ChangePasswordResponse changePassword(ChangePasswordRequest request, HttpServletRequest httpRequest) {
+    public ChangePasswordResponse changePassword(
+            ChangePasswordRequest request,
+            HttpServletRequest httpRequest) {
+
+        log.info("[CHANGE_PASSWORD] Change password process started.");
 
         String token = resolveToken(httpRequest);
+
         Long userId = jwtUtil.extractUserId(token);
 
-        Users user = usersRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        log.debug(
+                "[CHANGE_PASSWORD] User ID extracted from access token. UserId={}",
+                userId);
 
-        // 1. Verify current password
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new RuntimeException("Current password is incorrect");
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[CHANGE_PASSWORD] User not found. UserId={}",
+                            userId);
+
+                    return new RuntimeException("User not found");
+                });
+
+        log.debug(
+                "[CHANGE_PASSWORD] User located. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
+
+        // Verify current password
+        if (!passwordEncoder.matches(
+                request.getCurrentPassword(),
+                user.getPassword())) {
+
+            log.warn(
+                    "[CHANGE_PASSWORD] Current password verification failed. UserId={}",
+                    user.getId());
+
+            throw new RuntimeException(
+                    "Current password is incorrect");
         }
 
-        // 2. New password should not match old password
-        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
-            throw new RuntimeException("New password cannot be same as current password");
+        log.debug(
+                "[CHANGE_PASSWORD] Current password verified. UserId={}",
+                user.getId());
+
+        // Prevent password reuse
+        if (passwordEncoder.matches(
+                request.getNewPassword(),
+                user.getPassword())) {
+
+            log.warn(
+                    "[CHANGE_PASSWORD] New password matches current password. UserId={}",
+                    user.getId());
+
+            throw new RuntimeException(
+                    "New password cannot be same as current password");
         }
 
         String uid = String.valueOf(user.getId());
 
-        // 3. Password history validation
-        validatePasswordHistory(uid, request.getNewPassword());
+        log.debug(
+                "[CHANGE_PASSWORD] Validating password history. UserId={}",
+                user.getId());
 
-        // 4. Save current password to history
-        savePasswordHistory(uid, user.getPassword());
+        // Password history validation
+        validatePasswordHistory(
+                uid,
+                request.getNewPassword());
 
-        // 5. Update password
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        log.debug(
+                "[CHANGE_PASSWORD] Password history validation passed. UserId={}",
+                user.getId());
+
+        // Save current password to history
+        savePasswordHistory(
+                uid,
+                user.getPassword());
+
+        log.debug(
+                "[CHANGE_PASSWORD] Current password stored in password history. UserId={}",
+                user.getId());
+
+        // Update password
+        user.setPassword(
+                passwordEncoder.encode(
+                        request.getNewPassword()));
 
         usersRepository.save(user);
+
+        log.info(
+                "[CHANGE_PASSWORD] Password updated successfully. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
+
+        log.info(
+                "[CHANGE_PASSWORD] Change password process completed successfully. UserId={}",
+                user.getId());
 
         return ChangePasswordResponse.builder()
                 .message("Password changed successfully")
                 .build();
     }
+
     @Override
     public List<LoginHistoryResponse> getLoginHistory(Long userId) {
 
