@@ -84,10 +84,10 @@ public class AuthController {
 
     @PostMapping("/verify-password-otp")
     public ResponseEntity<ApiResponse<EmailOtpVerifyResponse>> EmailVerifyOtp(@RequestBody VerifyEmailOtpRequest verifyEmailOtpRequest, HttpServletRequest servletRequest) {
-        log.info("Received password OTP verification request for email: {}", verifyEmailOtpRequest.getEmail());
-        EmailOtpVerifyResponse otpVerifyResponse = authService.verifyEmailPasswordOtp(verifyEmailOtpRequest);
-        log.info("Password OTP verified successfully for email: {}", verifyEmailOtpRequest.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "OTP verified successfully", servletRequest.getRequestURI(), otpVerifyResponse));
+        log.info("[VERIFY_PASSWORD_OTP] Password OTP verification request received. Email={}, IP={}, URI={}", verifyEmailOtpRequest.getEmail(), servletRequest.getRemoteAddr(), servletRequest.getRequestURI());
+        EmailOtpVerifyResponse response = authService.verifyEmailPasswordOtp(verifyEmailOtpRequest);
+        log.info("[VERIFY_PASSWORD_OTP] Password OTP verified successfully. Email={}", verifyEmailOtpRequest.getEmail());
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "OTP verified successfully", servletRequest.getRequestURI(), response));
     }
 
     @PostMapping("/reset-password")

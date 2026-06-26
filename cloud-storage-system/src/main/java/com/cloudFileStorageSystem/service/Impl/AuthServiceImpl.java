@@ -884,24 +884,46 @@ public class AuthServiceImpl implements AuthService {
                 .trim()
                 .toLowerCase();
 
-        String otpCode = request.getOtp()
-                .trim();
+        log.info(
+                "[VERIFY_PASSWORD_OTP] Password OTP verification started. Email={}",
+                email);
+
+        String otpCode = request.getOtp().trim();
 
         Otp otpEntity = otpRepository
                 .findByUserEmailAndOtpCodeAndPurpose(
                         email,
                         otpCode,
-                        OtpPurpose.FORGOT_PASSWORD
-                )
-                .orElseThrow(() ->
-                        new RuntimeException("Invalid OTP"));
+                        OtpPurpose.FORGOT_PASSWORD)
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[VERIFY_PASSWORD_OTP] Invalid OTP provided. Email={}",
+                            email);
+
+                    return new RuntimeException("Invalid OTP");
+                });
+
+        log.debug(
+                "[VERIFY_PASSWORD_OTP] OTP record found. OtpId={}, UserId={}",
+                otpEntity.getId(),
+                otpEntity.getUser().getId());
 
         if (Boolean.TRUE.equals(otpEntity.getVerified())) {
+
+            log.warn(
+                    "[VERIFY_PASSWORD_OTP] OTP already verified. Email={}",
+                    email);
+
             throw new RuntimeException("OTP already verified");
         }
 
-        if (otpEntity.getExpiryTime()
-                .isBefore(LocalDateTime.now())) {
+        if (otpEntity.getExpiryTime().isBefore(LocalDateTime.now())) {
+
+            log.warn(
+                    "[VERIFY_PASSWORD_OTP] OTP expired. Email={}, ExpiryTime={}",
+                    email,
+                    otpEntity.getExpiryTime());
 
             throw new RuntimeException("OTP expired");
         }
@@ -909,6 +931,15 @@ public class AuthServiceImpl implements AuthService {
         otpEntity.setVerified(true);
 
         otpRepository.save(otpEntity);
+
+        log.info(
+                "[VERIFY_PASSWORD_OTP] OTP verified successfully. UserId={}, Email={}",
+                otpEntity.getUser().getId(),
+                email);
+
+        log.info(
+                "[VERIFY_PASSWORD_OTP] Password OTP verification process completed successfully. UserId={}",
+                otpEntity.getUser().getId());
 
         return EmailOtpVerifyResponse.builder()
                 .verified(true)
