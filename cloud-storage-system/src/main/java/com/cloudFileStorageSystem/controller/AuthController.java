@@ -66,9 +66,9 @@ public class AuthController {
 
     @PostMapping("/forgot-password/email")
     public ResponseEntity<ApiResponse<OtpResponse>> forgotPasswordEmail(@Valid @RequestBody ForgotPasswordRequest request, HttpServletRequest servletRequest) {
-        log.info("Forgot password API called for email: {}", request.getEmail());
+        log.info("[FORGOT_PASSWORD] Forgot password request received. Email={}, IP={}, URI={}", request.getEmail(), servletRequest.getRemoteAddr(), servletRequest.getRequestURI());
         OtpResponse response = authService.forgotPassword(request);
-        log.info("Forgot password API completed successfully for email: {}", request.getEmail());
+        log.info("[FORGOT_PASSWORD] Forgot password request completed successfully. Email={}", request.getEmail());
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "OTP sent successfully", servletRequest.getRequestURI(), response));
     }
 

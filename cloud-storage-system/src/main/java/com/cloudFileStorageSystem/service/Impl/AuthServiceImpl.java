@@ -693,27 +693,40 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public OtpResponse forgotPassword(ForgotPasswordRequest request) {
 
-        log.info("Forgot password request received for email: {}", request.getEmail());
+        log.info(
+                "[FORGOT_PASSWORD] Forgot password process started. Email={}",
+                request.getEmail());
 
         Users user = usersRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> {
-                    log.warn("Forgot password requested for non-existing email: {}", request.getEmail());
+
+                    log.warn(
+                            "[FORGOT_PASSWORD] User not found. Email={}",
+                            request.getEmail());
+
                     return new RuntimeException("User not found");
                 });
 
+        log.debug(
+                "[FORGOT_PASSWORD] User located. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
+
         otpRepository.deleteByUserAndPurpose(
                 user,
-                OtpPurpose.FORGOT_PASSWORD
-        );
+                OtpPurpose.FORGOT_PASSWORD);
 
-        log.info("Existing forgot-password OTPs removed for user: {}", user.getEmail());
+        log.debug(
+                "[FORGOT_PASSWORD] Previous forgot-password OTPs removed. UserId={}",
+                user.getId());
 
         String otpCode = String.format(
                 "%06d",
                 ThreadLocalRandom.current().nextInt(100000, 1000000)
         );
 
-        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(otpExpiryMinutes);
+        LocalDateTime expiryTime =
+                LocalDateTime.now().plusMinutes(otpExpiryMinutes);
 
         Otp otp = Otp.builder()
                 .user(user)
@@ -728,17 +741,22 @@ public class AuthServiceImpl implements AuthService {
         otpRepository.save(otp);
 
         log.info(
-                "Forgot-password OTP generated for user: {} with expiry at {}",
-                user.getEmail(),
-                expiryTime
-        );
+                "[FORGOT_PASSWORD] Forgot-password OTP generated successfully. UserId={}, ExpiresAt={}",
+                user.getId(),
+                expiryTime);
 
         emailService.sendOtpEmail(
                 user.getEmail(),
-                otpCode
-        );
+                otpCode);
 
-        log.info("Forgot-password OTP email sent successfully to: {}", user.getEmail());
+        log.info(
+                "[FORGOT_PASSWORD] OTP email sent successfully. UserId={}, Email={}",
+                user.getId(),
+                user.getEmail());
+
+        log.info(
+                "[FORGOT_PASSWORD] Forgot password process completed successfully. UserId={}",
+                user.getId());
 
         return OtpResponse.builder()
                 .email(user.getEmail())
