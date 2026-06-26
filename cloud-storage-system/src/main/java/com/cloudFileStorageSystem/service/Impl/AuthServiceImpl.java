@@ -1250,21 +1250,38 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public OtpResponse resendPasswordOtp(String email) {
 
+        log.info(
+                "[RESEND_PASSWORD_OTP] Resend password OTP process started. Email={}",
+                email);
+
         Users user = usersRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[RESEND_PASSWORD_OTP] User not found. Email={}",
+                            email);
+
+                    return new RuntimeException("User not found");
+                });
+
+        log.debug(
+                "[RESEND_PASSWORD_OTP] User located. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
 
         // Delete previous forgot-password OTPs
         otpRepository.deleteByUserAndPurpose(
                 user,
-                OtpPurpose.FORGOT_PASSWORD
-        );
+                OtpPurpose.FORGOT_PASSWORD);
+
+        log.debug(
+                "[RESEND_PASSWORD_OTP] Previous forgot-password OTPs removed. UserId={}",
+                user.getId());
 
         String otpCode = String.format(
                 "%06d",
                 ThreadLocalRandom.current()
-                        .nextInt(100000, 1000000)
-        );
+                        .nextInt(100000, 1000000));
 
         LocalDateTime expiryTime =
                 LocalDateTime.now()
@@ -1282,10 +1299,23 @@ public class AuthServiceImpl implements AuthService {
 
         otpRepository.save(otp);
 
+        log.info(
+                "[RESEND_PASSWORD_OTP] New password OTP generated successfully. UserId={}, ExpiresAt={}",
+                user.getId(),
+                expiryTime);
+
         emailService.sendOtpEmail(
                 user.getEmail(),
-                otpCode
-        );
+                otpCode);
+
+        log.info(
+                "[RESEND_PASSWORD_OTP] Password OTP email sent successfully. UserId={}, Email={}",
+                user.getId(),
+                user.getEmail());
+
+        log.info(
+                "[RESEND_PASSWORD_OTP] Resend password OTP process completed successfully. UserId={}",
+                user.getId());
 
         return OtpResponse.builder()
                 .email(user.getEmail())

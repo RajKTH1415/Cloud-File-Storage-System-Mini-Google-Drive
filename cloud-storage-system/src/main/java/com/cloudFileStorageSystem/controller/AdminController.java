@@ -53,6 +53,7 @@ public class AdminController {
         UsersResponse user = adminService.getUserById(id);
         return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User fetched successfully", request.getRequestURI(), user));
     }
+
     @PutMapping("/users/{id}/role")
     public ResponseEntity<ApiResponse<UsersResponse>> updateUserRole(@PathVariable Long id, @Valid @RequestBody UpdateUserRoleRequest request, HttpServletRequest servletRequest) {
         log.info("Role update request received. userId={}, role={}", id, request.getRole());

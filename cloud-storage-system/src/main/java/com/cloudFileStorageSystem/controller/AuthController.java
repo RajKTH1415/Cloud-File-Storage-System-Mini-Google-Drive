@@ -41,6 +41,7 @@ public class AuthController {
         log.info("[LOGOUT] Logout completed successfully.");
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Logout successful", servletRequest.getRequestURI(), logoutResponse));
     }
+
     @PostMapping("/refresh-token")
     public ResponseEntity<ApiResponse<TokenResponse>> refreshToken(@RequestBody RefreshTokenRequest request, HttpServletRequest httpServletRequest) {
         log.info("[REFRESH_TOKEN] Refresh token request received. IP={}, URI={}", httpServletRequest.getRemoteAddr(), httpServletRequest.getRequestURI());
@@ -48,6 +49,7 @@ public class AuthController {
         log.info("[REFRESH_TOKEN] Token refresh completed successfully.");
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Token refreshed successfully", httpServletRequest.getRequestURI(), response));
     }
+
     @GetMapping("/verify-email")
     public ResponseEntity<ApiResponse<String>> verifyEmail(@RequestParam String token, HttpServletRequest request) {
         log.info("[VERIFY_EMAIL] Verification request received. IP={}, URI={}", request.getRemoteAddr(), request.getRequestURI());
@@ -74,10 +76,10 @@ public class AuthController {
 
     @PostMapping("/resend-password-otp")
     public ResponseEntity<ApiResponse<OtpResponse>> resendPasswordOtp(@Valid @RequestBody ForgotPasswordRequest request, HttpServletRequest httpServletRequest) {
-        log.info("Received resend password OTP request for email: {}", request.getEmail());
+        log.info("[RESEND_PASSWORD_OTP] Resend password OTP request received. Email={}, IP={}, URI={}", request.getEmail(), httpServletRequest.getRemoteAddr(), httpServletRequest.getRequestURI());
         OtpResponse response = authService.resendPasswordOtp(request.getEmail());
-        log.info("Password OTP resent successfully for email: {}", request.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "OTP resent successfully", httpServletRequest.getRequestURI(), response));
+        log.info("[RESEND_PASSWORD_OTP] Password OTP resent successfully. Email={}", request.getEmail());
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "OTP resent successfully", httpServletRequest.getRequestURI(), response));
     }
 
     @PostMapping("/verify-password-otp")
@@ -113,6 +115,5 @@ public class AuthController {
         log.info("Successfully fetched {} login history records for userId: {}", historyResponses.size(), userId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Login history fetched successfully", httpServletRequest.getRequestURI(), historyResponses));
     }
-
 
 }
