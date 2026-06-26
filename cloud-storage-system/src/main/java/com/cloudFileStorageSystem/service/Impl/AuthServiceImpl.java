@@ -580,7 +580,7 @@ public class AuthServiceImpl implements AuthService {
             RefreshTokenRequest request,
             HttpServletRequest httpServletRequest) {
 
-        log.info("Refresh token process started");
+        log.info("[REFRESH_TOKEN] Token refresh process started.");
 
         String refreshToken = request.getRefreshToken();
 
@@ -588,49 +588,57 @@ public class AuthServiceImpl implements AuthService {
                 refreshTokenRepository
                         .findByToken(refreshToken)
                         .orElseThrow(() -> {
-                            log.warn("Refresh token not found");
+
+                            log.warn("[REFRESH_TOKEN] Refresh token not found.");
+
                             return new RuntimeException(
                                     "Refresh token not found");
                         });
 
-        log.debug("Refresh token located. TokenId={}, UserId={}",
+        log.debug(
+                "[REFRESH_TOKEN] Refresh token located. TokenId={}, UserId={}",
                 storedToken.getId(),
                 storedToken.getUserId());
 
         if (storedToken.getRevoked()) {
-            log.warn("Attempt to use revoked refresh token. TokenId={}, UserId={}",
+
+            log.warn(
+                    "[REFRESH_TOKEN] Attempt to use revoked refresh token. TokenId={}, UserId={}",
                     storedToken.getId(),
                     storedToken.getUserId());
 
-            throw new RuntimeException(
-                    "Refresh token revoked");
+            throw new RuntimeException("Refresh token revoked");
         }
 
         if (!jwtUtil.isTokenValid(refreshToken)) {
 
-            log.warn("Expired refresh token detected. TokenId={}, UserId={}",
+            log.warn(
+                    "[REFRESH_TOKEN] Refresh token expired. TokenId={}, UserId={}",
                     storedToken.getId(),
                     storedToken.getUserId());
 
-            throw new RuntimeException(
-                    "Refresh token expired");
+            throw new RuntimeException("Refresh token expired");
         }
 
-        Long userId =
-                jwtUtil.extractUserId(refreshToken);
+        Long userId = jwtUtil.extractUserId(refreshToken);
 
-        log.debug("User ID extracted from refresh token. UserId={}",
+        log.debug(
+                "[REFRESH_TOKEN] User ID extracted from refresh token. UserId={}",
                 userId);
 
         Users user =
                 usersRepository.findById(userId)
                         .orElseThrow(() -> {
-                            log.warn("User not found for refresh token. UserId={}",
+
+                            log.warn(
+                                    "[REFRESH_TOKEN] User not found. UserId={}",
                                     userId);
+
                             return new RuntimeException("User not found");
                         });
 
-        log.debug("User located successfully. UserId={}, Username={}",
+        log.debug(
+                "[REFRESH_TOKEN] User located. UserId={}, Username={}",
                 user.getId(),
                 user.getUsername());
 
@@ -638,7 +646,8 @@ public class AuthServiceImpl implements AuthService {
         storedToken.setRevoked(true);
         refreshTokenRepository.save(storedToken);
 
-        log.info("Old refresh token revoked. TokenId={}, UserId={}",
+        log.info(
+                "[REFRESH_TOKEN] Previous refresh token revoked. TokenId={}, UserId={}",
                 storedToken.getId(),
                 user.getId());
 
@@ -649,7 +658,8 @@ public class AuthServiceImpl implements AuthService {
         String newRefreshToken =
                 jwtUtil.generateRefreshToken(user);
 
-        log.info("New JWT tokens generated. UserId={}",
+        log.debug(
+                "[REFRESH_TOKEN] New JWT access and refresh tokens generated. UserId={}",
                 user.getId());
 
         // Save new refresh token
@@ -657,20 +667,21 @@ public class AuthServiceImpl implements AuthService {
                 RefreshToken.builder()
                         .userId(user.getId())
                         .token(newRefreshToken)
-                        .expiryDate(
-                                jwtUtil.extractExpiration(
-                                        newRefreshToken))
+                        .expiryDate(jwtUtil.extractExpiration(newRefreshToken))
                         .revoked(false)
                         .build();
 
         refreshTokenRepository.save(newToken);
 
-        log.info("New refresh token saved. TokenId={}, UserId={}",
+        log.info(
+                "[REFRESH_TOKEN] New refresh token saved. TokenId={}, UserId={}",
                 newToken.getId(),
                 user.getId());
 
-        log.info("Token refresh completed successfully. UserId={}",
-                user.getId());
+        log.info(
+                "[REFRESH_TOKEN] Token refresh completed successfully. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
 
         return TokenResponse.builder()
                 .accessToken(newAccessToken)

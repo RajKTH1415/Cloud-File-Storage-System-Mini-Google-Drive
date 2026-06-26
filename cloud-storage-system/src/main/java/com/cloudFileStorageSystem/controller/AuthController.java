@@ -43,12 +43,11 @@ public class AuthController {
     }
     @PostMapping("/refresh-token")
     public ResponseEntity<ApiResponse<TokenResponse>> refreshToken(@RequestBody RefreshTokenRequest request, HttpServletRequest httpServletRequest) {
-        log.info("Refresh token request received. URI={}, IP={}", httpServletRequest.getRequestURI(), httpServletRequest.getRemoteAddr());
+        log.info("[REFRESH_TOKEN] Refresh token request received. IP={}, URI={}", httpServletRequest.getRemoteAddr(), httpServletRequest.getRequestURI());
         TokenResponse response = authService.refreshToken(request, httpServletRequest);
-        log.info("Token refresh completed successfully");
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Token refreshed successfully", httpServletRequest.getRequestURI(), response));
+        log.info("[REFRESH_TOKEN] Token refresh completed successfully.");
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Token refreshed successfully", httpServletRequest.getRequestURI(), response));
     }
-
     @GetMapping("/verify-email")
     public ResponseEntity<ApiResponse<String>> verifyEmail(@RequestParam String token, HttpServletRequest request) {
         log.info("[VERIFY_EMAIL] Verification request received. IP={}, URI={}", request.getRemoteAddr(), request.getRequestURI());
