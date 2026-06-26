@@ -90,8 +90,7 @@ public class AuthServiceImpl implements AuthService {
 
         String identifier = request.getIdentifier();
 
-        log.info("========== LOGIN START ==========");
-        log.info("Identifier: {}", identifier);
+        log.info("[LOGIN] Login process started. Identifier={}", identifier);
 
         Users user = usersRepository
                 .findByUsernameOrEmailOrPhoneNumber(
@@ -101,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
                 )
                 .orElseThrow(() -> {
 
-                    log.warn("User NOT FOUND for identifier={}", identifier);
+                    log.warn("[LOGIN] Login failed. User not found. Identifier={}", identifier);
 
                     saveUnknownUserAttempt(
                             identifier,
@@ -121,13 +120,11 @@ public class AuthServiceImpl implements AuthService {
                 });
 
         log.info(
-                "User Found -> username={}, email={}, failedAttempts={}, accountNonLocked={}, emailVerified={}, enabled={}",
+                "[LOGIN] User located. UserId={}, Username={}, FailedAttempts={}, AccountLocked={}",
+                user.getId(),
                 user.getUsername(),
-                user.getEmail(),
                 user.getFailedAttempts(),
-                user.isAccountNonLocked(),
-                user.isEmailVerified(),
-                user.isEnabled()
+                !user.isAccountNonLocked()
         );
 
         validateAccountStatus(user);
@@ -138,24 +135,18 @@ public class AuthServiceImpl implements AuthService {
                         user.getPassword()
                 );
 
-        log.info("Password Match Result: {}", passwordMatched);
+        log.info("[LOGIN] Password verified successfully. Username={}",
+                user.getUsername());
 
         if (!passwordMatched) {
 
-            log.warn(
-                    "Password mismatch for username={}",
-                    user.getUsername()
-            );
+            log.warn("[LOGIN] Login failed. Invalid password. Username={}",
+                    user.getUsername());
 
             processFailedLogin(
                     user,
                     request,
                     httpServletRequest
-            );
-
-            log.warn(
-                    "Throwing Invalid Credentials Exception for username={}",
-                    user.getUsername()
             );
 
             throw new RuntimeException(
@@ -174,11 +165,8 @@ public class AuthServiceImpl implements AuthService {
 
         usersRepository.save(user);
 
-        log.info(
-                "User updated after successful login. failedAttempts={}, locked={}",
-                user.getFailedAttempts(),
-                !user.isAccountNonLocked()
-        );
+        log.info("[LOGIN] User account updated after successful login. UserId={}",
+                user.getId());
 
         saveSuccessfulAttempt(
                 user,
@@ -197,10 +185,8 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken =
                 jwtUtil.generateRefreshToken(user);
 
-        log.info(
-                "Tokens generated successfully for username={}",
-                user.getUsername()
-        );
+        log.debug("[LOGIN] JWT access and refresh tokens generated. UserId={}",
+                user.getId());
 
         RefreshToken refreshTokenEntity =
                 RefreshToken.builder()
@@ -226,12 +212,9 @@ public class AuthServiceImpl implements AuthService {
                 .refreshToken(refreshToken)
                 .build();
 
-        log.info(
-                "Login completed successfully for username={}",
-                user.getUsername()
-        );
-
-        log.info("========== LOGIN END ==========");
+        log.info("[LOGIN] Login completed successfully. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
 
         return LoginResponse.builder()
                 .username(user.getUsername())
@@ -248,22 +231,18 @@ public class AuthServiceImpl implements AuthService {
 
     private void validateAccountStatus(Users user) {
 
-        log.info(
-                "Validating account status -> username={}, enabled={}, emailVerified={}, accountNonLocked={}, lockedUntil={}",
-                user.getUsername(),
-                user.isEnabled(),
-                user.isEmailVerified(),
-                user.isAccountNonLocked(),
-                user.getLockedUntil()
-        );
+        log.debug("[LOGIN] Validating account status. Username={}",
+                user.getUsername());
 
         if (!user.isEnabled()) {
-            log.error("Account Disabled");
+            log.warn("[LOGIN] Login failed. Account disabled. Username={}",
+                    user.getUsername());
             throw new RuntimeException("Account is disabled");
         }
 
         if (!user.isEmailVerified()) {
-            log.error("Email Not Verified");
+            log.warn("[LOGIN] Login failed. Email not verified. Username={}",
+                    user.getUsername());
             throw new RuntimeException(
                     "Please verify your email first"
             );
@@ -274,10 +253,9 @@ public class AuthServiceImpl implements AuthService {
             if (user.getLockedUntil() != null &&
                     user.getLockedUntil().isAfter(LocalDateTime.now())) {
 
-                log.error(
-                        "Account currently locked until {}",
-                        user.getLockedUntil()
-                );
+                log.warn("[LOGIN] Account locked until {}. Username={}",
+                        user.getLockedUntil(),
+                        user.getUsername());
 
                 throw new RuntimeException(
                         "Account locked until "
@@ -285,9 +263,8 @@ public class AuthServiceImpl implements AuthService {
                 );
             }
 
-            log.info(
-                    "Lock expired. Unlocking account."
-            );
+            log.info("[LOGIN] Lock period expired. Unlocking account. Username={}",
+                    user.getUsername());
 
             user.setFailedAttempts(0);
             user.setAccountNonLocked(true);
@@ -310,18 +287,14 @@ public class AuthServiceImpl implements AuthService {
             LoginRequest request,
             HttpServletRequest servletRequest) {
 
-        log.warn(
-                "processFailedLogin START for username={}",
-                user.getUsername()
-        );
+        log.warn("[LOGIN] Processing failed login. Username={}",
+                user.getUsername());
 
         int attempts = user.getFailedAttempts() + 1;
 
-        log.warn(
-                "Previous Attempts={}, New Attempts={}",
-                user.getFailedAttempts(),
-                attempts
-        );
+        log.warn("[LOGIN] Failed login attempts updated. Username={}, Attempts={}",
+                user.getUsername(),
+                attempts);
 
         user.setFailedAttempts(attempts);
 
@@ -329,10 +302,8 @@ public class AuthServiceImpl implements AuthService {
 
         if (attempts >= securityProperties.getMaxFailedAttempts()) {
 
-            log.error(
-                    "Account LOCKED for username={}",
-                    user.getUsername()
-            );
+            log.error("[LOGIN] Account locked after maximum failed attempts. Username={}",
+                    user.getUsername());
 
             user.setAccountNonLocked(false);
 
@@ -348,12 +319,8 @@ public class AuthServiceImpl implements AuthService {
 
         Users savedUser = usersRepository.save(user);
 
-        log.info(
-                "User Saved -> failedAttempts={}, accountNonLocked={}, lockedUntil={}",
-                savedUser.getFailedAttempts(),
-                savedUser.isAccountNonLocked(),
-                savedUser.getLockedUntil()
-        );
+        log.info("[LOGIN] User account updated after failed login. UserId={}",
+                user.getId());
 
         LoginAttempt attempt = new LoginAttempt();
 
@@ -407,17 +374,9 @@ public class AuthServiceImpl implements AuthService {
                         : "Invalid password"
         );
 
-        log.info(
-                "LoginAttempt Saved -> identifier={}, attempts={}, locked={}",
+        log.info("[LOGIN] Failed login attempt recorded. Identifier={}, Locked={}",
                 request.getIdentifier(),
-                attempts,
-                locked
-        );
-
-        log.warn(
-                "processFailedLogin END for username={}",
-                user.getUsername()
-        );
+                locked);
     }
 
     private void resetFailedAttempts(
@@ -433,7 +392,10 @@ public class AuthServiceImpl implements AuthService {
             String loginIdentifier,
             HttpServletRequest request) {
 
+        log.warn("[LOGIN] Recording login attempt for unknown user. Identifier={}",
+                loginIdentifier);
         LoginAttempt attempt = new LoginAttempt();
+
 
         attempt.setUserId(user.getId());
 
@@ -469,6 +431,9 @@ public class AuthServiceImpl implements AuthService {
         attempt.setAccountLocked(false);
 
         loginAttemptRepository.save(attempt);
+
+        log.info("[LOGIN] Successful login attempt saved. UserId={}",
+                user.getId());
 
 
     }
@@ -506,6 +471,7 @@ public class AuthServiceImpl implements AuthService {
         attempt.setFailureReason(reason);
 
         loginAttemptRepository.save(attempt);
+        log.info("[LOGIN] Unknown user login attempt saved.");
     }
 
     private String getIdentifierType(
@@ -539,8 +505,12 @@ public class AuthServiceImpl implements AuthService {
 
         auditLog.setTimestamp(LocalDateTime.now());
         auditLog.setDetails(details);
-
+        log.debug("[AUDIT] Saving audit log. Action={}, Identifier={}",
+                action,
+                identifier);
         auditLogRepository.save(auditLog);
+        log.info("[AUDIT] Audit log saved successfully. Action={}",
+                action);
     }
 
     private String getClientIp(HttpServletRequest request) {
@@ -770,34 +740,40 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public LogoutResponse logout(String accessToken, String refreshToken) {
 
-        log.info("Logout process started");
+        log.info("[LOGOUT] Logout process started.");
 
         // Blacklist access token
         tokenBlacklistService.blacklistToken(accessToken);
 
-        log.debug("Access token blacklisted successfully");
+        log.debug("[LOGOUT] Access token blacklisted successfully.");
+
+        // Find refresh token
+        RefreshToken token = refreshTokenRepository
+                .findByToken(refreshToken)
+                .orElseThrow(() -> {
+
+                    log.warn("[LOGOUT] Logout failed. Invalid refresh token.");
+
+                    return new RuntimeException("Invalid refresh token");
+                });
+
+        log.debug(
+                "[LOGOUT] Refresh token found. TokenId={}, UserId={}",
+                token.getId(),
+                token.getUserId());
 
         // Revoke refresh token
-        RefreshToken token =
-                refreshTokenRepository
-                        .findByToken(refreshToken)
-                        .orElseThrow(() -> {
-                            log.warn("Logout failed. Invalid refresh token");
-                            return new RuntimeException("Invalid refresh token");
-                        });
-
-        log.debug("Refresh token found. TokenId={}, UserId={}",
-                token.getId(),
-                token.getUserId());
-
         token.setRevoked(true);
+
         refreshTokenRepository.save(token);
 
-        log.info("Refresh token revoked successfully. TokenId={}, UserId={}",
+        log.info(
+                "[LOGOUT] Refresh token revoked successfully. TokenId={}, UserId={}",
                 token.getId(),
                 token.getUserId());
 
-        log.info("Logout completed successfully. UserId={}",
+        log.info(
+                "[LOGOUT] Logout completed successfully. UserId={}",
                 token.getUserId());
 
         return LogoutResponse.builder()

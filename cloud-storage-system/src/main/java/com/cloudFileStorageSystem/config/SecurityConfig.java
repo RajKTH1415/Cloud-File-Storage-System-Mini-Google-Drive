@@ -1,20 +1,17 @@
 package com.cloudFileStorageSystem.config;
 
-import com.cloudFileStorageSystem.security.CustomUserDetailsService;
 import com.cloudFileStorageSystem.security.JwtAuthFilter;
 import com.cloudFileStorageSystem.security.JwtAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
@@ -27,16 +24,16 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final JwtAuthenticationEntryPoint jwtEntryPoint;
 
-    public SecurityConfig(AuthenticationProvider authenticationProvider, AuthenticationProviderConfig authenticationProvider1, JwtAuthFilter jwtAuthFilter, JwtAuthenticationEntryPoint jwtEntryPoint) {
+    public SecurityConfig(AuthenticationProvider authenticationProvider, JwtAuthFilter jwtAuthFilter, JwtAuthenticationEntryPoint jwtEntryPoint) {
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthFilter = jwtAuthFilter;
         this.jwtEntryPoint = jwtEntryPoint;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http){
 
-        http.csrf(csrf -> csrf.disable())
+        http.csrf(AbstractHttpConfigurer::disable)
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
@@ -65,8 +62,7 @@ public class SecurityConfig {
                                                 "frame-ancestors 'none';"))
 
                         // Clickjacking protection
-                        .frameOptions(frame ->
-                                frame.deny())
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::deny)
 
                         // MIME sniffing protection
                         .contentTypeOptions(content -> {})
@@ -76,7 +72,7 @@ public class SecurityConfig {
                                 referrer.policy(
                                         ReferrerPolicyHeaderWriter
                                                 .ReferrerPolicy.NO_REFERRER)))
-                .formLogin(form -> form.disable())
+                .formLogin(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -84,7 +80,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config){
         return config.getAuthenticationManager();
     }
 }
