@@ -26,9 +26,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpServletRequest) {
-        log.info("POST {} invoked for identifier={}", httpServletRequest.getRequestURI(), request.getIdentifier());
+        log.info("[LOGIN] Login request received. Identifier={}, IP={}, URI={}", request.getIdentifier(), httpServletRequest.getRemoteAddr(), httpServletRequest.getRequestURI());
         LoginResponse response = authService.login(request, httpServletRequest);
-        log.info("Login API completed successfully for username={}", response.getUsername());
+        log.info("[LOGIN] Login completed successfully., Username={}",  response.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Login successful", httpServletRequest.getRequestURI(), response));
     }
 
