@@ -58,10 +58,10 @@ public class AuthController {
 
     @PostMapping("/resend-verification-email")
     public ResponseEntity<ApiResponse<ResendVerificationEmailResponse>> resendVerificationEmail(@RequestBody @Valid ResendVerificationRequest request, HttpServletRequest httpServletRequest) {
-        log.info("Received resend verification email request for email: {}", request.getEmail());
-        ResendVerificationEmailResponse resendVerificationEmailResponse = authService.resendVerificationEmail(request.getEmail());
-        log.info("Verification email resent successfully for email: {}", request.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Verification email resent successfully", httpServletRequest.getRequestURI(), resendVerificationEmailResponse));
+        log.info("[RESEND_VERIFICATION_EMAIL] Resend verification email request received. Email={}, IP={}, URI={}", request.getEmail(), httpServletRequest.getRemoteAddr(), httpServletRequest.getRequestURI());
+        ResendVerificationEmailResponse response = authService.resendVerificationEmail(request.getEmail());
+        log.info("[RESEND_VERIFICATION_EMAIL] Verification email resent successfully. Email={}", request.getEmail());
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Verification email resent successfully", httpServletRequest.getRequestURI(), response));
     }
 
     @PostMapping("/forgot-password/email")

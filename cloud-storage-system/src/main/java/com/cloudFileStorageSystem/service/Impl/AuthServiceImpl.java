@@ -1114,30 +1114,59 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public ResendVerificationEmailResponse resendVerificationEmail(String email) {
+
+        log.info(
+                "[RESEND_VERIFICATION_EMAIL] Resend verification email process started. Email={}",
+                email);
+
         Users user = usersRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[RESEND_VERIFICATION_EMAIL] User not found. Email={}",
+                            email);
+
+                    return new RuntimeException("User not found");
+                });
+
+        log.debug(
+                "[RESEND_VERIFICATION_EMAIL] User located. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
 
         // Email already verified
         if (user.isEmailVerified()) {
-            throw new RuntimeException(
-                    "Email already verified");
+
+            log.warn(
+                    "[RESEND_VERIFICATION_EMAIL] Email already verified. UserId={}, Email={}",
+                    user.getId(),
+                    user.getEmail());
+
+            throw new RuntimeException("Email already verified");
         }
 
-        // ================= MAX 3 EMAILS PER HOUR =================
-
+        // Maximum resend attempts
         long resendCount =
                 emailVerificationTokenRepository.countByUserAndCreatedAtAfter(
                         user,
                         LocalDateTime.now().minusHours(1));
 
+        log.debug(
+                "[RESEND_VERIFICATION_EMAIL] Resend count in last hour={}. UserId={}",
+                resendCount,
+                user.getId());
+
         if (resendCount >= 3) {
+
+            log.warn(
+                    "[RESEND_VERIFICATION_EMAIL] Maximum resend attempts exceeded. UserId={}",
+                    user.getId());
+
             throw new RuntimeException(
                     "Maximum resend attempts reached. Try again after 1 hour.");
         }
 
-        // ================= 60-SECOND COOLDOWN =================
-
+        // Cooldown check
         EmailVerificationToken latestToken =
                 emailVerificationTokenRepository
                         .findTopByUserOrderByCreatedAtDesc(user)
@@ -1148,15 +1177,20 @@ public class AuthServiceImpl implements AuthService {
                         .plusSeconds(60)
                         .isAfter(LocalDateTime.now())) {
 
+            log.warn(
+                    "[RESEND_VERIFICATION_EMAIL] Cooldown period active. UserId={}",
+                    user.getId());
+
             throw new RuntimeException(
                     "Please wait 60 seconds before requesting another verification email.");
         }
-        // ================= DELETE OLD TOKENS =================
+
+        log.debug(
+                "[RESEND_VERIFICATION_EMAIL] Removing previous verification tokens. UserId={}",
+                user.getId());
 
         emailVerificationTokenRepository.deleteByUser(user);
         emailVerificationTokenRepository.flush();
-
-        // ================= GENERATE NEW TOKEN =================
 
         String token = UUID.randomUUID().toString();
 
@@ -1170,21 +1204,28 @@ public class AuthServiceImpl implements AuthService {
 
         emailVerificationTokenRepository.save(verificationToken);
 
-        // ================= SEND EMAIL =================
+        log.debug(
+                "[RESEND_VERIFICATION_EMAIL] New verification token created. UserId={}",
+                user.getId());
 
         emailService.sendVerificationEmail(
                 user.getEmail(),
-                token
-        );
+                token);
 
-        // ================= RESPONSE =================
+        log.info(
+                "[RESEND_VERIFICATION_EMAIL] Verification email sent successfully. UserId={}, Email={}",
+                user.getId(),
+                user.getEmail());
+
+        log.info(
+                "[RESEND_VERIFICATION_EMAIL] Resend verification email process completed successfully. UserId={}",
+                user.getId());
 
         return ResendVerificationEmailResponse.builder()
                 .emailSent(true)
                 .email(user.getEmail())
                 .expiryMinutes(15)
                 .build();
-
     }
 
     @Override
