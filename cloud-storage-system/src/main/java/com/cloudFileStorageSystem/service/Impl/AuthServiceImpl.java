@@ -955,6 +955,10 @@ public class AuthServiceImpl implements AuthService {
             ResetPasswordRequest request,
             HttpServletRequest httpServletRequest) {
 
+        log.info(
+                "[RESET_PASSWORD] Password reset process started. Email={}",
+                request.getEmail());
+
         String ip = getClientIp(httpServletRequest);
         String device = getDevice(httpServletRequest);
 
@@ -965,37 +969,67 @@ public class AuthServiceImpl implements AuthService {
                                 request.getEmail(),
                                 OtpPurpose.FORGOT_PASSWORD
                         )
-                        .orElseThrow(() ->
-                                new RuntimeException("OTP not found"));
+                        .orElseThrow(() -> {
+
+                            log.warn(
+                                    "[RESET_PASSWORD] OTP not found. Email={}",
+                                    request.getEmail());
+
+                            return new RuntimeException("OTP not found");
+                        });
+
+        log.debug(
+                "[RESET_PASSWORD] OTP record found. OtpId={}, UserId={}",
+                savedOtp.getId(),
+                savedOtp.getUser().getId());
 
         // 2. OTP VERIFIED CHECK
         if (!Boolean.TRUE.equals(savedOtp.getVerified())) {
-            throw new RuntimeException(
-                    "OTP verification required");
+
+            log.warn(
+                    "[RESET_PASSWORD] OTP verification required. Email={}",
+                    request.getEmail());
+
+            throw new RuntimeException("OTP verification required");
         }
 
         // 3. OTP EXPIRY CHECK
-        if (savedOtp.getExpiryTime()
-                .isBefore(LocalDateTime.now())) {
+        if (savedOtp.getExpiryTime().isBefore(LocalDateTime.now())) {
 
-            throw new RuntimeException(
-                    "OTP expired");
+            log.warn(
+                    "[RESET_PASSWORD] OTP expired. Email={}, ExpiryTime={}",
+                    request.getEmail(),
+                    savedOtp.getExpiryTime());
+
+            throw new RuntimeException("OTP expired");
         }
 
         // 4. USER CHECK
         Users user =
                 usersRepository
                         .findByEmail(request.getEmail())
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "User not found"));
+                        .orElseThrow(() -> {
+
+                            log.warn(
+                                    "[RESET_PASSWORD] User not found. Email={}",
+                                    request.getEmail());
+
+                            return new RuntimeException("User not found");
+                        });
+
+        log.debug(
+                "[RESET_PASSWORD] User located. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
 
         // 5. PASSWORD MATCH CHECK
-        if (!request.getNewPassword()
-                .equals(request.getConfirmPassword())) {
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
 
-            throw new RuntimeException(
-                    "Passwords do not match");
+            log.warn(
+                    "[RESET_PASSWORD] Password confirmation mismatch. UserId={}",
+                    user.getId());
+
+            throw new RuntimeException("Passwords do not match");
         }
 
         // 6. PREVENT CURRENT PASSWORD REUSE
@@ -1003,77 +1037,89 @@ public class AuthServiceImpl implements AuthService {
                 request.getNewPassword(),
                 user.getPassword())) {
 
+            log.warn(
+                    "[RESET_PASSWORD] New password matches current password. UserId={}",
+                    user.getId());
+
             throw new RuntimeException(
                     "New password cannot be same as current password");
         }
 
         // 7. PASSWORD HISTORY CHECK
-        int limit =
-                securityProperties.getPasswordHistoryLimit();
-
-//        List<PasswordHistory> lastPasswords =
-//                passwordHistoryRepository
-//                        .findTop5ByUserIdOrderByChangedAtDesc(
-//                                user.getEmail());
-
-        String userId = String.valueOf(user.getId());
+        int limit = securityProperties.getPasswordHistoryLimit();
 
         List<PasswordHistory> lastPasswords =
                 passwordHistoryRepository
-                        .findTop5ByUserIdOrderByChangedAtDesc(userId);
+                        .findTop5ByUserIdOrderByChangedAtDesc(
+                                String.valueOf(user.getId()));
+
+        log.debug(
+                "[RESET_PASSWORD] Checking password history. UserId={}, HistoryLimit={}",
+                user.getId(),
+                limit);
 
         for (PasswordHistory history :
-                lastPasswords.stream()
-                        .limit(limit)
-                        .toList()) {
+                lastPasswords.stream().limit(limit).toList()) {
 
             if (passwordEncoder.matches(
                     request.getNewPassword(),
                     history.getPasswordHash())) {
 
+                log.warn(
+                        "[RESET_PASSWORD] Password reuse detected. UserId={}",
+                        user.getId());
+
                 throw new RuntimeException(
-                        "You cannot reuse last "
-                                + limit
-                                + " passwords");
+                        "You cannot reuse last " + limit + " passwords");
             }
         }
 
         // 8. UPDATE PASSWORD
         String encodedPassword =
-                passwordEncoder.encode(
-                        request.getNewPassword());
+                passwordEncoder.encode(request.getNewPassword());
 
         user.setPassword(encodedPassword);
 
         usersRepository.save(user);
+
+        log.info(
+                "[RESET_PASSWORD] User password updated successfully. UserId={}",
+                user.getId());
 
         // 9. SAVE PASSWORD HISTORY
         PasswordHistory passwordHistory = new PasswordHistory();
 
         passwordHistory.setUserId(String.valueOf(user.getId()));
         passwordHistory.setPasswordHash(encodedPassword);
-
         passwordHistory.setChangedAt(LocalDateTime.now());
 
-        passwordHistoryRepository.save(
-                passwordHistory);
+        passwordHistoryRepository.save(passwordHistory);
+
+        log.debug(
+                "[RESET_PASSWORD] Password history saved. UserId={}",
+                user.getId());
 
         // 10. REVOKE ALL ACTIVE REFRESH TOKENS
         List<RefreshToken> tokens =
-                refreshTokenRepository
-                        .findByUserIdAndRevokedFalse(
-                                user.getId());
+                refreshTokenRepository.findByUserIdAndRevokedFalse(user.getId());
 
-        tokens.forEach(token ->
-                token.setRevoked(true));
+        tokens.forEach(token -> token.setRevoked(true));
 
-        refreshTokenRepository.saveAll(
-                tokens);
+        refreshTokenRepository.saveAll(tokens);
+
+        log.info(
+                "[RESET_PASSWORD] Revoked {} active refresh token(s). UserId={}",
+                tokens.size(),
+                user.getId());
 
         // 11. MARK OTP AS CONSUMED
         savedOtp.setVerified(false);
 
         otpRepository.save(savedOtp);
+
+        log.debug(
+                "[RESET_PASSWORD] OTP marked as consumed. UserId={}",
+                user.getId());
 
         // 12. AUDIT LOG
         auditService.log(
@@ -1081,10 +1127,18 @@ public class AuthServiceImpl implements AuthService {
                 "PASSWORD_RESET",
                 ip,
                 device,
-                "Password changed successfully"
-        );
+                "Password changed successfully");
 
-        // 13. RESPONSE
+        log.info(
+                "[RESET_PASSWORD] Audit log created. UserId={}",
+                user.getId());
+
+        // 13. COMPLETE
+        log.info(
+                "[RESET_PASSWORD] Password reset completed successfully. UserId={}, Email={}",
+                user.getId(),
+                user.getEmail());
+
         return ResetPasswordResponse.builder()
                 .passwordUpdated(true)
                 .tokensRevoked(true)

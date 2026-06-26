@@ -92,10 +92,10 @@ public class AuthController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<ResetPasswordResponse>> resetPassword(@RequestBody ResetPasswordRequest request, HttpServletRequest servletRequest) {
-        log.info("Received password reset request for email: {}", request.getEmail());
-        ResetPasswordResponse resetPasswordResponse = authService.resetPassword(request, servletRequest);
-        log.info("Password reset completed successfully for email: {}", request.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully. Please login again.", servletRequest.getRequestURI(), resetPasswordResponse));
+        log.info("[RESET_PASSWORD] Password reset request received. Email={}, IP={}, URI={}", request.getEmail(), servletRequest.getRemoteAddr(), servletRequest.getRequestURI());
+        ResetPasswordResponse response = authService.resetPassword(request, servletRequest);
+        log.info("[RESET_PASSWORD] Password reset completed successfully. Email={}", request.getEmail());
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Password changed successfully. Please login again.", servletRequest.getRequestURI(), response));
     }
 
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
