@@ -1,6 +1,4 @@
 package com.cloudFileStorageSystem.controller;
-
-
 import com.cloudFileStorageSystem.dtos.request.UpdateUserRoleRequest;
 import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.service.AdminService;
@@ -25,7 +23,6 @@ public class AdminController {
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
-
 
     @GetMapping("/stats")
     public ResponseEntity<ApiResponse<AdminStatsResponse>> getStats(HttpServletRequest request) {

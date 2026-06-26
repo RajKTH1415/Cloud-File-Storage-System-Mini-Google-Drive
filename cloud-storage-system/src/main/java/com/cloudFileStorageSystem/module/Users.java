@@ -39,7 +39,7 @@ public class Users extends AuditableEntity {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "phone_number", unique = true, length = 15)

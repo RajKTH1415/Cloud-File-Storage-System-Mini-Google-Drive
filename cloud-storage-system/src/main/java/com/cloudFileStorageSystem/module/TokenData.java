@@ -12,5 +12,4 @@ public class TokenData {
     private String accessToken;
     private String refreshToken;
 
-    // builder, getters
 }

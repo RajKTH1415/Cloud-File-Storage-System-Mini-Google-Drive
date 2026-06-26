@@ -15,6 +15,8 @@ import com.cloudFileStorageSystem.service.TokenBlacklistService;
 import com.cloudFileStorageSystem.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,10 +32,13 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-@Slf4j
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
+
+    private static final Logger log =
+            LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final PasswordHistoryRepository passwordHistoryRepository;
     private final PasswordResetOtpRepository passwordResetOtpRepository;
@@ -805,36 +810,64 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void verifyEmail(String token) {
 
+        log.info("[VERIFY_EMAIL] Email verification started.");
+
         EmailVerificationToken verificationToken =
                 emailVerificationTokenRepository.findByToken(token)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Invalid verification token"));
+                        .orElseThrow(() -> {
+
+                            log.warn("[VERIFY_EMAIL] Invalid verification token.");
+
+                            return new RuntimeException(
+                                    "Invalid verification token");
+                        });
+
+        log.debug("[VERIFY_EMAIL] Verification token found.");
 
         if (verificationToken.isUsed()) {
+
+            log.warn("[VERIFY_EMAIL] Verification token already used.");
 
             throw new RuntimeException(
                     "Verification token already used");
         }
 
+        log.debug("[VERIFY_EMAIL] Token has not been used.");
+
         if (verificationToken.getExpiryDate()
-                .isBefore(java.time.LocalDateTime.now())) {
+                .isBefore(LocalDateTime.now())) {
+
+            log.warn("[VERIFY_EMAIL] Verification token expired.");
 
             throw new RuntimeException(
-                    "Verification token expired"
-            );
+                    "Verification token expired");
         }
 
+        log.debug("[VERIFY_EMAIL] Token is valid.");
+
         Users user = verificationToken.getUser();
+
+        log.debug("[VERIFY_EMAIL] Activating account. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
 
         user.setEnabled(true);
         user.setEmailVerified(true);
 
         usersRepository.save(user);
 
+        log.info("[VERIFY_EMAIL] User account activated. UserId={}, Username={}",
+                user.getId(),
+                user.getUsername());
+
         verificationToken.setUsed(true);
 
         emailVerificationTokenRepository.save(verificationToken);
+
+        log.debug("[VERIFY_EMAIL] Verification token marked as used.");
+
+        log.info("[VERIFY_EMAIL] Email verification completed successfully. UserId={}",
+                user.getId());
     }
 
     @Override

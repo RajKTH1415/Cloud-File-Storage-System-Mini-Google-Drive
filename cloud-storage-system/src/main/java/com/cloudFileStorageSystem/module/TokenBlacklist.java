@@ -20,7 +20,7 @@ public class TokenBlacklist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "jti", nullable = false, unique = true, length = 255)
+    @Column(name = "jti", nullable = false, unique = true)
     private String jti;
 
     @Column(name = "expiry_date", nullable = false)

@@ -11,6 +11,8 @@ import com.cloudFileStorageSystem.repository.UsersRepository;
 import com.cloudFileStorageSystem.service.EmailService;
 import com.cloudFileStorageSystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,6 +27,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UsersRepository usersRepository;
     private final EmailService emailService;
+
+    private static final Logger log =
+            LoggerFactory.getLogger(UserServiceImpl.class);
+
 
     public UserServiceImpl(EmailVerificationTokenRepository emailVerificationTokenRepository, PasswordEncoder passwordEncoder, UsersRepository usersRepository, EmailService emailService) {
         this.emailVerificationTokenRepository = emailVerificationTokenRepository;
@@ -36,76 +41,82 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserResponse registerUser(UserRegistrationRequest userRegistrationRequest) {
-        log.info("Starting user registration. Username={}, Email={}", userRegistrationRequest.getUsername(), userRegistrationRequest.getEmail());
+    public UserResponse registerUser(UserRegistrationRequest request) {
 
-        if (usersRepository.existsByUsername(
-                userRegistrationRequest.getUsername())) {
+        log.info("[REGISTER_USER] Registration started.");
 
-            log.warn("Registration failed. Username already exists: {}",
-                    userRegistrationRequest.getUsername());
+        log.debug("[REGISTER_USER] Checking username availability.");
 
-            throw new ResourceAlreadyExistsException(
-                    "Username '" +
-                            userRegistrationRequest.getUsername() +
-                            "' already exists");
-        }
+        if (usersRepository.existsByUsername(request.getUsername())) {
 
-        if (usersRepository.existsByEmail(
-                userRegistrationRequest.getEmail())) {
-
-            log.warn("Registration failed. Email already exists: {}",
-                    userRegistrationRequest.getEmail());
+            log.warn("[REGISTER_USER] Username already exists | username={}",
+                    request.getUsername());
 
             throw new ResourceAlreadyExistsException(
-                    "Email '" +
-                            userRegistrationRequest.getEmail() +
-                            "' already exists");
+                    "Username '" + request.getUsername() + "' already exists");
         }
 
-        log.debug("Username and email validation passed");
+        log.debug("[REGISTER_USER] Username validation passed.");
 
-        Users users = Users.builder()
-                .firstName(userRegistrationRequest.getFirstName())
-                .lastName(userRegistrationRequest.getLastName())
-                .username(userRegistrationRequest.getUsername())
-                .email(userRegistrationRequest.getEmail())
-                .password(passwordEncoder.encode(
-                        userRegistrationRequest.getPassword()))
-                .phoneNumber(userRegistrationRequest.getPhoneNumber())
+        log.debug("[REGISTER_USER] Checking email availability.");
+
+        if (usersRepository.existsByEmail(request.getEmail())) {
+
+            log.warn("[REGISTER_USER] Email already exists | email={}", request.getEmail());
+
+            throw new ResourceAlreadyExistsException(
+                    "Email '" + request.getEmail() + "' already exists");
+        }
+
+        log.debug("[REGISTER_USER] Email validation passed.");
+
+        log.debug("[REGISTER_USER] Encrypting password.");
+
+        Users user = Users.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .phoneNumber(request.getPhoneNumber())
                 .role(Role.USER)
-                .emailVerified(false)
                 .enabled(true)
+                .emailVerified(false)
                 .build();
 
-        log.debug("User entity created. Username={}",
-                users.getUsername());
+        log.debug("[REGISTER_USER] User entity created.");
 
-        Users savedUser = usersRepository.save(users);
+        Users savedUser = usersRepository.save(user);
 
-        String emailToken = UUID.randomUUID().toString();
+        log.info("[REGISTER_USER] User saved successfully | userId={}", savedUser.getId());
+
+        String token = UUID.randomUUID().toString();
+
+        log.debug("[REGISTER_USER] Verification token generated.");
 
         EmailVerificationToken verificationToken =
                 EmailVerificationToken.builder()
-                        .token(emailToken)
+                        .token(token)
                         .user(savedUser)
                         .expiryDate(LocalDateTime.now().plusMinutes(15))
                         .used(false)
                         .resendCount(0)
                         .build();
 
-        emailVerificationTokenRepository .save(verificationToken);
+        emailVerificationTokenRepository.save(verificationToken);
 
-        // Send verification email
-        emailService.sendVerificationEmail(
-                savedUser.getEmail(),
-                emailToken
-        );
+        log.debug("[REGISTER_USER] Verification token saved.");
 
-        log.info("User registered successfully. UserId={}, Username={}, Role={}",
+
+        emailService.sendVerificationEmail(savedUser.getEmail(), token);
+
+        log.info("[REGISTER_USER] Verification email sent | email={}",
+                savedUser.getEmail());
+
+
+        log.info("[REGISTER_USER] Registration completed successfully | userId={} | username={}",
                 savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getRole());
+                savedUser.getUsername());
 
         return mapToResponse(savedUser);
     }

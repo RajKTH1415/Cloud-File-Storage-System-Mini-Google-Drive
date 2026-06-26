@@ -52,10 +52,10 @@ public class AuthController {
 
     @GetMapping("/verify-email")
     public ResponseEntity<ApiResponse<String>> verifyEmail(@RequestParam String token, HttpServletRequest request) {
-        log.info("Received email verification request");
+        log.info("[VERIFY_EMAIL] Verification request received. IP={}, URI={}", request.getRemoteAddr(), request.getRequestURI());
         authService.verifyEmail(token);
-        log.info("Email verified successfully");
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Email verified successfully", request.getRequestURI(), "Account activated"));
+        log.info("[VERIFY_EMAIL] Email verification completed successfully.");
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Email verified successfully", request.getRequestURI(), "Account activated"));
     }
 
     @PostMapping("/resend-verification-email")
