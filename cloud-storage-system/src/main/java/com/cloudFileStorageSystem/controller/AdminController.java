@@ -34,10 +34,10 @@ public class AdminController {
 
     @PostMapping("/users/{id}/unlock")
     public ResponseEntity<ApiResponse<UnlockUserResponse>> unlockUser(@PathVariable Long id, HttpServletRequest request) {
-        log.info("Received unlock user request for userId: {}", id);
-        UnlockUserResponse unlockUserResponse = adminService.unlockUser(id);
-        log.info("User unlocked successfully for userId: {}", id);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User unlocked successfully", request.getRequestURI(), unlockUserResponse));
+        log.info("[UNLOCK_USER] Unlock user request received. UserId={}, IP={}, URI={}", id, request.getRemoteAddr(), request.getRequestURI());
+        UnlockUserResponse response = adminService.unlockUser(id);
+        log.info("[UNLOCK_USER] User unlocked successfully. UserId={}", id);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User unlocked successfully", request.getRequestURI(), response));
     }
 
     @GetMapping("/users")

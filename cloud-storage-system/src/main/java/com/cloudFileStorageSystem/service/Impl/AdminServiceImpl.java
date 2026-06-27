@@ -40,36 +40,48 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public UnlockUserResponse unlockUser(Long userId) {
 
-        log.info("Unlock user request received for userId={}", userId);
+        log.info(
+                "[UNLOCK_USER] Unlock process started. UserId={}",
+                userId);
 
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> {
-                    log.error("User not found. userId={}", userId);
+
+                    log.warn(
+                            "[UNLOCK_USER] User not found. UserId={}",
+                            userId);
+
                     return new RuntimeException("User not found");
                 });
+
+        log.debug(
+                "[UNLOCK_USER] User located. UserId={}, Username={}, AccountNonLocked={}",
+                user.getId(),
+                user.getUsername(),
+                user.isAccountNonLocked());
 
         if (user.isAccountNonLocked()) {
 
             log.warn(
-                    "Unlock operation skipped. User already unlocked. userId={}, email={}",
+                    "[UNLOCK_USER] Unlock operation skipped. User already unlocked. UserId={}, Email={}",
                     user.getId(),
-                    user.getEmail()
-            );
+                    user.getEmail());
 
             throw new RuntimeException(
-                    "User account is already unlocked"
-            );
+                    "User account is already unlocked");
         }
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
-        String adminUsername = Objects.requireNonNull(authentication).getName();
+        String adminUsername =
+                Objects.requireNonNull(authentication).getName();
 
-        log.info("Admin '{}' is unlocking user '{}' (userId={})",
+        log.info(
+                "[UNLOCK_USER] Admin initiated unlock operation. Admin={}, UserId={}, Email={}",
                 adminUsername,
-                user.getEmail(),
-                user.getId());
+                user.getId(),
+                user.getEmail());
 
         user.setAccountNonLocked(true);
         user.setFailedAttempts(0);
@@ -78,12 +90,12 @@ public class AdminServiceImpl implements AdminService {
         usersRepository.save(user);
 
         log.info(
-                "User account unlocked successfully. userId={}, email={}",
+                "[UNLOCK_USER] User account unlocked successfully. UserId={}, FailedAttempts={}",
                 user.getId(),
-                user.getEmail()
-        );
+                user.getFailedAttempts());
 
         AuditLog auditLog = new AuditLog();
+
         auditLog.setIdentifier(user.getEmail());
         auditLog.setAction("ACCOUNT_UNLOCKED_BY_ADMIN");
         auditLog.setTimestamp(LocalDateTime.now());
@@ -93,17 +105,18 @@ public class AdminServiceImpl implements AdminService {
                         "Admin '%s' unlocked account '%s' (User ID: %d)",
                         adminUsername,
                         user.getEmail(),
-                        user.getId()
-                )
-        );
+                        user.getId()));
 
         auditLogRepository.save(auditLog);
 
         log.info(
-                "Audit log saved for unlock operation. userId={}, admin={}",
+                "[UNLOCK_USER] Audit log saved successfully. UserId={}, Admin={}",
                 user.getId(),
-                adminUsername
-        );
+                adminUsername);
+
+        log.info(
+                "[UNLOCK_USER] Unlock process completed successfully. UserId={}",
+                user.getId());
 
         return UnlockUserResponse.builder()
                 .userId(user.getId())
