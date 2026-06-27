@@ -54,12 +54,13 @@ public class AdminController {
         log.info("[GET_USER_BY_ID] User retrieved successfully. UserId={}", id);
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User fetched successfully", request.getRequestURI(), user));
     }
+
     @PutMapping("/users/{id}/role")
     public ResponseEntity<ApiResponse<UsersResponse>> updateUserRole(@PathVariable Long id, @Valid @RequestBody UpdateUserRoleRequest request, HttpServletRequest servletRequest) {
-        log.info("Role update request received. userId={}, role={}", id, request.getRole());
+        log.info("[UPDATE_USER_ROLE] Role update request received. UserId={}, NewRole={}, IP={}, URI={}", id, request.getRole(), servletRequest.getRemoteAddr(), servletRequest.getRequestURI());
         UsersResponse response = adminService.updateUserRole(id, request.getRole());
-        log.info("Role updated successfully. userId={}, role={}", id, request.getRole());
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User role updated successfully", servletRequest.getRequestURI(), response));
+        log.info("[UPDATE_USER_ROLE] Role updated successfully. UserId={}, NewRole={}", id, request.getRole());
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User role updated successfully", servletRequest.getRequestURI(), response));
     }
 
     @PatchMapping("/users/{id}/lock")

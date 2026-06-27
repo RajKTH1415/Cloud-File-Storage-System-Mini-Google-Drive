@@ -190,11 +190,34 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public UsersResponse updateUserRole(Long userId, Role role) {
 
+        log.info(
+                "[UPDATE_USER_ROLE] Role update process started. UserId={}, RequestedRole={}",
+                userId,
+                role);
+
         Users user = usersRepository.findById(userId)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "User not found with id: " + userId));
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[UPDATE_USER_ROLE] User not found. UserId={}",
+                            userId);
+
+                    return new RuntimeException(
+                            "User not found with id: " + userId);
+                });
+
+        log.debug(
+                "[UPDATE_USER_ROLE] User located. UserId={}, Username={}, CurrentRole={}",
+                user.getId(),
+                user.getUsername(),
+                user.getRole());
+
         if ("admin".equalsIgnoreCase(user.getUsername())) {
+
+            log.warn(
+                    "[UPDATE_USER_ROLE] Attempt to modify default admin role. UserId={}",
+                    user.getId());
+
             throw new IllegalArgumentException(
                     "Default admin role cannot be modified");
         }
@@ -202,25 +225,52 @@ public class AdminServiceImpl implements AdminService {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
-        String currentAdmin = Objects.requireNonNull(authentication).getName();
+        String currentAdmin =
+                Objects.requireNonNull(authentication).getName();
+
+        log.debug(
+                "[UPDATE_USER_ROLE] Requested by admin={}",
+                currentAdmin);
+
         if (user.getUsername().equals(currentAdmin)
                 && role == Role.USER) {
+
+            log.warn(
+                    "[UPDATE_USER_ROLE] Admin attempted to remove own admin role. Username={}",
+                    currentAdmin);
 
             throw new IllegalArgumentException(
                     "You cannot remove your own admin role");
         }
 
         if (user.getRole() == role) {
+
+            log.warn(
+                    "[UPDATE_USER_ROLE] User already has requested role. UserId={}, Role={}",
+                    user.getId(),
+                    role);
+
             throw new IllegalArgumentException(
                     "User already has role: " + role);
         }
+
+        Role previousRole = user.getRole();
 
         user.setRole(role);
 
         Users updatedUser = usersRepository.save(user);
 
-        return mapToUserResponse(updatedUser);
+        log.info(
+                "[UPDATE_USER_ROLE] User role updated successfully. UserId={}, PreviousRole={}, NewRole={}",
+                updatedUser.getId(),
+                previousRole,
+                updatedUser.getRole());
 
+        log.info(
+                "[UPDATE_USER_ROLE] Role update process completed successfully. UserId={}",
+                updatedUser.getId());
+
+        return mapToUserResponse(updatedUser);
     }
 
     @Override
