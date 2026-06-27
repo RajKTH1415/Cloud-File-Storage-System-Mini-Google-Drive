@@ -130,10 +130,26 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<UsersResponse> getAllUsers() {
-        return usersRepository.findAll()
-                .stream()
-                .map(this::mapToUserResponse)
-                .toList();
+
+        log.info("[GET_ALL_USERS] User retrieval process started.");
+
+        List<Users> users =
+                usersRepository.findAll();
+
+        log.debug(
+                "[GET_ALL_USERS] Retrieved {} user(s) from database.",
+                users.size());
+
+        List<UsersResponse> responses =
+                users.stream()
+                        .map(this::mapToUserResponse)
+                        .toList();
+
+        log.info(
+                "[GET_ALL_USERS] User retrieval completed successfully. TotalUsers={}",
+                responses.size());
+
+        return responses;
     }
 
     @Override

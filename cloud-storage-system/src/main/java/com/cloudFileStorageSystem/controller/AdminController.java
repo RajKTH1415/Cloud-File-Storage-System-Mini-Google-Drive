@@ -42,11 +42,11 @@ public class AdminController {
 
     @GetMapping("/users")
     public ResponseEntity<ApiResponse<List<UsersResponse>>> getAllUsers(HttpServletRequest request) {
-        log.info("Fetching all users");
+        log.info("[GET_ALL_USERS] Fetch all users request received. IP={}, URI={}", request.getRemoteAddr(), request.getRequestURI());
         List<UsersResponse> users = adminService.getAllUsers();
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Users fetched successfully", request.getRequestURI(), users));
+        log.info("[GET_ALL_USERS] Users fetched successfully. TotalUsers={}", users.size());
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Users fetched successfully", request.getRequestURI(), users));
     }
-
     @GetMapping("/users/{id}")
     public ResponseEntity<ApiResponse<UsersResponse>> getUserById(@PathVariable Long id, HttpServletRequest request) {
         log.info("Fetching user with id={}", id);
