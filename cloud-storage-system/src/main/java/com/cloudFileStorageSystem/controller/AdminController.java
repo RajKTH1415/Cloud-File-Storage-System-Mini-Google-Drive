@@ -49,11 +49,11 @@ public class AdminController {
     }
     @GetMapping("/users/{id}")
     public ResponseEntity<ApiResponse<UsersResponse>> getUserById(@PathVariable Long id, HttpServletRequest request) {
-        log.info("Fetching user with id={}", id);
+        log.info("[GET_USER_BY_ID] User retrieval request received. UserId={}, IP={}, URI={}", id, request.getRemoteAddr(), request.getRequestURI());
         UsersResponse user = adminService.getUserById(id);
-        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User fetched successfully", request.getRequestURI(), user));
+        log.info("[GET_USER_BY_ID] User retrieved successfully. UserId={}", id);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User fetched successfully", request.getRequestURI(), user));
     }
-
     @PutMapping("/users/{id}/role")
     public ResponseEntity<ApiResponse<UsersResponse>> updateUserRole(@PathVariable Long id, @Valid @RequestBody UpdateUserRoleRequest request, HttpServletRequest servletRequest) {
         log.info("Role update request received. userId={}, role={}", id, request.getRole());

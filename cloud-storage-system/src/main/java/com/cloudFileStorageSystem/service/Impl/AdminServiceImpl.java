@@ -154,12 +154,36 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public UsersResponse getUserById(Long userId) {
-        Users user = usersRepository.findById(userId)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "User not found with id: " + userId));
 
-        return mapToUserResponse(user);
+        log.info(
+                "[GET_USER_BY_ID] User retrieval process started. UserId={}",
+                userId);
+
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[GET_USER_BY_ID] User not found. UserId={}",
+                            userId);
+
+                    return new RuntimeException(
+                            "User not found with id: " + userId);
+                });
+
+        log.debug(
+                "[GET_USER_BY_ID] User located. UserId={}, Username={}, Email={}",
+                user.getId(),
+                user.getUsername(),
+                user.getEmail());
+
+        UsersResponse response =
+                mapToUserResponse(user);
+
+        log.info(
+                "[GET_USER_BY_ID] User retrieval completed successfully. UserId={}",
+                userId);
+
+        return response;
     }
 
     @Override
