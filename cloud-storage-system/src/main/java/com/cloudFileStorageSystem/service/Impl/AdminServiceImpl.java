@@ -277,13 +277,34 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public LockUserResponse lockUser(Long userId) {
 
+        log.info(
+                "[LOCK_USER] Lock user process started. UserId={}",
+                userId);
+
         Users user = usersRepository.findById(userId)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "User not found with id: " + userId));
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[LOCK_USER] User not found. UserId={}",
+                            userId);
+
+                    return new RuntimeException(
+                            "User not found with id: " + userId);
+                });
+
+        log.debug(
+                "[LOCK_USER] User located. UserId={}, Username={}, AccountNonLocked={}",
+                user.getId(),
+                user.getUsername(),
+                user.isAccountNonLocked());
 
         // Prevent locking default admin
         if ("admin".equalsIgnoreCase(user.getUsername())) {
+
+            log.warn(
+                    "[LOCK_USER] Attempt to lock default admin account. UserId={}",
+                    user.getId());
+
             throw new IllegalArgumentException(
                     "Default admin account cannot be locked");
         }
@@ -292,26 +313,46 @@ public class AdminServiceImpl implements AdminService {
                 SecurityContextHolder.getContext().getAuthentication();
 
         Long currentAdminId =
-                Long.parseLong(Objects.requireNonNull(authentication).getName());
+                Long.parseLong(
+                        Objects.requireNonNull(authentication).getName());
+
+        log.debug(
+                "[LOCK_USER] Lock request initiated by AdminId={}",
+                currentAdminId);
 
         // Prevent self-lock
         if (user.getId().equals(currentAdminId)) {
+
+            log.warn(
+                    "[LOCK_USER] Admin attempted to lock own account. UserId={}",
+                    currentAdminId);
+
             throw new IllegalArgumentException(
                     "You cannot lock your own account");
         }
 
         // Already locked
         if (!user.isAccountNonLocked()) {
+
+            log.warn(
+                    "[LOCK_USER] User account already locked. UserId={}",
+                    user.getId());
+
             throw new IllegalArgumentException(
                     "User account is already locked");
         }
 
         user.setAccountNonLocked(false);
 
-        // Admin lock = indefinite lock
+        // Admin lock = indefinite
         user.setLockedUntil(null);
 
         usersRepository.save(user);
+
+        log.info(
+                "[LOCK_USER] User account locked successfully. UserId={}, Email={}",
+                user.getId(),
+                user.getEmail());
 
         AuditLog auditLog = new AuditLog();
 
@@ -329,6 +370,15 @@ public class AdminServiceImpl implements AdminService {
         );
 
         auditLogRepository.save(auditLog);
+
+        log.info(
+                "[LOCK_USER] Audit log saved successfully. UserId={}, Admin={}",
+                user.getId(),
+                authentication.getName());
+
+        log.info(
+                "[LOCK_USER] Lock user process completed successfully. UserId={}",
+                user.getId());
 
         return LockUserResponse.builder()
                 .userId(user.getId())

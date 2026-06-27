@@ -65,10 +65,10 @@ public class AdminController {
 
     @PatchMapping("/users/{id}/lock")
     public ResponseEntity<ApiResponse<LockUserResponse>> lockUser(@PathVariable Long id, HttpServletRequest request) {
-        log.info("Lock user request received for userId={}", id);
+        log.info("[LOCK_USER] Lock user request received. UserId={}, IP={}, URI={}", id, request.getRemoteAddr(), request.getRequestURI());
         LockUserResponse response = adminService.lockUser(id);
-        log.info("User locked successfully. userId={}", id);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User locked successfully", request.getRequestURI(), response));
+        log.info("[LOCK_USER] User locked successfully. UserId={}", id);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User locked successfully", request.getRequestURI(), response));
     }
 
     @PatchMapping("/users/{id}/enable")
