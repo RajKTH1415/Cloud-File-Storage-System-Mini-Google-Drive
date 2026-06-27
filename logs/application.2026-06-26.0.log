@@ -1,0 +1,881 @@
+2026-06-26 12:16:56.294 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 12232 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:16:56.309 [restartedMain] DEBUG c.c.CloudStorageSystemApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-06-26 12:16:56.314 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:16:56.501 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 12:16:56.502 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 12:16:59.014 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:16:59.328 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 284 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:17:02.891 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 12:17:02.931 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:17:02.938 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:17:02.941 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:17:02.943 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 34536 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:17:02.950 [restartedMain] DEBUG c.c.CloudStorageSystemApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-06-26 12:17:02.952 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:17:03.111 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 12:17:03.112 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 12:17:03.158 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 6653 ms
+2026-06-26 12:17:05.830 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:17:06.116 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 262 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:17:06.245 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:17:06.375 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:17:08.173 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@ca4b2f4
+2026-06-26 12:17:08.183 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:17:08.506 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:17:09.570 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 12:17:09.605 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:17:09.609 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:17:09.610 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:17:09.724 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 6611 ms
+2026-06-26 12:17:11.460 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:17:11.582 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:17:12.630 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@699fac11
+2026-06-26 12:17:12.636 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:17:12.836 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:17:14.046 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:17:14.173 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:17:16.099 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 12:17:16.646 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:17:16.836 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:17:16.925 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:17:16.984 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 12:17:17.689 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 23.407 seconds (process running for 25.033)
+2026-06-26 12:17:17.712 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 12:17:18.402 [restartedMain] INFO  c.c.initializer.AdminInitializer - Admin Created Successfully
+2026-06-26 12:17:18.813 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 12:17:19.469 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:17:19.493 [restartedMain] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-06-26 12:17:19.495 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:17:19.505 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:17:19.519 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 12:17:19.552 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-06-26 12:17:19.603 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2026-06-26 12:17:24.499 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 12:17:24.508 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 12:17:24.515 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:17:24.522 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:17:24.533 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 12:17:28.734 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 30704 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:17:28.738 [restartedMain] DEBUG c.c.CloudStorageSystemApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-06-26 12:17:28.740 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:17:28.879 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 12:17:28.879 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 12:17:30.542 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:17:30.702 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 150 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:17:32.711 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 12:17:32.740 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:17:32.744 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:17:32.745 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:17:32.840 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 3960 ms
+2026-06-26 12:17:33.881 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:17:33.927 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:17:34.453 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3416ccb2
+2026-06-26 12:17:34.457 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:17:34.549 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:17:36.572 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:17:36.682 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:17:37.968 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 12:17:38.547 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:17:38.587 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 12:17:39.054 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 11.64 seconds (process running for 13.143)
+2026-06-26 12:17:39.072 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 12:18:05.551 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 12:18:05.552 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 12:18:05.776 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 224 ms
+2026-06-26 12:18:05.942 [http-nio-8080-exec-1] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-26 12:18:05.943 [http-nio-8080-exec-1] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 12:18:06.952 [http-nio-8080-exec-1] INFO  c.c.controller.UsersController - [REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+2026-06-26 12:18:06.953 [http-nio-8080-exec-1] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration started.
+2026-06-26 12:18:06.953 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking username availability.
+2026-06-26 12:18:06.966 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Username validation passed.
+2026-06-26 12:18:06.966 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking email availability.
+2026-06-26 12:18:06.972 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Email validation passed.
+2026-06-26 12:18:06.973 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Encrypting password.
+2026-06-26 12:18:07.126 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User entity created.
+2026-06-26 12:18:07.400 [http-nio-8080-exec-1] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User saved successfully | userId=2
+2026-06-26 12:18:07.401 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token generated.
+2026-06-26 12:18:07.429 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token saved.
+2026-06-26 12:18:07.436 [http-nio-8080-exec-1] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification email sent | email=kumar.raj.prasad1415@gmail.com
+2026-06-26 12:18:07.436 [http-nio-8080-exec-1] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration completed successfully | userId=2 | username=rajkumar1s231
+2026-06-26 12:18:07.441 [http-nio-8080-exec-1] INFO  c.c.controller.UsersController - [REGISTER_USER] Registration completed | userId=2 | username=rajkumar1s231
+2026-06-26 12:24:21.359 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 12:24:21.367 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 12:24:21.374 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:24:21.381 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:24:21.390 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+Starting CloudStorageSystemApplication using Java 21.0.11 with PID 2100 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+Running with Spring Boot v4.1.0, Spring v7.0.8
+No active profile set, falling back to 1 default profile: "default"
+Starting CloudStorageSystemApplication using Java 21.0.11 with PID 22492 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+Running with Spring Boot v4.1.0, Spring v7.0.8
+No active profile set, falling back to 1 default profile: "default"
+Filter 'jwtAuthFilter' configured for use
+Started CloudStorageSystemApplication in 21.335 seconds (process running for 22.637)
+AdminInitializer Started
+Admin Created Successfully
+Filter 'jwtAuthFilter' configured for use
+[REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+[REGISTER_USER] Registration started.
+[REGISTER_USER] Checking username availability.
+[REGISTER_USER] Username validation passed.
+[REGISTER_USER] Checking email availability.
+[REGISTER_USER] Email validation passed.
+[REGISTER_USER] Encrypting password.
+[REGISTER_USER] User entity created.
+[REGISTER_USER] User saved successfully | userId=2
+[REGISTER_USER] Verification token generated.
+[REGISTER_USER] Verification token saved.
+[REGISTER_USER] Verification email sent | email=kumar.raj.prasad1415@gmail.com
+[REGISTER_USER] Registration completed successfully | userId=2 | username=rajkumar1s231
+[REGISTER_USER] Registration completed | userId=2 | username=rajkumar1s231
+Starting CloudStorageSystemApplication using Java 21.0.11 with PID 14212 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+Running with Spring Boot v4.1.0, Spring v7.0.8
+No active profile set, falling back to 1 default profile: "default"
+Starting CloudStorageSystemApplication using Java 21.0.11 with PID 23224 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+Running with Spring Boot v4.1.0, Spring v7.0.8
+No active profile set, falling back to 1 default profile: "default"
+Filter 'jwtAuthFilter' configured for use
+Started CloudStorageSystemApplication in 12.13 seconds (process running for 13.214)
+AdminInitializer Started
+Admin Created Successfully
+Starting CloudStorageSystemApplication using Java 21.0.11 with PID 11148 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+Running with Spring Boot v4.1.0, Spring v7.0.8
+No active profile set, falling back to 1 default profile: "default"
+Filter 'jwtAuthFilter' configured for use
+Started CloudStorageSystemApplication in 11.699 seconds (process running for 13.006)
+AdminInitializer Started
+[REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+[REGISTER_USER] Registration started.
+[REGISTER_USER] Checking username availability.
+[REGISTER_USER] Username validation passed.
+[REGISTER_USER] Checking email availability.
+[REGISTER_USER] Email validation passed.
+[REGISTER_USER] Encrypting password.
+[REGISTER_USER] User entity created.
+[REGISTER_USER] User saved successfully | userId=2
+[REGISTER_USER] Verification token generated.
+[REGISTER_USER] Verification token saved.
+[REGISTER_USER] Verification email sent | email=kumar.raj.prasad1415@gmail.com
+[REGISTER_USER] Registration completed successfully | userId=2 | username=rajkumar1s231
+[REGISTER_USER] Registration completed | userId=2 | username=rajkumar1s231
+2026-06-26 12:31:18.808 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 12:31:18.921 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 7104 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:31:18.922 [restartedMain] DEBUG c.c.CloudStorageSystemApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-06-26 12:31:18.923 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:31:19.037 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 12:31:19.037 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 12:31:20.657 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:31:20.813 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 145 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:31:23.065 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 12:31:23.101 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:31:23.106 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:31:23.107 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:31:23.194 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 4156 ms
+2026-06-26 12:31:23.595 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 12:31:23.734 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 12:31:24.541 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:31:24.574 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:31:25.037 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@369f5c40
+2026-06-26 12:31:25.042 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:31:25.131 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:31:25.151 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 12:31:26.838 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 12:31:26.992 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:31:27.089 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:31:28.114 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 12:31:28.634 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:31:28.673 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 12:31:29.132 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 11.583 seconds (process running for 12.706)
+2026-06-26 12:31:29.148 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 12:31:32.615 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 12:31:32.616 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 12:31:32.831 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 213 ms
+2026-06-26 12:31:32.980 [http-nio-8080-exec-1] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-26 12:31:32.981 [http-nio-8080-exec-1] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 12:31:33.942 [http-nio-8080-exec-1] INFO  c.c.controller.UsersController - [REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+2026-06-26 12:31:33.943 [http-nio-8080-exec-1] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration started.
+2026-06-26 12:31:33.943 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking username availability.
+2026-06-26 12:31:33.952 [http-nio-8080-exec-1] WARN  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Username already exists | username=rajkumar1s231
+2026-06-26 12:31:34.079 [http-nio-8080-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.cloudFileStorageSystem.exception.ResourceAlreadyExistsException: Username 'rajkumar1s231' already exists]
+2026-06-26 12:34:59.829 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 12:34:59.839 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 12:34:59.845 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:34:59.855 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:34:59.867 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 12:35:04.890 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 12:35:05.057 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 11956 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:35:05.058 [restartedMain] DEBUG c.c.CloudStorageSystemApplication - Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-06-26 12:35:05.060 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:35:05.224 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 12:35:05.225 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 12:35:07.895 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:35:08.108 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 198 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:35:10.505 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 12:35:10.542 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:35:10.549 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:35:10.551 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:35:10.676 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 5450 ms
+2026-06-26 12:35:11.194 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 12:35:11.335 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 12:35:12.247 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:35:12.313 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:35:13.023 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@99dfec1
+2026-06-26 12:35:13.029 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:35:13.156 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:35:13.197 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 12:35:15.297 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 12:35:15.466 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:35:15.596 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:35:17.213 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:35:17.240 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 12:35:17.670 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 14.43 seconds (process running for 16.118)
+2026-06-26 12:35:23.944 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 12:35:23.945 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 12:35:24.131 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 186 ms
+2026-06-26 12:35:24.271 [http-nio-8080-exec-2] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-26 12:35:24.272 [http-nio-8080-exec-2] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 12:35:25.271 [http-nio-8080-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.cloudFileStorageSystem.exception.ResourceAlreadyExistsException: Username 'rajkumar1s231' already exists]
+2026-06-26 12:36:56.223 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 12:36:56.230 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 12:36:56.238 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:36:56.246 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:36:56.259 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 12:37:00.294 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 12:37:00.458 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 6180 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:37:00.460 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:37:02.689 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:37:02.915 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 208 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:37:05.372 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:37:05.376 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:37:05.377 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:37:05.880 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 12:37:05.984 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 12:37:06.823 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:37:06.927 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:37:07.864 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3de75cb2
+2026-06-26 12:37:07.866 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:37:07.945 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:37:07.977 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 12:37:10.177 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 12:37:10.708 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:37:10.801 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:37:12.289 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:37:12.793 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 13.645 seconds (process running for 14.873)
+2026-06-26 12:37:12.812 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 12:37:13.258 [restartedMain] INFO  c.c.initializer.AdminInitializer - Admin Created Successfully
+2026-06-26 12:37:18.750 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 12:37:18.751 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 12:37:18.993 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 241 ms
+2026-06-26 12:37:19.120 [http-nio-8080-exec-2] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 12:38:27.412 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:38:27.419 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:38:27.429 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 12:38:31.251 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 12:38:31.346 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 28888 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:38:31.347 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:38:33.711 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:38:33.884 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 152 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:38:36.152 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:38:36.156 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:38:36.157 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:38:36.588 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 12:38:36.723 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 12:38:37.536 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:38:37.587 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:38:38.519 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5ca8d48
+2026-06-26 12:38:38.526 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:38:38.647 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:38:38.702 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 12:38:40.635 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 12:38:41.305 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:38:41.427 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:38:43.005 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:38:43.492 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 13.218 seconds (process running for 14.21)
+2026-06-26 12:38:43.509 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 12:38:43.925 [restartedMain] INFO  c.c.initializer.AdminInitializer - Admin Created Successfully
+2026-06-26 12:38:46.749 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 12:38:46.749 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 12:38:46.936 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 186 ms
+2026-06-26 12:38:47.066 [http-nio-8080-exec-2] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 12:40:39.613 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:40:39.621 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:40:39.634 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 12:40:43.487 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 12:40:43.603 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 16896 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:40:43.605 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:40:43.732 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 12:40:43.733 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 12:40:46.792 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:40:47.046 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 228 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:40:50.148 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 12:40:50.178 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:40:50.182 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:40:50.183 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:40:50.310 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 6576 ms
+2026-06-26 12:40:50.732 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 12:40:50.850 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 12:40:51.959 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:40:52.013 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:40:52.681 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@50abf0f2
+2026-06-26 12:40:52.685 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:40:52.776 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:40:52.815 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 12:40:54.627 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 12:40:55.204 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:40:55.311 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:40:56.650 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 12:40:57.144 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:40:57.177 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 12:40:57.613 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 15.231 seconds (process running for 16.388)
+2026-06-26 12:40:57.629 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 12:40:58.053 [restartedMain] INFO  c.c.initializer.AdminInitializer - Admin Created Successfully
+2026-06-26 12:40:59.874 [http-nio-8080-exec-4] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 12:40:59.874 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 12:41:00.084 [http-nio-8080-exec-4] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 209 ms
+2026-06-26 12:41:00.211 [http-nio-8080-exec-4] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-26 12:41:00.213 [http-nio-8080-exec-4] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 12:41:01.371 [http-nio-8080-exec-4] INFO  c.c.controller.UsersController - [REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+2026-06-26 12:41:01.372 [http-nio-8080-exec-4] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration started.
+2026-06-26 12:41:01.372 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking username availability.
+2026-06-26 12:41:01.382 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Username validation passed.
+2026-06-26 12:41:01.383 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking email availability.
+2026-06-26 12:41:01.389 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Email validation passed.
+2026-06-26 12:41:01.390 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Encrypting password.
+2026-06-26 12:41:01.503 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User entity created.
+2026-06-26 12:41:01.515 [http-nio-8080-exec-4] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User saved successfully | userId=2
+2026-06-26 12:41:01.516 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token generated.
+2026-06-26 12:41:01.538 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token saved.
+2026-06-26 12:41:01.545 [http-nio-8080-exec-4] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification email sent | email=kumar.raj.prasad1415@gmail.com
+2026-06-26 12:41:01.545 [http-nio-8080-exec-4] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration completed successfully | userId=2 | username=rajkumar1s231
+2026-06-26 12:41:01.547 [http-nio-8080-exec-4] INFO  c.c.controller.UsersController - [REGISTER_USER] Registration completed | userId=2 | username=rajkumar1s231
+2026-06-26 12:44:14.677 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 12:44:14.685 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 12:44:14.691 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:44:14.700 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:44:14.710 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 12:44:25.489 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 12:44:25.659 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 21088 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:44:25.663 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:44:25.832 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 12:44:25.832 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 12:44:27.677 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:44:27.832 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 137 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:44:29.979 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 12:44:30.007 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:44:30.012 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:44:30.013 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:44:30.110 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 4277 ms
+2026-06-26 12:44:30.461 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 12:44:30.564 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 12:44:31.198 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:44:31.238 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:44:31.713 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7eafb1af
+2026-06-26 12:44:31.717 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:44:31.827 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:44:31.863 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 12:44:33.604 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 12:44:33.774 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:44:33.880 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:44:34.896 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 12:44:35.342 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:44:35.375 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 12:44:35.828 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 11.762 seconds (process running for 12.935)
+2026-06-26 12:44:35.845 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 12:45:03.854 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 12:45:03.855 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 12:45:04.227 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 371 ms
+2026-06-26 12:45:04.500 [http-nio-8080-exec-1] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-26 12:45:04.502 [http-nio-8080-exec-1] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 12:45:05.698 [http-nio-8080-exec-1] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Verification request received. IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/verify-email
+2026-06-26 12:45:05.753 [http-nio-8080-exec-1] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification started.
+2026-06-26 12:45:05.795 [http-nio-8080-exec-1] WARN  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Invalid verification token.
+2026-06-26 12:45:05.982 [http-nio-8080-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Invalid verification token]
+2026-06-26 12:45:24.066 [http-nio-8080-exec-4] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Verification request received. IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/verify-email
+2026-06-26 12:45:24.068 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification started.
+2026-06-26 12:45:24.112 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token found.
+2026-06-26 12:45:24.112 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token has not been used.
+2026-06-26 12:45:24.112 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token is valid.
+2026-06-26 12:45:24.112 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Activating account. UserId=2, Username=rajkumar1s231
+2026-06-26 12:45:24.129 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] User account activated. UserId=2, Username=rajkumar1s231
+2026-06-26 12:45:24.130 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token marked as used.
+2026-06-26 12:45:24.130 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification completed successfully. UserId=2
+2026-06-26 12:45:24.264 [http-nio-8080-exec-4] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Email verification completed successfully.
+2026-06-26 12:46:27.261 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 12:46:27.268 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 12:46:27.275 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:46:27.283 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:46:27.297 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 12:46:32.787 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 12:46:32.939 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 6840 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:46:32.943 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:46:33.086 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 12:46:33.087 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 12:46:34.684 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:46:34.815 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 120 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:46:36.516 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 12:46:36.542 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:46:36.546 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:46:36.547 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:46:36.619 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 3531 ms
+2026-06-26 12:46:36.930 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 12:46:37.050 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 12:46:37.719 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:46:37.754 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:46:38.342 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@f73c75c
+2026-06-26 12:46:38.345 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:46:38.413 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:46:38.452 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 12:46:40.125 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 12:46:40.609 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:46:40.694 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:46:41.726 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 12:46:42.165 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:46:42.192 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 12:46:42.608 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 11.082 seconds (process running for 13.838)
+2026-06-26 12:46:42.625 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 12:46:43.071 [restartedMain] INFO  c.c.initializer.AdminInitializer - Admin Created Successfully
+2026-06-26 12:47:54.411 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 12:47:54.419 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 12:47:54.425 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:47:54.432 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:47:54.445 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 12:48:03.697 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 12:48:03.833 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 2448 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 12:48:03.835 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 12:48:03.961 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 12:48:03.963 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 12:48:05.713 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 12:48:05.852 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 128 ms. Found 9 JPA repository interfaces.
+2026-06-26 12:48:07.882 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 12:48:07.910 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:48:07.915 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 12:48:07.916 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 12:48:08.017 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 4054 ms
+2026-06-26 12:48:08.451 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 12:48:08.597 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 12:48:09.441 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 12:48:09.487 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 12:48:10.036 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@32053b7f
+2026-06-26 12:48:10.039 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 12:48:10.108 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 12:48:10.139 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 12:48:12.123 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 12:48:12.611 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:48:12.697 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 12:48:13.821 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 12:48:14.307 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 12:48:14.342 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 12:48:14.853 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 12.267 seconds (process running for 13.499)
+2026-06-26 12:48:14.872 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 12:48:15.325 [restartedMain] INFO  c.c.initializer.AdminInitializer - Admin Created Successfully
+2026-06-26 12:48:23.813 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 12:48:23.813 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 12:48:24.020 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 205 ms
+2026-06-26 12:48:24.208 [http-nio-8080-exec-2] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-26 12:48:24.209 [http-nio-8080-exec-2] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 12:48:25.145 [http-nio-8080-exec-2] INFO  c.c.controller.UsersController - [REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+2026-06-26 12:48:25.145 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration started.
+2026-06-26 12:48:25.146 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking username availability.
+2026-06-26 12:48:25.156 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Username validation passed.
+2026-06-26 12:48:25.157 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking email availability.
+2026-06-26 12:48:25.162 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Email validation passed.
+2026-06-26 12:48:25.162 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Encrypting password.
+2026-06-26 12:48:25.264 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User entity created.
+2026-06-26 12:48:25.277 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User saved successfully | userId=2
+2026-06-26 12:48:25.278 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token generated.
+2026-06-26 12:48:25.296 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token saved.
+2026-06-26 12:48:25.302 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification email sent | email=kumar.raj.prasad1415@gmail.com
+2026-06-26 12:48:25.302 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration completed successfully | userId=2 | username=rajkumar1s231
+2026-06-26 12:48:25.304 [http-nio-8080-exec-2] INFO  c.c.controller.UsersController - [REGISTER_USER] Registration completed | userId=2 | username=rajkumar1s231
+2026-06-26 12:48:50.219 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Verification request received. IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/verify-email
+2026-06-26 12:48:50.223 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification started.
+2026-06-26 12:48:50.285 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token found.
+2026-06-26 12:48:50.285 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token has not been used.
+2026-06-26 12:48:50.285 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token is valid.
+2026-06-26 12:48:50.286 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Activating account. UserId=2, Username=rajkumar1s231
+2026-06-26 12:48:50.290 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] User account activated. UserId=2, Username=rajkumar1s231
+2026-06-26 12:48:50.290 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token marked as used.
+2026-06-26 12:48:50.291 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification completed successfully. UserId=2
+2026-06-26 12:48:50.317 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Email verification completed successfully.
+2026-06-26 12:55:17.999 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 12:55:18.006 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 12:55:18.012 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 12:55:18.016 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 12:55:18.024 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 14:26:04.995 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 14:26:05.160 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 13636 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 14:26:05.163 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 14:26:05.329 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 14:26:05.329 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 14:26:07.270 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 14:26:07.427 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 142 ms. Found 9 JPA repository interfaces.
+2026-06-26 14:26:09.425 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 14:26:09.449 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 14:26:09.453 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 14:26:09.454 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 14:26:09.525 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 4195 ms
+2026-06-26 14:26:09.872 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 14:26:10.053 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 14:26:10.989 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 14:26:11.059 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 14:26:11.932 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@39f40820
+2026-06-26 14:26:11.936 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 14:26:12.101 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 14:26:12.132 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 14:26:14.992 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 14:26:15.432 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 14:26:15.573 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 14:26:16.986 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 14:26:17.550 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 14:26:17.589 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 14:26:18.131 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 14.393 seconds (process running for 15.87)
+2026-06-26 14:26:18.151 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 14:26:42.855 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 14:26:42.855 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 14:26:43.110 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 253 ms
+2026-06-26 14:26:43.267 [http-nio-8080-exec-2] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-26 14:26:43.268 [http-nio-8080-exec-2] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 14:26:44.288 [http-nio-8080-exec-2] INFO  c.c.controller.UsersController - [REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+2026-06-26 14:26:44.289 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration started.
+2026-06-26 14:26:44.289 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking username availability.
+2026-06-26 14:26:44.302 [http-nio-8080-exec-2] WARN  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Username already exists | username=rajkumar1s231
+2026-06-26 14:26:44.410 [http-nio-8080-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.cloudFileStorageSystem.exception.ResourceAlreadyExistsException: Username 'rajkumar1s231' already exists]
+2026-06-26 14:27:09.579 [http-nio-8080-exec-3] INFO  c.c.controller.UsersController - [REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+2026-06-26 14:27:09.579 [http-nio-8080-exec-3] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration started.
+2026-06-26 14:27:09.579 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking username availability.
+2026-06-26 14:27:09.583 [http-nio-8080-exec-3] WARN  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Username already exists | username=rajkumar1s231
+2026-06-26 14:27:09.588 [http-nio-8080-exec-3] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.cloudFileStorageSystem.exception.ResourceAlreadyExistsException: Username 'rajkumar1s231' already exists]
+2026-06-26 14:32:16.662 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 14:32:16.670 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 14:32:16.676 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 14:32:16.685 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 14:32:16.702 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 14:32:22.781 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 14:32:22.888 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 19364 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 14:32:22.890 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 14:32:23.004 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 14:32:23.005 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 14:32:24.376 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 14:32:24.505 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 118 ms. Found 9 JPA repository interfaces.
+2026-06-26 14:32:26.211 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 14:32:26.237 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 14:32:26.241 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 14:32:26.242 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 14:32:26.352 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 3345 ms
+2026-06-26 14:32:26.762 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 14:32:26.924 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 14:32:27.805 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 14:32:27.857 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 14:32:28.468 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7b3a87db
+2026-06-26 14:32:28.471 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 14:32:28.543 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 14:32:28.564 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 14:32:30.310 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 14:32:30.902 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 14:32:30.987 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 14:32:32.103 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 14:32:32.585 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 14:32:32.621 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 14:32:33.066 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 11.315 seconds (process running for 12.408)
+2026-06-26 14:32:33.084 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 14:32:33.529 [restartedMain] INFO  c.c.initializer.AdminInitializer - Admin Created Successfully
+2026-06-26 14:32:48.968 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 14:32:48.969 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 14:32:49.211 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 242 ms
+2026-06-26 14:32:49.342 [http-nio-8080-exec-1] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-26 14:32:49.344 [http-nio-8080-exec-1] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 14:32:50.237 [http-nio-8080-exec-1] INFO  c.c.controller.UsersController - [REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+2026-06-26 14:32:50.238 [http-nio-8080-exec-1] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration started.
+2026-06-26 14:32:50.238 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking username availability.
+2026-06-26 14:32:50.247 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Username validation passed.
+2026-06-26 14:32:50.248 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking email availability.
+2026-06-26 14:32:50.253 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Email validation passed.
+2026-06-26 14:32:50.254 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Encrypting password.
+2026-06-26 14:32:50.363 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User entity created.
+2026-06-26 14:32:50.379 [http-nio-8080-exec-1] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User saved successfully | userId=2
+2026-06-26 14:32:50.380 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token generated.
+2026-06-26 14:32:50.405 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token saved.
+2026-06-26 14:32:50.411 [http-nio-8080-exec-1] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification email sent | email=kumar.raj.prasad1415@gmail.com
+2026-06-26 14:32:50.411 [http-nio-8080-exec-1] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration completed successfully | userId=2 | username=rajkumar1s231
+2026-06-26 14:32:50.413 [http-nio-8080-exec-1] INFO  c.c.controller.UsersController - [REGISTER_USER] Registration completed | userId=2 | username=rajkumar1s231
+2026-06-26 14:33:22.452 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Verification request received. IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/verify-email
+2026-06-26 14:33:22.456 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification started.
+2026-06-26 14:33:22.519 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token found.
+2026-06-26 14:33:22.520 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token has not been used.
+2026-06-26 14:33:22.520 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token is valid.
+2026-06-26 14:33:22.520 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Activating account. UserId=2, Username=rajkumar1s231
+2026-06-26 14:33:22.525 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] User account activated. UserId=2, Username=rajkumar1s231
+2026-06-26 14:33:22.526 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token marked as used.
+2026-06-26 14:33:22.526 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification completed successfully. UserId=2
+2026-06-26 14:33:22.551 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Email verification completed successfully.
+2026-06-26 14:33:27.045 [http-nio-8080-exec-4] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=admin@cloudstorage.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-26 14:33:27.046 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=admin@cloudstorage.com
+2026-06-26 14:33:27.073 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=1, Username=admin, FailedAttempts=0, AccountLocked=false
+2026-06-26 14:33:27.073 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=admin
+2026-06-26 14:33:27.182 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=admin
+2026-06-26 14:33:27.183 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - Password verified successfully for username=admin
+2026-06-26 14:33:27.202 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after successful login. UserId=1
+2026-06-26 14:33:27.202 [http-nio-8080-exec-4] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Recording login attempt for unknown user. Identifier=admin@cloudstorage.com
+2026-06-26 14:33:27.220 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Successful login attempt saved. UserId=1
+2026-06-26 14:33:27.220 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_SUCCESS, Identifier=admin@cloudstorage.com
+2026-06-26 14:33:27.240 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_SUCCESS
+2026-06-26 14:33:27.331 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] JWT access and refresh tokens generated. UserId=1
+2026-06-26 14:33:27.362 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login completed successfully. UserId=1, Username=admin
+2026-06-26 14:33:27.363 [http-nio-8080-exec-4] INFO  c.c.controller.AuthController - [LOGIN] Login completed successfully., Username=admin
+2026-06-26 14:33:36.687 [http-nio-8080-exec-5] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-26 14:33:36.688 [http-nio-8080-exec-5] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-26 14:33:36.695 [http-nio-8080-exec-5] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=0, AccountLocked=false
+2026-06-26 14:33:36.695 [http-nio-8080-exec-5] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-26 14:33:36.802 [http-nio-8080-exec-5] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=rajkumar1s231
+2026-06-26 14:33:36.803 [http-nio-8080-exec-5] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login failed. Invalid password. Username=rajkumar1s231
+2026-06-26 14:33:36.803 [http-nio-8080-exec-5] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Processing failed login. Username=rajkumar1s231
+2026-06-26 14:33:36.803 [http-nio-8080-exec-5] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempts updated. Username=rajkumar1s231, Attempts=1
+2026-06-26 14:33:36.815 [http-nio-8080-exec-5] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after failed login. UserId=2
+2026-06-26 14:33:36.827 [http-nio-8080-exec-5] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_FAILED, Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-26 14:33:36.839 [http-nio-8080-exec-5] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_FAILED
+2026-06-26 14:33:36.840 [http-nio-8080-exec-5] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempt recorded. Identifier=kumar.raj.prasad1415@gmail.com, Locked=false
+2026-06-26 14:33:36.851 [http-nio-8080-exec-5] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Invalid username/email/phone or password]
+2026-06-26 14:34:00.796 [http-nio-8080-exec-7] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-26 14:34:00.797 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-26 14:34:00.804 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=1, AccountLocked=false
+2026-06-26 14:34:00.804 [http-nio-8080-exec-7] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-26 14:34:00.911 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=rajkumar1s231
+2026-06-26 14:34:00.911 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - Password verified successfully for username=rajkumar1s231
+2026-06-26 14:34:00.926 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after successful login. UserId=2
+2026-06-26 14:34:00.927 [http-nio-8080-exec-7] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Recording login attempt for unknown user. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-26 14:34:00.938 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Successful login attempt saved. UserId=2
+2026-06-26 14:34:00.938 [http-nio-8080-exec-7] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_SUCCESS, Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-26 14:34:00.949 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_SUCCESS
+2026-06-26 14:34:00.952 [http-nio-8080-exec-7] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] JWT access and refresh tokens generated. UserId=2
+2026-06-26 14:34:00.975 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login completed successfully. UserId=2, Username=rajkumar1s231
+2026-06-26 14:34:00.975 [http-nio-8080-exec-7] INFO  c.c.controller.AuthController - [LOGIN] Login completed successfully., Username=rajkumar1s231
+2026-06-26 14:34:20.845 [http-nio-8080-exec-8] INFO  c.c.controller.AuthController - Received login history request for userId: 2
+2026-06-26 14:34:20.876 [http-nio-8080-exec-8] INFO  c.c.controller.AuthController - Successfully fetched 2 login history records for userId: 2
+2026-06-26 14:35:41.951 [http-nio-8080-exec-2] INFO  c.c.controller.AuthController - Logout request received. URI=/api/v1/auth/logout, IP=0:0:0:0:0:0:0:1
+2026-06-26 14:35:41.953 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - Logout process started
+2026-06-26 14:35:41.967 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.AuthServiceImpl - Access token blacklisted successfully
+2026-06-26 14:35:41.975 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.AuthServiceImpl - Refresh token found. TokenId=2, UserId=2
+2026-06-26 14:35:41.976 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - Refresh token revoked successfully. TokenId=2, UserId=2
+2026-06-26 14:35:41.976 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - Logout completed successfully. UserId=2
+2026-06-26 14:35:41.986 [http-nio-8080-exec-2] INFO  c.c.controller.AuthController - Logout completed successfully
+2026-06-26 14:45:26.768 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 14:45:26.775 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 14:45:26.780 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 14:45:26.786 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 14:45:26.791 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-26 17:25:52.121 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-26 17:25:52.387 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 7600 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-26 17:25:52.392 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-26 17:25:52.585 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-26 17:25:52.585 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-26 17:25:54.813 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-26 17:25:55.027 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 193 ms. Found 9 JPA repository interfaces.
+2026-06-26 17:25:57.652 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-26 17:25:57.688 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-26 17:25:57.697 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-26 17:25:57.700 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-26 17:25:57.846 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 5257 ms
+2026-06-26 17:25:58.389 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-26 17:25:58.675 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-26 17:26:00.480 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-26 17:26:00.583 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-26 17:26:02.379 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4ace0a79
+2026-06-26 17:26:02.385 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-26 17:26:02.608 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-26 17:26:02.674 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-26 17:26:07.800 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-26 17:26:08.507 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 17:26:08.766 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-26 17:26:11.678 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-26 17:26:12.402 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-26 17:26:12.460 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-26 17:26:13.203 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 22.643 seconds (process running for 24.038)
+2026-06-26 17:26:13.235 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-26 17:26:17.914 [http-nio-8080-exec-3] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-26 17:26:17.915 [http-nio-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-26 17:26:18.190 [http-nio-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 274 ms
+2026-06-26 17:26:18.333 [http-nio-8080-exec-3] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-26 17:26:18.335 [http-nio-8080-exec-3] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-26 17:26:19.293 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=admin@cloudstorage.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-26 17:26:19.294 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=admin@cloudstorage.com
+2026-06-26 17:26:19.375 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=1, Username=admin, FailedAttempts=0, AccountLocked=false
+2026-06-26 17:26:19.375 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=admin
+2026-06-26 17:26:19.522 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=admin
+2026-06-26 17:26:19.523 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - Password verified successfully for username=admin
+2026-06-26 17:26:19.727 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after successful login. UserId=1
+2026-06-26 17:26:19.727 [http-nio-8080-exec-3] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Recording login attempt for unknown user. Identifier=admin@cloudstorage.com
+2026-06-26 17:26:19.830 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Successful login attempt saved. UserId=1
+2026-06-26 17:26:19.831 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_SUCCESS, Identifier=admin@cloudstorage.com
+2026-06-26 17:26:19.857 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_SUCCESS
+2026-06-26 17:26:19.968 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] JWT access and refresh tokens generated. UserId=1
+2026-06-26 17:26:20.004 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login completed successfully. UserId=1, Username=admin
+2026-06-26 17:26:20.006 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [LOGIN] Login completed successfully., Username=admin
+2026-06-26 17:26:44.769 [http-nio-8080-exec-2] INFO  c.c.controller.AuthController - [LOGOUT] Logout request received. IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/logout
+2026-06-26 17:26:44.771 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - [LOGOUT] Logout process started.
+2026-06-26 17:26:44.784 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGOUT] Access token blacklisted successfully.
+2026-06-26 17:26:44.797 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGOUT] Refresh token found. TokenId=3, UserId=1
+2026-06-26 17:26:44.797 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - [LOGOUT] Refresh token revoked successfully. TokenId=3, UserId=1
+2026-06-26 17:26:44.797 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - [LOGOUT] Logout completed successfully. UserId=1
+2026-06-26 17:26:44.808 [http-nio-8080-exec-2] INFO  c.c.controller.AuthController - [LOGOUT] Logout completed successfully.
+2026-06-26 17:27:05.988 [http-nio-8080-exec-6] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=admin@cloudstorage.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-26 17:27:05.989 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=admin@cloudstorage.com
+2026-06-26 17:27:05.996 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=1, Username=admin, FailedAttempts=0, AccountLocked=false
+2026-06-26 17:27:05.996 [http-nio-8080-exec-6] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=admin
+2026-06-26 17:27:06.109 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=admin
+2026-06-26 17:27:06.109 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - Password verified successfully for username=admin
+2026-06-26 17:27:06.123 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after successful login. UserId=1
+2026-06-26 17:27:06.124 [http-nio-8080-exec-6] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Recording login attempt for unknown user. Identifier=admin@cloudstorage.com
+2026-06-26 17:27:06.135 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Successful login attempt saved. UserId=1
+2026-06-26 17:27:06.135 [http-nio-8080-exec-6] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_SUCCESS, Identifier=admin@cloudstorage.com
+2026-06-26 17:27:06.145 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_SUCCESS
+2026-06-26 17:27:06.148 [http-nio-8080-exec-6] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] JWT access and refresh tokens generated. UserId=1
+2026-06-26 17:27:06.172 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login completed successfully. UserId=1, Username=admin
+2026-06-26 17:27:06.172 [http-nio-8080-exec-6] INFO  c.c.controller.AuthController - [LOGIN] Login completed successfully., Username=admin
+2026-06-26 17:27:30.006 [http-nio-8080-exec-7] INFO  c.c.controller.AuthController - [LOGOUT] Logout request received. IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/logout
+2026-06-26 17:27:30.007 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [LOGOUT] Logout process started.
+2026-06-26 17:27:30.019 [http-nio-8080-exec-7] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGOUT] Access token blacklisted successfully.
+2026-06-26 17:27:30.024 [http-nio-8080-exec-7] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGOUT] Refresh token found. TokenId=4, UserId=1
+2026-06-26 17:27:30.025 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [LOGOUT] Refresh token revoked successfully. TokenId=4, UserId=1
+2026-06-26 17:27:30.025 [http-nio-8080-exec-7] INFO  c.c.service.Impl.AuthServiceImpl - [LOGOUT] Logout completed successfully. UserId=1
+2026-06-26 17:27:30.037 [http-nio-8080-exec-7] INFO  c.c.controller.AuthController - [LOGOUT] Logout completed successfully.
+2026-06-26 17:27:35.454 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-26 17:27:35.461 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-26 17:27:35.467 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-26 17:27:35.472 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-26 17:27:35.483 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

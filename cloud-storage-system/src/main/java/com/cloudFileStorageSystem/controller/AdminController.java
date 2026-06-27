@@ -26,10 +26,10 @@ public class AdminController {
 
     @GetMapping("/stats")
     public ResponseEntity<ApiResponse<AdminStatsResponse>> getStats(HttpServletRequest request) {
-        log.info("Admin stats request received");
+        log.info("[ADMIN_STATS] Admin statistics request received. IP={}, URI={}", request.getRemoteAddr(), request.getRequestURI());
         AdminStatsResponse response = adminService.getAdminStats();
-        log.info("Admin stats fetched successfully");
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Admin stats fetched successfully", request.getRequestURI(), response));
+        log.info("[ADMIN_STATS] Admin statistics fetched successfully.");
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "Admin stats fetched successfully", request.getRequestURI(), response));
     }
 
     @PostMapping("/users/{id}/unlock")
@@ -60,7 +60,6 @@ public class AdminController {
         UsersResponse response = adminService.updateUserRole(id, request.getRole());
         log.info("Role updated successfully. userId={}, role={}", id, request.getRole());
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User role updated successfully", servletRequest.getRequestURI(), response));
-
     }
 
     @PatchMapping("/users/{id}/lock")

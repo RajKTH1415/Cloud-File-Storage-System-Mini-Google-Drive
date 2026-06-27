@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -63,7 +64,7 @@ public class AdminServiceImpl implements AdminService {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
-        String adminUsername = authentication.getName();
+        String adminUsername = Objects.requireNonNull(authentication).getName();
 
         log.info("Admin '{}' is unlocking user '{}' (userId={})",
                 adminUsername,
@@ -148,7 +149,7 @@ public class AdminServiceImpl implements AdminService {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
-        String currentAdmin = authentication.getName();
+        String currentAdmin = Objects.requireNonNull(authentication).getName();
         if (user.getUsername().equals(currentAdmin)
                 && role == Role.USER) {
 
@@ -188,7 +189,7 @@ public class AdminServiceImpl implements AdminService {
                 SecurityContextHolder.getContext().getAuthentication();
 
         Long currentAdminId =
-                Long.parseLong(authentication.getName());
+                Long.parseLong(Objects.requireNonNull(authentication).getName());
 
         // Prevent self-lock
         if (user.getId().equals(currentAdminId)) {
@@ -273,7 +274,7 @@ public class AdminServiceImpl implements AdminService {
         auditLog.setDetails(
                 String.format(
                         "Admin '%s' enabled account '%s' (User ID: %d)",
-                        authentication.getName(),
+                        Objects.requireNonNull(authentication).getName(),
                         user.getEmail(),
                         user.getId()
                 )
@@ -301,7 +302,7 @@ public class AdminServiceImpl implements AdminService {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
-        String adminName = authentication.getName();
+        String adminName = Objects.requireNonNull(authentication).getName();
 
         // Already disabled
         if (!user.isEnabled()) {
@@ -315,7 +316,7 @@ public class AdminServiceImpl implements AdminService {
                     "You cannot disable your own account");
         }
 
-        // 🚨 Core change
+        //  Core change
         user.setEnabled(false);
         user.setStatus(UserStatus.DISABLED);
 
@@ -356,33 +357,33 @@ public class AdminServiceImpl implements AdminService {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
-        String adminName = authentication.getName();
+        String adminName = Objects.requireNonNull(authentication).getName();
 
-        // 🚫 Prevent deleting default admin
+        //  Prevent deleting default admin
         if ("admin".equalsIgnoreCase(user.getUsername())) {
             throw new IllegalArgumentException(
                     "Default admin account cannot be deleted");
         }
 
-        // 🚫 Already deleted
+        //  Already deleted
         if (user.getStatus() == UserStatus.DELETED) {
             throw new IllegalArgumentException("User is already deleted");
         }
 
-        // 🚫 Prevent self-delete
+        //  Prevent self-delete
         if (user.getUsername().equals(adminName)) {
             throw new IllegalArgumentException(
                     "You cannot delete your own account");
         }
 
-        // 🧠 SOFT DELETE
+        //  SOFT DELETE
         user.setStatus(UserStatus.DELETED);
         user.setEnabled(false);
         user.setAccountNonLocked(false);
 
         Users updatedUser = usersRepository.save(user);
 
-        // 📜 Audit log
+        //  Audit log
         AuditLog auditLog = new AuditLog();
         auditLog.setIdentifier(user.getEmail());
         auditLog.setAction("ACCOUNT_DELETED_BY_ADMIN");
@@ -404,22 +405,40 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public AdminStatsResponse getAdminStats() {
 
+        log.info("[ADMIN_STATS] Admin statistics retrieval started.");
+
         List<Users> users = usersRepository.findAll();
 
         long totalUsers = users.size();
 
-        long activeUsers = usersRepository.countByStatus(UserStatus.ACTIVE);
+        long activeUsers =
+                usersRepository.countByStatus(UserStatus.ACTIVE);
 
-        long lockedUsers = usersRepository.countByStatus(UserStatus.LOCKED);
+        long lockedUsers =
+                usersRepository.countByStatus(UserStatus.LOCKED);
 
-        long deletedUsers = usersRepository.countByStatus(UserStatus.DELETED);
+        long deletedUsers =
+                usersRepository.countByStatus(UserStatus.DELETED);
 
-        return AdminStatsResponse.builder()
-                .totalUsers(totalUsers)
-                .activeUsers(activeUsers)
-                .lockedUsers(lockedUsers)
-                .deletedUsers(deletedUsers)
-                .build();
+        log.debug(
+                "[ADMIN_STATS] Statistics calculated. TotalUsers={}, ActiveUsers={}, LockedUsers={}, DeletedUsers={}",
+                totalUsers,
+                activeUsers,
+                lockedUsers,
+                deletedUsers);
+
+        AdminStatsResponse response =
+                AdminStatsResponse.builder()
+                        .totalUsers(totalUsers)
+                        .activeUsers(activeUsers)
+                        .lockedUsers(lockedUsers)
+                        .deletedUsers(deletedUsers)
+                        .build();
+
+        log.info(
+                "[ADMIN_STATS] Admin statistics retrieval completed successfully.");
+
+        return response;
     }
 
 

@@ -7,14 +7,12 @@ import com.cloudFileStorageSystem.enums.AttemptStatus;
 import com.cloudFileStorageSystem.enums.OtpPurpose;
 import com.cloudFileStorageSystem.module.*;
 import com.cloudFileStorageSystem.repository.*;
-import com.cloudFileStorageSystem.security.CustomUserDetailsService;
 import com.cloudFileStorageSystem.service.AuditService;
 import com.cloudFileStorageSystem.service.AuthService;
 import com.cloudFileStorageSystem.service.EmailService;
 import com.cloudFileStorageSystem.service.TokenBlacklistService;
 import com.cloudFileStorageSystem.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,9 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -41,7 +39,6 @@ public class AuthServiceImpl implements AuthService {
             LoggerFactory.getLogger(AuthServiceImpl.class);
 
     private final PasswordHistoryRepository passwordHistoryRepository;
-    private final PasswordResetOtpRepository passwordResetOtpRepository;
     private final SecurityProperties securityProperties;
     private final AuditLogRepository auditLogRepository;
     private final LoginAttemptRepository loginAttemptRepository;
@@ -54,7 +51,6 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UsersRepository usersRepository;
     private final JwtUtil jwtUtil;
-    private final CustomUserDetailsService customUserDetailsService;
 
     @Value("${jwt.refresh-token-validity}")
     private long refreshTokenValidity;
@@ -66,9 +62,8 @@ public class AuthServiceImpl implements AuthService {
     private int passwordHistoryLimit;
 
 
-    public AuthServiceImpl(PasswordHistoryRepository passwordHistoryRepository, PasswordResetOtpRepository passwordResetOtpRepository, SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
+    public AuthServiceImpl(PasswordHistoryRepository passwordHistoryRepository, SecurityProperties securityProperties, AuditLogRepository auditLogRepository, LoginAttemptRepository loginAttemptRepository, PasswordEncoder passwordEncoder, AuditService auditService, EmailVerificationTokenRepository emailVerificationTokenRepository, OtpRepository otpRepository, EmailService emailService, TokenBlacklistService tokenBlacklistService, RefreshTokenRepository refreshTokenRepository, UsersRepository usersRepository, JwtUtil jwtUtil) {
         this.passwordHistoryRepository = passwordHistoryRepository;
-        this.passwordResetOtpRepository = passwordResetOtpRepository;
         this.securityProperties = securityProperties;
         this.auditLogRepository = auditLogRepository;
         this.loginAttemptRepository = loginAttemptRepository;
@@ -81,7 +76,6 @@ public class AuthServiceImpl implements AuthService {
         this.refreshTokenRepository = refreshTokenRepository;
         this.usersRepository = usersRepository;
         this.jwtUtil = jwtUtil;
-        this.customUserDetailsService = customUserDetailsService;
     }
 
 
@@ -104,8 +98,7 @@ public class AuthServiceImpl implements AuthService {
 
                     saveUnknownUserAttempt(
                             identifier,
-                            httpServletRequest,
-                            "USER_NOT_FOUND"
+                            httpServletRequest
                     );
                     saveAuditLog(
                             identifier,
@@ -310,14 +303,12 @@ public class AuthServiceImpl implements AuthService {
             user.setLockedUntil(
                     LocalDateTime.now()
                             .plusMinutes(
-                                    securityProperties.getLockTimeMinutes()
-                            )
-            );
+                                    securityProperties.getLockTimeMinutes()));
 
             locked = true;
         }
 
-        Users savedUser = usersRepository.save(user);
+          usersRepository.save(user);
 
         log.info("[LOGIN] User account updated after failed login. UserId={}",
                 user.getId());
@@ -331,27 +322,21 @@ public class AuthServiceImpl implements AuthService {
 
         attempt.setIdentifierType(
                 getIdentifierType(
-                        request.getIdentifier()
-                )
-        );
+                        request.getIdentifier()));
 
         attempt.setIpAddress(
-                getClientIp(servletRequest)
-        );
+                getClientIp(servletRequest));
 
         attempt.setUserAgent(
-                getDevice(servletRequest)
-        );
+                getDevice(servletRequest));
 
         attempt.setAttemptStatus(
-                AttemptStatus.FAILED
-        );
+                AttemptStatus.FAILED);
 
         attempt.setFailureReason(
                 locked
                         ? "ACCOUNT_LOCKED"
-                        : "INVALID_PASSWORD"
-        );
+                        : "INVALID_PASSWORD");
 
         attempt.setFailedAttempts(attempts);
 
@@ -359,8 +344,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (locked) {
             attempt.setLockTime(
-                    user.getLockedUntil()
-            );
+                    user.getLockedUntil());
         }
 
         loginAttemptRepository.save(attempt);
@@ -371,8 +355,7 @@ public class AuthServiceImpl implements AuthService {
                 servletRequest,
                 locked
                         ? "Account locked after maximum failed attempts"
-                        : "Invalid password"
-        );
+                        : "Invalid password");
 
         log.info("[LOGIN] Failed login attempt recorded. Identifier={}, Locked={}",
                 request.getIdentifier(),
@@ -402,29 +385,23 @@ public class AuthServiceImpl implements AuthService {
         attempt.setEmail(user.getEmail());
 
         attempt.setPhoneNumber(
-                user.getPhoneNumber()
-        );
+                user.getPhoneNumber());
 
         attempt.setLoginIdentifier(
-                loginIdentifier
-        );
+                loginIdentifier);
 
         attempt.setIdentifierType(
-                getIdentifierType(loginIdentifier)
-        );
+                getIdentifierType(loginIdentifier));
 
 
         attempt.setIpAddress(
-                getClientIp(request)
-        );
+                getClientIp(request));
 
         attempt.setUserAgent(
-                getDevice(request)
-        );
+                getDevice(request));
 
         attempt.setAttemptStatus(
-                AttemptStatus.SUCCESS
-        );
+                AttemptStatus.SUCCESS);
 
         attempt.setFailedAttempts(0);
 
@@ -440,35 +417,28 @@ public class AuthServiceImpl implements AuthService {
 
     private void saveUnknownUserAttempt(
             String identifier,
-            HttpServletRequest request,
-            String reason) {
+            HttpServletRequest request) {
 
         LoginAttempt attempt = new LoginAttempt();
         attempt.setUserId(null);
 
         attempt.setLoginIdentifier(
-                identifier
-        );
+                identifier);
 
         attempt.setIdentifierType(
                 getIdentifierType(
-                        identifier
-                )
-        );
+                        identifier));
 
         attempt.setIpAddress(
-                getClientIp(request)
-        );
+                getClientIp(request));
 
         attempt.setUserAgent(
-                getDevice(request)
-        );
+                getDevice(request));
 
         attempt.setAttemptStatus(
-                AttemptStatus.FAILED
-        );
+                AttemptStatus.FAILED);
 
-        attempt.setFailureReason(reason);
+        attempt.setFailureReason("USER_NOT_FOUND");
 
         loginAttemptRepository.save(attempt);
         log.info("[LOGIN] Unknown user login attempt saved.");
@@ -500,8 +470,7 @@ public class AuthServiceImpl implements AuthService {
         auditLog.setAction(action);
 
         auditLog.setIpAddress(
-                getClientIp(request)
-        );
+                getClientIp(request));
 
         auditLog.setTimestamp(LocalDateTime.now());
         auditLog.setDetails(details);
@@ -612,8 +581,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (!jwtUtil.isTokenValid(refreshToken)) {
 
-            log.warn(
-                    "[REFRESH_TOKEN] Refresh token expired. TokenId={}, UserId={}",
+            log.warn("[REFRESH_TOKEN] Refresh token expired. TokenId={}, UserId={}",
                     storedToken.getId(),
                     storedToken.getUserId());
 
@@ -631,8 +599,7 @@ public class AuthServiceImpl implements AuthService {
                         .orElseThrow(() -> {
 
                             log.warn(
-                                    "[REFRESH_TOKEN] User not found. UserId={}",
-                                    userId);
+                                    "[REFRESH_TOKEN] User not found. UserId={}", userId);
 
                             return new RuntimeException("User not found");
                         });
@@ -722,8 +689,7 @@ public class AuthServiceImpl implements AuthService {
 
         String otpCode = String.format(
                 "%06d",
-                ThreadLocalRandom.current().nextInt(100000, 1000000)
-        );
+                ThreadLocalRandom.current().nextInt(100000, 1000000));
 
         LocalDateTime expiryTime =
                 LocalDateTime.now().plusMinutes(otpExpiryMinutes);
@@ -740,8 +706,7 @@ public class AuthServiceImpl implements AuthService {
 
         otpRepository.save(otp);
 
-        log.info(
-                "[FORGOT_PASSWORD] Forgot-password OTP generated successfully. UserId={}, ExpiresAt={}",
+        log.info("[FORGOT_PASSWORD] Forgot-password OTP generated successfully. UserId={}, ExpiresAt={}",
                 user.getId(),
                 expiryTime);
 
@@ -749,13 +714,11 @@ public class AuthServiceImpl implements AuthService {
                 user.getEmail(),
                 otpCode);
 
-        log.info(
-                "[FORGOT_PASSWORD] OTP email sent successfully. UserId={}, Email={}",
+        log.info("[FORGOT_PASSWORD] OTP email sent successfully. UserId={}, Email={}",
                 user.getId(),
                 user.getEmail());
 
-        log.info(
-                "[FORGOT_PASSWORD] Forgot password process completed successfully. UserId={}",
+        log.info("[FORGOT_PASSWORD] Forgot password process completed successfully. UserId={}",
                 user.getId());
 
         return OtpResponse.builder()
@@ -796,13 +759,11 @@ public class AuthServiceImpl implements AuthService {
 
         refreshTokenRepository.save(token);
 
-        log.info(
-                "[LOGOUT] Refresh token revoked successfully. TokenId={}, UserId={}",
+        log.info("[LOGOUT] Refresh token revoked successfully. TokenId={}, UserId={}",
                 token.getId(),
                 token.getUserId());
 
-        log.info(
-                "[LOGOUT] Logout completed successfully. UserId={}",
+        log.info("[LOGOUT] Logout completed successfully. UserId={}",
                 token.getUserId());
 
         return LogoutResponse.builder()
@@ -1262,16 +1223,16 @@ public class AuthServiceImpl implements AuthService {
                 SecurityContextHolder.getContext().getAuthentication();
 
         UserDetails userDetails =
-                (UserDetails) authentication.getPrincipal();
+                (UserDetails) Objects.requireNonNull(authentication).getPrincipal();
 
         Long currentUserId =
-                Long.parseLong(userDetails.getUsername());
+                Long.parseLong(Objects.requireNonNull(userDetails).getUsername());
 
         boolean isAdmin =
                 authentication.getAuthorities()
                         .stream()
                         .anyMatch(auth ->
-                                auth.getAuthority().equals("ROLE_ADMIN"));
+                                Objects.requireNonNull(auth.getAuthority()).equals("ROLE_ADMIN"));
 
         log.debug(
                 "[LOGIN_HISTORY] CurrentUserId={}, IsAdmin={}",
