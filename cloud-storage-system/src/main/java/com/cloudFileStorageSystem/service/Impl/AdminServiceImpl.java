@@ -601,54 +601,109 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public UsersResponse deleteUser(Long userId) {
 
+        log.info(
+                "[DELETE_USER] Delete user process started. UserId={}",
+                userId);
+
         Users user = usersRepository.findById(userId)
-                .orElseThrow(() ->
-                        new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[DELETE_USER] User not found. UserId={}",
+                            userId);
+
+                    return new RuntimeException(
+                            "User not found with id: " + userId);
+                });
+
+        log.debug(
+                "[DELETE_USER] User located. UserId={}, Username={}, Status={}",
+                user.getId(),
+                user.getUsername(),
+                user.getStatus());
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
-        String adminName = Objects.requireNonNull(authentication).getName();
+        String adminName =
+                Objects.requireNonNull(authentication).getName();
 
-        //  Prevent deleting default admin
+        log.debug(
+                "[DELETE_USER] Delete request initiated by Admin={}",
+                adminName);
+
+        // Prevent deleting default admin
         if ("admin".equalsIgnoreCase(user.getUsername())) {
+
+            log.warn(
+                    "[DELETE_USER] Attempt to delete default admin account. UserId={}",
+                    user.getId());
+
             throw new IllegalArgumentException(
                     "Default admin account cannot be deleted");
         }
 
-        //  Already deleted
+        // Already deleted
         if (user.getStatus() == UserStatus.DELETED) {
-            throw new IllegalArgumentException("User is already deleted");
+
+            log.warn(
+                    "[DELETE_USER] User already deleted. UserId={}, Email={}",
+                    user.getId(),
+                    user.getEmail());
+
+            throw new IllegalArgumentException(
+                    "User is already deleted");
         }
 
-        //  Prevent self-delete
+        // Prevent self-delete
         if (user.getUsername().equals(adminName)) {
+
+            log.warn(
+                    "[DELETE_USER] Admin attempted to delete own account. Admin={}",
+                    adminName);
+
             throw new IllegalArgumentException(
                     "You cannot delete your own account");
         }
 
-        //  SOFT DELETE
+        // Soft delete
         user.setStatus(UserStatus.DELETED);
         user.setEnabled(false);
         user.setAccountNonLocked(false);
 
         Users updatedUser = usersRepository.save(user);
 
-        //  Audit log
+        log.info(
+                "[DELETE_USER] User soft deleted successfully. UserId={}, Email={}",
+                updatedUser.getId(),
+                updatedUser.getEmail());
+
+        // Audit log
         AuditLog auditLog = new AuditLog();
-        auditLog.setIdentifier(user.getEmail());
+
+        auditLog.setIdentifier(updatedUser.getEmail());
         auditLog.setAction("ACCOUNT_DELETED_BY_ADMIN");
         auditLog.setTimestamp(LocalDateTime.now());
+
         auditLog.setDetails(
                 String.format(
                         "Admin '%s' deleted account '%s' (User ID: %d)",
                         adminName,
-                        user.getEmail(),
-                        user.getId()
+                        updatedUser.getEmail(),
+                        updatedUser.getId()
                 )
         );
 
         auditLogRepository.save(auditLog);
+
+        log.info(
+                "[DELETE_USER] Audit log saved successfully. UserId={}, Admin={}",
+                updatedUser.getId(),
+                adminName);
+
+        log.info(
+                "[DELETE_USER] Delete user process completed successfully. UserId={}",
+                updatedUser.getId());
 
         return mapToUserResponse(updatedUser);
     }

@@ -88,9 +88,9 @@ public class AdminController {
     }
     @DeleteMapping("/users/{id}")
     public ResponseEntity<ApiResponse<UsersResponse>> deleteUser(@PathVariable Long id, HttpServletRequest request) {
-        log.info("Delete user request received. userId={}", id);
+        log.info("[DELETE_USER] Delete user request received. UserId={}, IP={}, URI={}", id, request.getRemoteAddr(), request.getRequestURI());
         UsersResponse response = adminService.deleteUser(id);
-        log.info("User deleted (soft delete) successfully. userId={}", id);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User deleted successfully", request.getRequestURI(), response));
+        log.info("[DELETE_USER] User deleted successfully. UserId={}", id);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User deleted successfully", request.getRequestURI(), response));
     }
 }
