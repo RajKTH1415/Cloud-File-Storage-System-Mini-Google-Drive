@@ -487,12 +487,35 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public UsersResponse disableUser(Long userId) {
 
+        log.info(
+                "[DISABLE_USER] Disable user process started. UserId={}",
+                userId);
+
         Users user = usersRepository.findById(userId)
-                .orElseThrow(() ->
-                        new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[DISABLE_USER] User not found. UserId={}",
+                            userId);
+
+                    return new RuntimeException(
+                            "User not found with id: " + userId);
+                });
+
+        log.debug(
+                "[DISABLE_USER] User located. UserId={}, Username={}, Enabled={}, Status={}",
+                user.getId(),
+                user.getUsername(),
+                user.isEnabled(),
+                user.getStatus());
 
         // Prevent disabling default admin
         if ("admin".equalsIgnoreCase(user.getUsername())) {
+
+            log.warn(
+                    "[DISABLE_USER] Attempt to disable default admin account. UserId={}",
+                    user.getId());
+
             throw new IllegalArgumentException(
                     "Default admin account cannot be disabled");
         }
@@ -500,46 +523,76 @@ public class AdminServiceImpl implements AdminService {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
-        String adminName = Objects.requireNonNull(authentication).getName();
+        String adminName =
+                Objects.requireNonNull(authentication).getName();
+
+        log.debug(
+                "[DISABLE_USER] Disable request initiated by Admin={}",
+                adminName);
 
         // Already disabled
         if (!user.isEnabled()) {
+
+            log.warn(
+                    "[DISABLE_USER] User account already disabled. UserId={}, Email={}",
+                    user.getId(),
+                    user.getEmail());
+
             throw new IllegalArgumentException(
                     "User account is already disabled");
         }
 
-        // Optional safety: prevent self-disable
+        // Prevent self-disable
         if (user.getUsername().equals(adminName)) {
+
+            log.warn(
+                    "[DISABLE_USER] Admin attempted to disable own account. Admin={}",
+                    adminName);
+
             throw new IllegalArgumentException(
                     "You cannot disable your own account");
         }
 
-        //  Core change
+        // Disable account
         user.setEnabled(false);
         user.setStatus(UserStatus.DISABLED);
-
-        // Optional hardening (recommended in real systems)
         user.setAccountNonLocked(false);
         user.setFailedAttempts(0);
         user.setLockedUntil(null);
 
         Users updatedUser = usersRepository.save(user);
 
+        log.info(
+                "[DISABLE_USER] User account disabled successfully. UserId={}, Email={}",
+                updatedUser.getId(),
+                updatedUser.getEmail());
+
         // Audit log
         AuditLog auditLog = new AuditLog();
-        auditLog.setIdentifier(user.getEmail());
+
+        auditLog.setIdentifier(updatedUser.getEmail());
         auditLog.setAction("ACCOUNT_DISABLED_BY_ADMIN");
         auditLog.setTimestamp(LocalDateTime.now());
+
         auditLog.setDetails(
                 String.format(
                         "Admin '%s' disabled account '%s' (User ID: %d)",
                         adminName,
-                        user.getEmail(),
-                        user.getId()
+                        updatedUser.getEmail(),
+                        updatedUser.getId()
                 )
         );
 
         auditLogRepository.save(auditLog);
+
+        log.info(
+                "[DISABLE_USER] Audit log saved successfully. UserId={}, Admin={}",
+                updatedUser.getId(),
+                adminName);
+
+        log.info(
+                "[DISABLE_USER] Disable user process completed successfully. UserId={}",
+                updatedUser.getId());
 
         return mapToUserResponse(updatedUser);
     }

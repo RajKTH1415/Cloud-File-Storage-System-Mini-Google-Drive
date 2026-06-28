@@ -81,12 +81,11 @@ public class AdminController {
 
     @PatchMapping("/users/{id}/disable")
     public ResponseEntity<ApiResponse<UsersResponse>> disableUser(@PathVariable Long id, HttpServletRequest request) {
-        log.info("Disable user request received. userId={}", id);
+        log.info("[DISABLE_USER] Disable user request received. UserId={}, IP={}, URI={}", id, request.getRemoteAddr(), request.getRequestURI());
         UsersResponse response = adminService.disableUser(id);
-        log.info("User disabled successfully. userId={}", id);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User disabled successfully", request.getRequestURI(), response));
+        log.info("[DISABLE_USER] User disabled successfully. UserId={}", id);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User disabled successfully", request.getRequestURI(), response));
     }
-
     @DeleteMapping("/users/{id}")
     public ResponseEntity<ApiResponse<UsersResponse>> deleteUser(@PathVariable Long id, HttpServletRequest request) {
         log.info("Delete user request received. userId={}", id);
