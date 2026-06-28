@@ -73,10 +73,10 @@ public class AdminController {
 
     @PatchMapping("/users/{id}/enable")
     public ResponseEntity<ApiResponse<UsersResponse>> enableUser(@PathVariable Long id, HttpServletRequest request) {
-        log.info("Enable user request received. userId={}", id);
+        log.info("[ENABLE_USER] Enable user request received. UserId={}, IP={}, URI={}", id, request.getRemoteAddr(), request.getRequestURI());
         UsersResponse response = adminService.enableUser(id);
-        log.info("User enabled successfully. userId={}", id);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "User enabled successfully", request.getRequestURI(), response));
+        log.info("[ENABLE_USER] User enabled successfully. UserId={}", id);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User enabled successfully", request.getRequestURI(), response));
     }
 
     @PatchMapping("/users/{id}/disable")

@@ -394,18 +394,46 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public UsersResponse enableUser(Long userId) {
 
+        log.info(
+                "[ENABLE_USER] Enable user process started. UserId={}",
+                userId);
+
         Users user = usersRepository.findById(userId)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "User not found with id: " + userId));
+                .orElseThrow(() -> {
+
+                    log.warn(
+                            "[ENABLE_USER] User not found. UserId={}",
+                            userId);
+
+                    return new RuntimeException(
+                            "User not found with id: " + userId);
+                });
+
+        log.debug(
+                "[ENABLE_USER] User located. UserId={}, Username={}, Enabled={}, Status={}",
+                user.getId(),
+                user.getUsername(),
+                user.isEnabled(),
+                user.getStatus());
 
         // Default admin protection
         if ("admin".equalsIgnoreCase(user.getUsername())) {
+
+            log.warn(
+                    "[ENABLE_USER] Attempt to enable default admin account. UserId={}",
+                    user.getId());
+
             throw new IllegalArgumentException(
                     "Default admin account is always enabled");
         }
 
         if (user.isEnabled()) {
+
+            log.warn(
+                    "[ENABLE_USER] User account already enabled. UserId={}, Email={}",
+                    user.getId(),
+                    user.getEmail());
+
             throw new IllegalArgumentException(
                     "User account is already enabled");
         }
@@ -415,25 +443,42 @@ public class AdminServiceImpl implements AdminService {
 
         Users updatedUser = usersRepository.save(user);
 
+        log.info(
+                "[ENABLE_USER] User account enabled successfully. UserId={}, Email={}",
+                updatedUser.getId(),
+                updatedUser.getEmail());
+
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
+
+        String adminName =
+                Objects.requireNonNull(authentication).getName();
 
         AuditLog auditLog = new AuditLog();
 
         auditLog.setAction("ACCOUNT_ENABLED_BY_ADMIN");
-        auditLog.setIdentifier(user.getEmail());
+        auditLog.setIdentifier(updatedUser.getEmail());
         auditLog.setTimestamp(LocalDateTime.now());
 
         auditLog.setDetails(
                 String.format(
                         "Admin '%s' enabled account '%s' (User ID: %d)",
-                        Objects.requireNonNull(authentication).getName(),
-                        user.getEmail(),
-                        user.getId()
+                        adminName,
+                        updatedUser.getEmail(),
+                        updatedUser.getId()
                 )
         );
 
         auditLogRepository.save(auditLog);
+
+        log.info(
+                "[ENABLE_USER] Audit log saved successfully. UserId={}, Admin={}",
+                updatedUser.getId(),
+                adminName);
+
+        log.info(
+                "[ENABLE_USER] Enable user process completed successfully. UserId={}",
+                updatedUser.getId());
 
         return mapToUserResponse(updatedUser);
     }
