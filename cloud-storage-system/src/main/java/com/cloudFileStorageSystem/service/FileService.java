@@ -43,4 +43,6 @@ public interface FileService {
     );
 
     RestoreFileResponse restoreFile(Long fileId);
+
+    PermanentDeleteResponse permanentDeleteFile(Long fileId);
 }

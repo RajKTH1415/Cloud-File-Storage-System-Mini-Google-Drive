@@ -156,4 +156,11 @@ public class FileController {
         RestoreFileResponse response = fileService.restoreFile(fileId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File restored successfully.", request.getRequestURI(), response));
     }
+
+    @DeleteMapping("/{fileId}/permanent")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<PermanentDeleteResponse>> permanentDeleteFile(@PathVariable Long fileId, HttpServletRequest request) {
+        PermanentDeleteResponse response = fileService.permanentDeleteFile(fileId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File permanently deleted successfully.", request.getRequestURI(), response));
+    }
 }

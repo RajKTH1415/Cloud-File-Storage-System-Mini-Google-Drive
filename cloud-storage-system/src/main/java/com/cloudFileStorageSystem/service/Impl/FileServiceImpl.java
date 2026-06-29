@@ -376,6 +376,31 @@ public class FileServiceImpl implements FileService {
                 .restoredAt(LocalDateTime.now())
                 .build();
     }
+
+    @Override
+    @Transactional
+    public PermanentDeleteResponse permanentDeleteFile(Long fileId) {
+
+        FileEntity file = validateDeletedFile(fileId);
+
+        Path path = Paths.get(file.getStoragePath());
+
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to delete physical file.");
+        }
+
+        fileRepository.delete(file);
+
+        return PermanentDeleteResponse.builder()
+                .fileId(file.getId())
+                .fileName(file.getOriginalName())
+                .deletedAt(LocalDateTime.now())
+                .message("File permanently deleted successfully.")
+                .build();
+    }
+
     private FileEntity validateDeletedFile(Long fileId) {
 
         Long currentUserId = authenticationUtil.getCurrentUserId();
