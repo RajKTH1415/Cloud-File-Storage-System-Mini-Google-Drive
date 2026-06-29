@@ -189,22 +189,10 @@ public class FileServiceImpl implements FileService {
 
         FileEntity file = validateFile(fileId);
 
-        Path path = Paths.get(file.getStoragePath());
-
-        try {
-            System.out.println("Deleting file: " + path);
-            System.out.println("Exists before delete: " + Files.exists(path));
-
-            boolean deleted = Files.deleteIfExists(path);
-
-            System.out.println("Deleted: " + deleted);
-            System.out.println("Exists after delete: " + Files.exists(path));
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to delete file.");
-        }
 
         file.setIsDeleted(true);
         file.setStatus(FileStatus.DELETED);
+        file.setDeletedAt(LocalDateTime.now());
 
         fileRepository.save(file);
 
@@ -361,6 +349,49 @@ public class FileServiceImpl implements FileService {
                 .sortBy(sortBy)
                 .direction(direction)
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public RestoreFileResponse restoreFile(Long fileId) {
+
+        FileEntity file = validateDeletedFile(fileId);
+
+        Path path = Paths.get(file.getStoragePath());
+
+        if (!Files.exists(path)) {
+            throw new RuntimeException("Physical file not found.");
+        }
+
+        file.setIsDeleted(false);
+        file.setStatus(FileStatus.ACTIVE);
+        file.setDeletedAt(null);
+
+        file = fileRepository.save(file);
+
+        return RestoreFileResponse.builder()
+                .fileId(file.getId())
+                .fileName(file.getOriginalName())
+                .status(file.getStatus())
+                .restoredAt(LocalDateTime.now())
+                .build();
+    }
+    private FileEntity validateDeletedFile(Long fileId) {
+
+        Long currentUserId = authenticationUtil.getCurrentUserId();
+
+        FileEntity file = fileRepository.findById(fileId)
+                .orElseThrow(() -> new RuntimeException("File not found."));
+
+        if (!file.getOwner().getId().equals(currentUserId)) {
+            throw new RuntimeException("You are not allowed to access this file.");
+        }
+
+        if (!Boolean.TRUE.equals(file.getIsDeleted())) {
+            throw new RuntimeException("File is not in trash.");
+        }
+
+        return file;
     }
 
     private FileEntity validateFile(Long fileId) {

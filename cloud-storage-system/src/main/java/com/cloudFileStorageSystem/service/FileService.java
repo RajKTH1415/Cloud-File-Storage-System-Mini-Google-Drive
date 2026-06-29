@@ -41,4 +41,6 @@ public interface FileService {
             String sortBy,
             String direction
     );
+
+    RestoreFileResponse restoreFile(Long fileId);
 }

@@ -4,24 +4,18 @@ import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
 import com.cloudFileStorageSystem.dtos.request.RenameFileRequest;
 import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.module.FileEntity;
-import com.cloudFileStorageSystem.module.Users;
-import com.cloudFileStorageSystem.security.CustomUserDetailsService;
+import com.cloudFileStorageSystem.security.AuthenticationUtil;
 import com.cloudFileStorageSystem.security.CustomUserPrincipal;
 import com.cloudFileStorageSystem.service.FileService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,11 +25,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
 
     private final FileService fileService;
+    private final AuthenticationUtil authenticationUtil;
 
     private static final Logger log = LoggerFactory.getLogger(FileController.class);
 
-    public FileController(FileService fileService) {
+    public FileController(FileService fileService, AuthenticationUtil authenticationUtil) {
         this.fileService = fileService;
+        this.authenticationUtil = authenticationUtil;
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -46,15 +42,9 @@ public class FileController {
 
             @ModelAttribute FileUploadRequest request,
 
-            Authentication authentication,
+            HttpServletRequest requestHttp) {
 
-            HttpServletRequest requestHttp
-    ) {
-
-        CustomUserPrincipal principal =
-                (CustomUserPrincipal) authentication.getPrincipal();
-
-        Long userId = principal.getId();
+        Long userId = authenticationUtil.getCurrentUserId();
         log.info(
                 "[FILE_UPLOAD] Upload request received. UserId={}, FileName={}, Size={} bytes, Folder={}, IP={}, URI={}",
                 userId,
@@ -158,5 +148,12 @@ public class FileController {
         PageResponse<FileSummaryResponse> response = fileService.getTrashFiles(page, size, sortBy, direction);
 
         return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Trash files fetched successfully.", request.getRequestURI(), response));
+    }
+
+    @PatchMapping("/{fileId}/restore")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<RestoreFileResponse>> restoreFile(@PathVariable Long fileId, HttpServletRequest request) {
+        RestoreFileResponse response = fileService.restoreFile(fileId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File restored successfully.", request.getRequestURI(), response));
     }
 }
