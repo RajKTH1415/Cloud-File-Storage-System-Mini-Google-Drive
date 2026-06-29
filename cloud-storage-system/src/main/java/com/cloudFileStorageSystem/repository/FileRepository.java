@@ -22,4 +22,10 @@ public interface FileRepository extends JpaRepository<FileEntity,Long> {
        AND f.isDeleted = false
        """)
     Optional<FileEntity> findByIdAndIsDeletedFalse(Long id);
+
+    boolean existsByOwnerIdAndFolderNameAndOriginalNameAndIsDeletedFalse(
+            Long ownerId,
+            String folderName,
+            String originalName
+    );
 }

@@ -1,16 +1,15 @@
 package com.cloudFileStorageSystem.controller;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
-import com.cloudFileStorageSystem.dtos.response.ApiResponse;
-import com.cloudFileStorageSystem.dtos.response.DeleteFileResponse;
-import com.cloudFileStorageSystem.dtos.response.FileMetadataResponse;
-import com.cloudFileStorageSystem.dtos.response.FileUploadResponse;
+import com.cloudFileStorageSystem.dtos.request.RenameFileRequest;
+import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.module.FileEntity;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.security.CustomUserDetailsService;
 import com.cloudFileStorageSystem.security.CustomUserPrincipal;
 import com.cloudFileStorageSystem.service.FileService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,5 +113,12 @@ public class FileController {
     public ResponseEntity<ApiResponse<DeleteFileResponse>> deleteFile(@PathVariable Long fileId, HttpServletRequest httpServletRequest) {
         DeleteFileResponse deleteFileResponse =  fileService.deleteFile(fileId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File deleted successfully.", httpServletRequest.getRequestURI()+ fileId, deleteFileResponse));
+    }
+
+    @PatchMapping("/{fileId}/rename")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<RenameFileResponse>> renameFile(@PathVariable Long fileId, @Valid @RequestBody RenameFileRequest request, HttpServletRequest httpRequest) {
+        RenameFileResponse response = fileService.renameFile(fileId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File renamed successfully.", httpRequest.getRequestURI(), response));
     }
 }

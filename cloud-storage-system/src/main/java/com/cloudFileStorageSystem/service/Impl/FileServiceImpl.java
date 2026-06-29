@@ -1,8 +1,10 @@
 package com.cloudFileStorageSystem.service.Impl;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
+import com.cloudFileStorageSystem.dtos.request.RenameFileRequest;
 import com.cloudFileStorageSystem.dtos.response.DeleteFileResponse;
 import com.cloudFileStorageSystem.dtos.response.FileUploadResponse;
+import com.cloudFileStorageSystem.dtos.response.RenameFileResponse;
 import com.cloudFileStorageSystem.enums.FileCategory;
 import com.cloudFileStorageSystem.enums.FileStatus;
 import com.cloudFileStorageSystem.module.FileEntity;
@@ -205,6 +207,55 @@ public class FileServiceImpl implements FileService {
                 .fileName(file.getOriginalName())
                 .status(FileStatus.DELETED)
                 .deletedAt(file.getDeletedAt())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public RenameFileResponse renameFile(
+            Long fileId,
+            RenameFileRequest request) {
+
+        FileEntity file = validateFile(fileId);
+
+        String oldFileName = file.getOriginalName();
+        String extension = file.getFileExtension();
+
+        String newFileName = request.getFileName().trim();
+
+        // Preserve original extension
+        if (!newFileName.toLowerCase().endsWith("." + extension.toLowerCase())) {
+            newFileName = newFileName + "." + extension;
+        }
+
+        // Prevent renaming to the same name
+        if (oldFileName.equalsIgnoreCase(newFileName)) {
+            throw new RuntimeException("File already has this name.");
+        }
+
+        // Prevent duplicate filename in the same folder
+        boolean exists = fileRepository
+                .existsByOwnerIdAndFolderNameAndOriginalNameAndIsDeletedFalse(
+                        file.getOwner().getId(),
+                        file.getFolderName(),
+                        newFileName
+                );
+
+        if (exists) {
+            throw new RuntimeException(
+                    "A file with the same name already exists in this folder."
+            );
+        }
+
+        file.setOriginalName(newFileName);
+
+        file = fileRepository.save(file);
+
+        return RenameFileResponse.builder()
+                .fileId(file.getId())
+                .oldFileName(oldFileName)
+                .newFileName(file.getOriginalName())
+                .updatedAt(file.getUpdatedAt())
                 .build();
     }
 
