@@ -2,15 +2,14 @@ package com.cloudFileStorageSystem.service.Impl;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
 import com.cloudFileStorageSystem.dtos.request.RenameFileRequest;
-import com.cloudFileStorageSystem.dtos.response.DeleteFileResponse;
-import com.cloudFileStorageSystem.dtos.response.FileUploadResponse;
-import com.cloudFileStorageSystem.dtos.response.RenameFileResponse;
+import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.enums.FileCategory;
 import com.cloudFileStorageSystem.enums.FileStatus;
 import com.cloudFileStorageSystem.module.FileEntity;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.FileRepository;
 import com.cloudFileStorageSystem.repository.UsersRepository;
+import com.cloudFileStorageSystem.security.AuthenticationUtil;
 import com.cloudFileStorageSystem.security.CustomUserDetailsService;
 import com.cloudFileStorageSystem.security.CustomUserPrincipal;
 import com.cloudFileStorageSystem.service.FileService;
@@ -19,6 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,19 +38,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class FileServiceImpl implements FileService {
 
     private static final Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
+    private final AuthenticationUtil authenticationUtil;
     private final UsersRepository usersRepository;
     private final FileRepository fileRepository;
     private final StorageService storageService;
 
-    public FileServiceImpl(UsersRepository usersRepository,
+    public FileServiceImpl(AuthenticationUtil authenticationUtil, UsersRepository usersRepository,
                            FileRepository fileRepository,
                            StorageService storageService) {
+        this.authenticationUtil = authenticationUtil;
         this.usersRepository = usersRepository;
         this.fileRepository = fileRepository;
         this.storageService = storageService;
@@ -259,6 +265,55 @@ public class FileServiceImpl implements FileService {
                 .build();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<FileSummaryResponse> getMyFiles(int page, int size, String sortBy, String direction) {
+
+        Long currentUserId = authenticationUtil.getCurrentUserId();
+
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<FileEntity> filePage =
+                fileRepository.findByOwnerIdAndIsDeletedFalse(
+                        currentUserId,
+                        pageable
+                );
+
+        List<FileSummaryResponse> content =
+                filePage.getContent()
+                        .stream()
+                        .map(file -> FileSummaryResponse.builder()
+                                .fileId(file.getId())
+                                .fileName(file.getOriginalName())
+                                .fileType(file.getFileType())
+                                .fileSize(file.getFileSize())
+                                .folderName(file.getFolderName())
+                                .isPublic(file.getIsPublic())
+                                .status(file.getStatus())
+                                .uploadedAt(file.getCreatedAt())
+                                .build())
+                        .toList();
+
+        return PageResponse.<FileSummaryResponse>builder()
+                .content(content)
+                .page(filePage.getNumber())
+                .size(filePage.getSize())
+                .totalElements(filePage.getTotalElements())
+                .totalPages(filePage.getTotalPages())
+                .numberOfElements(filePage.getNumberOfElements())
+                .first(filePage.isFirst())
+                .last(filePage.isLast())
+                .hasNext(filePage.hasNext())
+                .hasPrevious(filePage.hasPrevious())
+                .sortBy(sortBy)
+                .direction(direction)
+                .build();
+    }
+
     private FileEntity validateFile(Long fileId) {
 
         Authentication authentication =
@@ -286,4 +341,21 @@ public class FileServiceImpl implements FileService {
 
         return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
     }
+
+
+//    private Long getCurrentUserId() {
+//
+//        Authentication authentication =
+//                SecurityContextHolder.getContext().getAuthentication();
+//
+//        if (authentication == null || authentication.getPrincipal() == null) {
+//            throw new RuntimeException("User is not authenticated.");
+//        }
+//
+//        if (!(authentication.getPrincipal() instanceof CustomUserPrincipal principal)) {
+//            throw new RuntimeException("Invalid authentication principal.");
+//        }
+//
+//        return principal.getId();
+//    }
 }

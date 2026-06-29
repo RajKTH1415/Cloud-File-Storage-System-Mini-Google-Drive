@@ -121,4 +121,23 @@ public class FileController {
         RenameFileResponse response = fileService.renameFile(fileId, request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File renamed successfully.", httpRequest.getRequestURI(), response));
     }
+
+    @GetMapping
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<PageResponse<FileSummaryResponse>>> getMyFiles(
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "10") int size,
+
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+
+            @RequestParam(defaultValue = "desc") String direction,
+
+            HttpServletRequest request) {
+
+        PageResponse<FileSummaryResponse> response = fileService.getMyFiles(page, size, sortBy, direction);
+
+        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Files fetched successfully.", request.getRequestURI(), response));
+    }
 }

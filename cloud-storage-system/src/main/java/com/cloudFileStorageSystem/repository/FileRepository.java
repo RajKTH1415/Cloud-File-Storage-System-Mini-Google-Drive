@@ -2,6 +2,8 @@ package com.cloudFileStorageSystem.repository;
 
 import com.cloudFileStorageSystem.module.FileEntity;
 import com.cloudFileStorageSystem.module.Users;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -27,5 +29,10 @@ public interface FileRepository extends JpaRepository<FileEntity,Long> {
             Long ownerId,
             String folderName,
             String originalName
+    );
+
+    Page<FileEntity> findByOwnerIdAndIsDeletedFalse(
+            Long ownerId,
+            Pageable pageable
     );
 }
