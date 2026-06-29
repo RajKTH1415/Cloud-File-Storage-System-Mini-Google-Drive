@@ -1,9 +1,6 @@
 package com.cloudFileStorageSystem.service.Impl;
 
-import com.cloudFileStorageSystem.dtos.response.AdminStatsResponse;
-import com.cloudFileStorageSystem.dtos.response.LockUserResponse;
-import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
-import com.cloudFileStorageSystem.dtos.response.UsersResponse;
+import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.enums.Role;
 import com.cloudFileStorageSystem.enums.UserStatus;
 import com.cloudFileStorageSystem.module.AuditLog;
@@ -11,13 +8,20 @@ import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.AuditLogRepository;
 import com.cloudFileStorageSystem.repository.UsersRepository;
 import com.cloudFileStorageSystem.service.AdminService;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -745,6 +749,99 @@ public class AdminServiceImpl implements AdminService {
                 "[ADMIN_STATS] Admin statistics retrieval completed successfully.");
 
         return response;
+    }
+
+    @Override
+    public PageResponse<AuditLogResponse> getAuditLogs(
+            String identifier,
+            String action,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            int page,
+            int size,
+            String sortBy,
+            String direction) {
+
+        log.info(
+                "[GET_AUDIT_LOGS] Fetching audit logs. identifier={}, action={}",
+                identifier,
+                action);
+
+        Sort sort = direction.equalsIgnoreCase("ASC")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Specification<AuditLog> specification = (root, query, cb) -> {
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (identifier != null && !identifier.isBlank()) {
+                predicates.add(
+                        cb.equal(root.get("identifier"), identifier));
+            }
+
+            if (action != null && !action.isBlank()) {
+                predicates.add(
+                        cb.equal(root.get("action"), action));
+            }
+
+            if (startDate != null) {
+                predicates.add(
+                        cb.greaterThanOrEqualTo(
+                                root.get("timestamp"),
+                                startDate));
+            }
+
+            if (endDate != null) {
+                predicates.add(
+                        cb.lessThanOrEqualTo(
+                                root.get("timestamp"),
+                                endDate));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Page<AuditLog> auditLogs =
+                auditLogRepository.findAll(specification, pageable);
+
+        log.info(
+                "[GET_AUDIT_LOGS] {} audit logs found.",
+                auditLogs.getTotalElements());
+
+        List<AuditLogResponse> content = auditLogs.getContent()
+                .stream()
+                .map(this::mapAuditResponse)
+                .toList();
+
+        return PageResponse.<AuditLogResponse>builder()
+                .content(content)
+                .page(auditLogs.getNumber())
+                .size(auditLogs.getSize())
+                .totalElements(auditLogs.getTotalElements())
+                .totalPages(auditLogs.getTotalPages())
+                .numberOfElements(auditLogs.getNumberOfElements())
+                .first(auditLogs.isFirst())
+                .last(auditLogs.isLast())
+                .hasNext(auditLogs.hasNext())
+                .hasPrevious(auditLogs.hasPrevious())
+                .sortBy(sortBy)
+                .direction(direction)
+                .build();
+    }
+
+    private AuditLogResponse mapAuditResponse(AuditLog auditLog) {
+
+        return AuditLogResponse.builder()
+                .id(auditLog.getId())
+                .userId(null)
+                .identifier(auditLog.getIdentifier())
+                .action(auditLog.getAction())
+                .details(auditLog.getDetails())
+                .timestamp(auditLog.getTimestamp())
+                .build();
     }
 
 

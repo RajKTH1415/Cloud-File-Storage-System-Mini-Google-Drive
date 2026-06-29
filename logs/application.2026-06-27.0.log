@@ -1,0 +1,312 @@
+2026-06-27 10:41:53.304 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-27 10:41:53.650 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 24216 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-27 10:41:53.654 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-27 10:41:53.816 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-27 10:41:53.817 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-27 10:41:55.923 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-27 10:41:56.276 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 332 ms. Found 9 JPA repository interfaces.
+2026-06-27 10:41:59.290 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-27 10:41:59.324 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-27 10:41:59.331 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-27 10:41:59.331 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-27 10:41:59.458 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 5640 ms
+2026-06-27 10:41:59.849 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-27 10:42:00.115 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-27 10:42:01.257 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-27 10:42:01.347 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-27 10:42:02.667 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1a9a0dd6
+2026-06-27 10:42:02.673 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-27 10:42:02.906 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-27 10:42:02.988 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-27 10:42:06.061 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-27 10:42:07.016 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-27 10:42:07.143 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-27 10:42:08.550 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-27 10:42:09.073 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-27 10:42:09.110 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-27 10:42:09.596 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 17.671 seconds (process running for 19.107)
+2026-06-27 10:42:09.615 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-27 10:42:10.059 [restartedMain] INFO  c.c.initializer.AdminInitializer - Admin Created Successfully
+2026-06-27 10:43:09.388 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-27 10:43:09.388 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-27 10:43:09.603 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 215 ms
+2026-06-27 10:43:09.745 [http-nio-8080-exec-2] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-27 10:43:09.747 [http-nio-8080-exec-2] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-27 10:43:10.775 [http-nio-8080-exec-2] INFO  c.c.controller.UsersController - [REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+2026-06-27 10:43:10.775 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration started.
+2026-06-27 10:43:10.775 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking username availability.
+2026-06-27 10:43:10.786 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Username validation passed.
+2026-06-27 10:43:10.787 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking email availability.
+2026-06-27 10:43:10.793 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Email validation passed.
+2026-06-27 10:43:10.793 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Encrypting password.
+2026-06-27 10:43:10.901 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User entity created.
+2026-06-27 10:43:10.921 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User saved successfully | userId=2
+2026-06-27 10:43:10.922 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token generated.
+2026-06-27 10:43:10.952 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token saved.
+2026-06-27 10:43:10.959 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification email sent | email=kumar.raj.prasad1415@gmail.com
+2026-06-27 10:43:10.959 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration completed successfully | userId=2 | username=rajkumar1s231
+2026-06-27 10:43:10.961 [http-nio-8080-exec-2] INFO  c.c.controller.UsersController - [REGISTER_USER] Registration completed | userId=2 | username=rajkumar1s231
+2026-06-27 10:43:56.711 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Verification request received. IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/verify-email
+2026-06-27 10:43:56.714 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification started.
+2026-06-27 10:43:56.784 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token found.
+2026-06-27 10:43:56.785 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token has not been used.
+2026-06-27 10:43:56.785 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token is valid.
+2026-06-27 10:43:56.785 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Activating account. UserId=2, Username=rajkumar1s231
+2026-06-27 10:43:56.790 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] User account activated. UserId=2, Username=rajkumar1s231
+2026-06-27 10:43:56.792 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token marked as used.
+2026-06-27 10:43:56.792 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification completed successfully. UserId=2
+2026-06-27 10:43:56.857 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Email verification completed successfully.
+2026-06-27 10:44:03.561 [http-nio-8080-exec-4] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=admin@cloudstorage.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 10:44:03.562 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=admin@cloudstorage.com
+2026-06-27 10:44:03.587 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=1, Username=admin, FailedAttempts=0, AccountLocked=false
+2026-06-27 10:44:03.588 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=admin
+2026-06-27 10:44:03.702 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=admin
+2026-06-27 10:44:03.703 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - Password verified successfully for username=admin
+2026-06-27 10:44:03.724 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after successful login. UserId=1
+2026-06-27 10:44:03.725 [http-nio-8080-exec-4] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Recording login attempt for unknown user. Identifier=admin@cloudstorage.com
+2026-06-27 10:44:03.746 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Successful login attempt saved. UserId=1
+2026-06-27 10:44:03.746 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_SUCCESS, Identifier=admin@cloudstorage.com
+2026-06-27 10:44:03.774 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_SUCCESS
+2026-06-27 10:44:03.902 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] JWT access and refresh tokens generated. UserId=1
+2026-06-27 10:44:03.944 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login completed successfully. UserId=1, Username=admin
+2026-06-27 10:44:03.947 [http-nio-8080-exec-4] INFO  c.c.controller.AuthController - [LOGIN] Login completed successfully., Username=admin
+2026-06-27 10:44:20.797 [http-nio-8080-exec-5] INFO  c.c.controller.AdminController - Fetching all users
+2026-06-27 10:44:50.956 [http-nio-8080-exec-6] INFO  c.c.controller.AdminController - Admin stats request received
+2026-06-27 10:44:50.998 [http-nio-8080-exec-6] INFO  c.c.controller.AdminController - Admin stats fetched successfully
+2026-06-27 10:46:32.904 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-27 10:46:32.910 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-27 10:46:32.916 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-27 10:46:32.921 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-27 10:46:32.930 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-27 12:13:21.002 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-06-27 12:13:21.253 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Starting CloudStorageSystemApplication using Java 21.0.11 with PID 22712 (C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system\cloud-storage-system\target\classes started by Rajku in C:\Users\Rajku\OneDrive\Desktop\Raj-MSGQ\JAVA+SPRING BOOT\cloud-storage-system)
+2026-06-27 12:13:21.257 [restartedMain] INFO  c.c.CloudStorageSystemApplication - No active profile set, falling back to 1 default profile: "default"
+2026-06-27 12:13:21.669 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-27 12:13:21.670 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-27 12:13:26.089 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-27 12:13:26.520 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 407 ms. Found 9 JPA repository interfaces.
+2026-06-27 12:13:30.532 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-27 12:13:30.563 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-27 12:13:30.570 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-27 12:13:30.571 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-06-27 12:13:30.666 [restartedMain] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 8995 ms
+2026-06-27 12:13:31.143 [restartedMain] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-27 12:13:31.349 [restartedMain] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-06-27 12:13:32.274 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-27 12:13:32.333 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-27 12:13:33.292 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@39f40820
+2026-06-27 12:13:33.295 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-27 12:13:33.421 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-27 12:13:33.456 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/cloud_storage_system?createDatabaseIfNotExist=true]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 8.0.46
+	Default catalog/schema: cloud_storage_system/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-27 12:13:35.467 [restartedMain] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-27 12:13:36.213 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-27 12:13:36.325 [restartedMain] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-27 12:13:37.590 [restartedMain] DEBUG c.c.security.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2026-06-27 12:13:38.046 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-27 12:13:38.076 [restartedMain] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-06-27 12:13:38.571 [restartedMain] INFO  c.c.CloudStorageSystemApplication - Started CloudStorageSystemApplication in 19.757 seconds (process running for 21.308)
+2026-06-27 12:13:38.590 [restartedMain] INFO  c.c.initializer.AdminInitializer - AdminInitializer Started
+2026-06-27 12:13:39.059 [restartedMain] INFO  c.c.initializer.AdminInitializer - Admin Created Successfully
+2026-06-27 12:13:42.172 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-27 12:13:42.172 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-27 12:13:42.423 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 250 ms
+2026-06-27 12:13:42.549 [http-nio-8080-exec-2] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-27 12:13:42.551 [http-nio-8080-exec-2] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-27 12:13:43.603 [http-nio-8080-exec-2] INFO  c.c.controller.UsersController - [REGISTER_USER] Request received | username=rajkumar1s231 | email=kumar.raj.prasad1415@gmail.com | ip=0:0:0:0:0:0:0:1 | uri=/api/v1/users/register
+2026-06-27 12:13:43.603 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration started.
+2026-06-27 12:13:43.603 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking username availability.
+2026-06-27 12:13:43.612 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Username validation passed.
+2026-06-27 12:13:43.613 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Checking email availability.
+2026-06-27 12:13:43.619 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Email validation passed.
+2026-06-27 12:13:43.619 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Encrypting password.
+2026-06-27 12:13:43.728 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User entity created.
+2026-06-27 12:13:43.750 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] User saved successfully | userId=2
+2026-06-27 12:13:43.750 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token generated.
+2026-06-27 12:13:43.769 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification token saved.
+2026-06-27 12:13:43.774 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Verification email sent | email=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:13:43.775 [http-nio-8080-exec-2] INFO  c.c.service.Impl.UserServiceImpl - [REGISTER_USER] Registration completed successfully | userId=2 | username=rajkumar1s231
+2026-06-27 12:13:43.776 [http-nio-8080-exec-2] INFO  c.c.controller.UsersController - [REGISTER_USER] Registration completed | userId=2 | username=rajkumar1s231
+2026-06-27 12:14:04.367 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Verification request received. IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/verify-email
+2026-06-27 12:14:04.370 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification started.
+2026-06-27 12:14:04.434 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token found.
+2026-06-27 12:14:04.434 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token has not been used.
+2026-06-27 12:14:04.434 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Token is valid.
+2026-06-27 12:14:04.434 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Activating account. UserId=2, Username=rajkumar1s231
+2026-06-27 12:14:04.438 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] User account activated. UserId=2, Username=rajkumar1s231
+2026-06-27 12:14:04.440 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Verification token marked as used.
+2026-06-27 12:14:04.440 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [VERIFY_EMAIL] Email verification completed successfully. UserId=2
+2026-06-27 12:14:04.471 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [VERIFY_EMAIL] Email verification completed successfully.
+2026-06-27 12:14:19.962 [http-nio-8080-exec-4] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:14:19.962 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:19.993 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=0, AccountLocked=false
+2026-06-27 12:14:19.993 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-27 12:14:20.098 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=rajkumar1s231
+2026-06-27 12:14:20.098 [http-nio-8080-exec-4] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login failed. Invalid password. Username=rajkumar1s231
+2026-06-27 12:14:20.098 [http-nio-8080-exec-4] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Processing failed login. Username=rajkumar1s231
+2026-06-27 12:14:20.098 [http-nio-8080-exec-4] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempts updated. Username=rajkumar1s231, Attempts=1
+2026-06-27 12:14:20.118 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after failed login. UserId=2
+2026-06-27 12:14:20.135 [http-nio-8080-exec-4] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_FAILED, Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:20.153 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_FAILED
+2026-06-27 12:14:20.153 [http-nio-8080-exec-4] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempt recorded. Identifier=kumar.raj.prasad1415@gmail.com, Locked=false
+2026-06-27 12:14:20.164 [http-nio-8080-exec-4] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Invalid username/email/phone or password]
+2026-06-27 12:14:21.976 [http-nio-8080-exec-6] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:14:21.977 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:21.983 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=1, AccountLocked=false
+2026-06-27 12:14:21.983 [http-nio-8080-exec-6] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-27 12:14:22.097 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=rajkumar1s231
+2026-06-27 12:14:22.097 [http-nio-8080-exec-6] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login failed. Invalid password. Username=rajkumar1s231
+2026-06-27 12:14:22.097 [http-nio-8080-exec-6] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Processing failed login. Username=rajkumar1s231
+2026-06-27 12:14:22.097 [http-nio-8080-exec-6] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempts updated. Username=rajkumar1s231, Attempts=2
+2026-06-27 12:14:22.111 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after failed login. UserId=2
+2026-06-27 12:14:22.123 [http-nio-8080-exec-6] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_FAILED, Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:22.134 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_FAILED
+2026-06-27 12:14:22.134 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempt recorded. Identifier=kumar.raj.prasad1415@gmail.com, Locked=false
+2026-06-27 12:14:22.137 [http-nio-8080-exec-6] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Invalid username/email/phone or password]
+2026-06-27 12:14:23.130 [http-nio-8080-exec-8] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:14:23.130 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:23.137 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=2, AccountLocked=false
+2026-06-27 12:14:23.138 [http-nio-8080-exec-8] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-27 12:14:23.240 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=rajkumar1s231
+2026-06-27 12:14:23.240 [http-nio-8080-exec-8] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login failed. Invalid password. Username=rajkumar1s231
+2026-06-27 12:14:23.240 [http-nio-8080-exec-8] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Processing failed login. Username=rajkumar1s231
+2026-06-27 12:14:23.240 [http-nio-8080-exec-8] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempts updated. Username=rajkumar1s231, Attempts=3
+2026-06-27 12:14:23.254 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after failed login. UserId=2
+2026-06-27 12:14:23.266 [http-nio-8080-exec-8] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_FAILED, Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:23.275 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_FAILED
+2026-06-27 12:14:23.275 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempt recorded. Identifier=kumar.raj.prasad1415@gmail.com, Locked=false
+2026-06-27 12:14:23.277 [http-nio-8080-exec-8] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Invalid username/email/phone or password]
+2026-06-27 12:14:24.160 [http-nio-8080-exec-10] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:14:24.161 [http-nio-8080-exec-10] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:24.167 [http-nio-8080-exec-10] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=3, AccountLocked=false
+2026-06-27 12:14:24.167 [http-nio-8080-exec-10] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-27 12:14:24.281 [http-nio-8080-exec-10] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=rajkumar1s231
+2026-06-27 12:14:24.281 [http-nio-8080-exec-10] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login failed. Invalid password. Username=rajkumar1s231
+2026-06-27 12:14:24.281 [http-nio-8080-exec-10] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Processing failed login. Username=rajkumar1s231
+2026-06-27 12:14:24.281 [http-nio-8080-exec-10] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempts updated. Username=rajkumar1s231, Attempts=4
+2026-06-27 12:14:24.296 [http-nio-8080-exec-10] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after failed login. UserId=2
+2026-06-27 12:14:24.305 [http-nio-8080-exec-10] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_FAILED, Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:24.316 [http-nio-8080-exec-10] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_FAILED
+2026-06-27 12:14:24.316 [http-nio-8080-exec-10] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempt recorded. Identifier=kumar.raj.prasad1415@gmail.com, Locked=false
+2026-06-27 12:14:24.319 [http-nio-8080-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Invalid username/email/phone or password]
+2026-06-27 12:14:25.255 [http-nio-8080-exec-2] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:14:25.256 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:25.261 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=4, AccountLocked=false
+2026-06-27 12:14:25.262 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-27 12:14:25.372 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=rajkumar1s231
+2026-06-27 12:14:25.372 [http-nio-8080-exec-2] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login failed. Invalid password. Username=rajkumar1s231
+2026-06-27 12:14:25.372 [http-nio-8080-exec-2] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Processing failed login. Username=rajkumar1s231
+2026-06-27 12:14:25.372 [http-nio-8080-exec-2] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempts updated. Username=rajkumar1s231, Attempts=5
+2026-06-27 12:14:25.372 [http-nio-8080-exec-2] ERROR c.c.service.Impl.AuthServiceImpl - [LOGIN] Account locked after maximum failed attempts. Username=rajkumar1s231
+2026-06-27 12:14:25.398 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after failed login. UserId=2
+2026-06-27 12:14:25.409 [http-nio-8080-exec-2] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=ACCOUNT_LOCKED, Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:25.421 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=ACCOUNT_LOCKED
+2026-06-27 12:14:25.421 [http-nio-8080-exec-2] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempt recorded. Identifier=kumar.raj.prasad1415@gmail.com, Locked=true
+2026-06-27 12:14:25.423 [http-nio-8080-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Invalid username/email/phone or password]
+2026-06-27 12:14:26.381 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:14:26.381 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:26.388 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=5, AccountLocked=true
+2026-06-27 12:14:26.388 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-27 12:14:26.388 [http-nio-8080-exec-3] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Account locked until 2026-06-27T12:29:25.382811. Username=rajkumar1s231
+2026-06-27 12:14:26.391 [http-nio-8080-exec-3] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Account locked until 2026-06-27T12:29:25.382811]
+2026-06-27 12:14:30.466 [http-nio-8080-exec-6] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:14:30.466 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:14:30.472 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=5, AccountLocked=true
+2026-06-27 12:14:30.472 [http-nio-8080-exec-6] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-27 12:14:30.472 [http-nio-8080-exec-6] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Account locked until 2026-06-27T12:29:25.382811. Username=rajkumar1s231
+2026-06-27 12:14:30.511 [http-nio-8080-exec-6] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Account locked until 2026-06-27T12:29:25.382811]
+2026-06-27 12:14:44.611 [http-nio-8080-exec-8] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=admin@cloudstorage.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:14:44.611 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=admin@cloudstorage.com
+2026-06-27 12:14:44.616 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=1, Username=admin, FailedAttempts=0, AccountLocked=false
+2026-06-27 12:14:44.616 [http-nio-8080-exec-8] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=admin
+2026-06-27 12:14:44.725 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=admin
+2026-06-27 12:14:44.725 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - Password verified successfully for username=admin
+2026-06-27 12:14:44.740 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after successful login. UserId=1
+2026-06-27 12:14:44.740 [http-nio-8080-exec-8] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Recording login attempt for unknown user. Identifier=admin@cloudstorage.com
+2026-06-27 12:14:44.752 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Successful login attempt saved. UserId=1
+2026-06-27 12:14:44.753 [http-nio-8080-exec-8] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_SUCCESS, Identifier=admin@cloudstorage.com
+2026-06-27 12:14:44.764 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_SUCCESS
+2026-06-27 12:14:44.900 [http-nio-8080-exec-8] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] JWT access and refresh tokens generated. UserId=1
+2026-06-27 12:14:44.934 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login completed successfully. UserId=1, Username=admin
+2026-06-27 12:14:44.936 [http-nio-8080-exec-8] INFO  c.c.controller.AuthController - [LOGIN] Login completed successfully., Username=admin
+2026-06-27 12:15:04.774 [http-nio-8080-exec-9] INFO  c.c.controller.AdminController - Received unlock user request for userId: 2
+2026-06-27 12:15:04.776 [http-nio-8080-exec-9] INFO  c.c.service.Impl.AdminServiceImpl - Unlock user request received for userId=2
+2026-06-27 12:15:04.781 [http-nio-8080-exec-9] INFO  c.c.service.Impl.AdminServiceImpl - Admin '1' is unlocking user 'kumar.raj.prasad1415@gmail.com' (userId=2)
+2026-06-27 12:15:04.782 [http-nio-8080-exec-9] INFO  c.c.service.Impl.AdminServiceImpl - User account unlocked successfully. userId=2, email=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:15:04.787 [http-nio-8080-exec-9] INFO  c.c.service.Impl.AdminServiceImpl - Audit log saved for unlock operation. userId=2, admin=1
+2026-06-27 12:15:04.798 [http-nio-8080-exec-9] INFO  c.c.controller.AdminController - User unlocked successfully for userId: 2
+2026-06-27 12:15:35.863 [http-nio-8080-exec-10] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.security.authorization.AuthorizationDeniedException: Access Denied]
+2026-06-27 12:15:44.279 [http-nio-8080-exec-1] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=admin@cloudstorage.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:15:44.280 [http-nio-8080-exec-1] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=admin@cloudstorage.com
+2026-06-27 12:15:44.285 [http-nio-8080-exec-1] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=1, Username=admin, FailedAttempts=0, AccountLocked=false
+2026-06-27 12:15:44.286 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=admin
+2026-06-27 12:15:44.381 [http-nio-8080-exec-1] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=admin
+2026-06-27 12:15:44.382 [http-nio-8080-exec-1] INFO  c.c.service.Impl.AuthServiceImpl - Password verified successfully for username=admin
+2026-06-27 12:15:44.395 [http-nio-8080-exec-1] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after successful login. UserId=1
+2026-06-27 12:15:44.395 [http-nio-8080-exec-1] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Recording login attempt for unknown user. Identifier=admin@cloudstorage.com
+2026-06-27 12:15:44.407 [http-nio-8080-exec-1] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Successful login attempt saved. UserId=1
+2026-06-27 12:15:44.407 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_SUCCESS, Identifier=admin@cloudstorage.com
+2026-06-27 12:15:44.417 [http-nio-8080-exec-1] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_SUCCESS
+2026-06-27 12:15:44.421 [http-nio-8080-exec-1] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] JWT access and refresh tokens generated. UserId=1
+2026-06-27 12:15:44.445 [http-nio-8080-exec-1] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login completed successfully. UserId=1, Username=admin
+2026-06-27 12:15:44.445 [http-nio-8080-exec-1] INFO  c.c.controller.AuthController - [LOGIN] Login completed successfully., Username=admin
+2026-06-27 12:16:44.357 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [LOGOUT] Logout request received. IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/logout
+2026-06-27 12:16:44.359 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGOUT] Logout process started.
+2026-06-27 12:16:44.372 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGOUT] Access token blacklisted successfully.
+2026-06-27 12:16:44.380 [http-nio-8080-exec-3] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGOUT] Refresh token found. TokenId=2, UserId=1
+2026-06-27 12:16:44.380 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGOUT] Refresh token revoked successfully. TokenId=2, UserId=1
+2026-06-27 12:16:44.381 [http-nio-8080-exec-3] INFO  c.c.service.Impl.AuthServiceImpl - [LOGOUT] Logout completed successfully. UserId=1
+2026-06-27 12:16:44.393 [http-nio-8080-exec-3] INFO  c.c.controller.AuthController - [LOGOUT] Logout completed successfully.
+2026-06-27 12:16:59.894 [http-nio-8080-exec-6] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:16:59.894 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:16:59.899 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=0, AccountLocked=false
+2026-06-27 12:16:59.899 [http-nio-8080-exec-6] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-27 12:17:00.003 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=rajkumar1s231
+2026-06-27 12:17:00.004 [http-nio-8080-exec-6] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login failed. Invalid password. Username=rajkumar1s231
+2026-06-27 12:17:00.004 [http-nio-8080-exec-6] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Processing failed login. Username=rajkumar1s231
+2026-06-27 12:17:00.004 [http-nio-8080-exec-6] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempts updated. Username=rajkumar1s231, Attempts=1
+2026-06-27 12:17:00.019 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after failed login. UserId=2
+2026-06-27 12:17:00.030 [http-nio-8080-exec-6] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_FAILED, Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:17:00.041 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_FAILED
+2026-06-27 12:17:00.041 [http-nio-8080-exec-6] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Failed login attempt recorded. Identifier=kumar.raj.prasad1415@gmail.com, Locked=false
+2026-06-27 12:17:00.043 [http-nio-8080-exec-6] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Invalid username/email/phone or password]
+2026-06-27 12:17:03.185 [http-nio-8080-exec-8] INFO  c.c.controller.AuthController - [LOGIN] Login request received. Identifier=kumar.raj.prasad1415@gmail.com, IP=0:0:0:0:0:0:0:1, URI=/api/v1/auth/login
+2026-06-27 12:17:03.185 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login process started. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:17:03.190 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User located. UserId=2, Username=rajkumar1s231, FailedAttempts=1, AccountLocked=false
+2026-06-27 12:17:03.190 [http-nio-8080-exec-8] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] Validating account status. Username=rajkumar1s231
+2026-06-27 12:17:03.296 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Password verified successfully. Username=rajkumar1s231
+2026-06-27 12:17:03.296 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - Password verified successfully for username=rajkumar1s231
+2026-06-27 12:17:03.310 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] User account updated after successful login. UserId=2
+2026-06-27 12:17:03.310 [http-nio-8080-exec-8] WARN  c.c.service.Impl.AuthServiceImpl - [LOGIN] Recording login attempt for unknown user. Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:17:03.320 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Successful login attempt saved. UserId=2
+2026-06-27 12:17:03.320 [http-nio-8080-exec-8] DEBUG c.c.service.Impl.AuthServiceImpl - [AUDIT] Saving audit log. Action=LOGIN_SUCCESS, Identifier=kumar.raj.prasad1415@gmail.com
+2026-06-27 12:17:03.333 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [AUDIT] Audit log saved successfully. Action=LOGIN_SUCCESS
+2026-06-27 12:17:03.336 [http-nio-8080-exec-8] DEBUG c.c.service.Impl.AuthServiceImpl - [LOGIN] JWT access and refresh tokens generated. UserId=2
+2026-06-27 12:17:03.355 [http-nio-8080-exec-8] INFO  c.c.service.Impl.AuthServiceImpl - [LOGIN] Login completed successfully. UserId=2, Username=rajkumar1s231
+2026-06-27 12:17:03.356 [http-nio-8080-exec-8] INFO  c.c.controller.AuthController - [LOGIN] Login completed successfully., Username=rajkumar1s231
+2026-06-27 12:17:43.852 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-27 12:17:43.859 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-06-27 12:17:43.866 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-27 12:17:43.874 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-27 12:17:43.880 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

@@ -5,11 +5,13 @@ import com.cloudFileStorageSystem.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -86,11 +88,69 @@ public class AdminController {
         log.info("[DISABLE_USER] User disabled successfully. UserId={}", id);
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User disabled successfully", request.getRequestURI(), response));
     }
+
     @DeleteMapping("/users/{id}")
     public ResponseEntity<ApiResponse<UsersResponse>> deleteUser(@PathVariable Long id, HttpServletRequest request) {
         log.info("[DELETE_USER] Delete user request received. UserId={}, IP={}, URI={}", id, request.getRemoteAddr(), request.getRequestURI());
         UsersResponse response = adminService.deleteUser(id);
         log.info("[DELETE_USER] User deleted successfully. UserId={}", id);
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "User deleted successfully", request.getRequestURI(), response));
+    }
+
+    @GetMapping("/audit-logs")
+    public ResponseEntity<ApiResponse<PageResponse<AuditLogResponse>>> getAuditLogs(
+
+            @RequestParam(required = false) String identifier,
+
+            @RequestParam(required = false) String action,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime startDate,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime endDate,
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "10") int size,
+
+            @RequestParam(defaultValue = "timestamp") String sortBy,
+
+            @RequestParam(defaultValue = "DESC") String direction,
+
+            HttpServletRequest request) {
+
+        log.info(
+                "[GET_AUDIT_LOGS] Request received. identifier={}, action={}, page={}, size={}, sortBy={}, direction={}",
+                identifier,
+                action,
+                page,
+                size,
+                sortBy,
+                direction);
+
+        PageResponse<AuditLogResponse> response =
+                adminService.getAuditLogs(
+                        identifier,
+                        action,
+                        startDate,
+                        endDate,
+                        page,
+                        size,
+                        sortBy,
+                        direction);
+
+        log.info(
+                "[GET_AUDIT_LOGS] Audit logs fetched successfully. TotalRecords={}",
+                response.getTotalElements());
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        HttpStatus.OK.value(),
+                        "Audit logs fetched successfully",
+                        request.getRequestURI(),
+                        response));
     }
 }

@@ -1,11 +1,9 @@
 package com.cloudFileStorageSystem.service;
 
-import com.cloudFileStorageSystem.dtos.response.AdminStatsResponse;
-import com.cloudFileStorageSystem.dtos.response.LockUserResponse;
-import com.cloudFileStorageSystem.dtos.response.UnlockUserResponse;
-import com.cloudFileStorageSystem.dtos.response.UsersResponse;
+import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.enums.Role;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AdminService {
@@ -27,4 +25,13 @@ public interface AdminService {
 
     AdminStatsResponse getAdminStats();
 
+    PageResponse<AuditLogResponse> getAuditLogs(
+            String identifier,
+            String action,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            int page,
+            int size,
+            String sortBy,
+            String direction);
 }

@@ -1,1 +1,15 @@
 2026-06-27 12:14:25.372 [http-nio-8080-exec-2] ERROR c.c.service.Impl.AuthServiceImpl - [LOGIN] Account locked after maximum failed attempts. Username=rajkumar1s231
+2026-06-29 10:53:04.109 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
