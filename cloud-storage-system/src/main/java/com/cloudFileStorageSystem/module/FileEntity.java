@@ -72,7 +72,7 @@ public class FileEntity extends AuditableEntity {
 
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
-    private Boolean deleted = false;
+    private Boolean isDeleted = false;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

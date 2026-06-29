@@ -2,7 +2,9 @@ package com.cloudFileStorageSystem.controller;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
 import com.cloudFileStorageSystem.dtos.response.ApiResponse;
+import com.cloudFileStorageSystem.dtos.response.FileMetadataResponse;
 import com.cloudFileStorageSystem.dtos.response.FileUploadResponse;
+import com.cloudFileStorageSystem.module.FileEntity;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.security.CustomUserDetailsService;
 import com.cloudFileStorageSystem.service.FileService;
@@ -10,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -77,5 +80,36 @@ public class FileController {
                         requestHttp.getRequestURI(),
                         response
                 ));
+    }
+
+    @GetMapping("/{fileId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<FileMetadataResponse>> getFileMetadata(
+            @PathVariable Long fileId) {
+
+        FileEntity file = fileService.getFileById(fileId);
+
+        FileMetadataResponse response = FileMetadataResponse.builder()
+                .fileId(file.getId())
+                .fileName(file.getOriginalName())
+                .fileType(file.getFileType())
+                .size(file.getFileSize())
+                .downloadUrl("/api/v1/files/" + file.getId() + "/download")
+                .build();
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        200,
+                        "File ready for download",
+                        "/api/v1/files/" + fileId,
+                        response
+                )
+        );
+    }
+
+    @GetMapping("/{fileId}/download")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {
+        return fileService.downloadFile(fileId);
     }
 }

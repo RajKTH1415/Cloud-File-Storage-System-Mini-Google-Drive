@@ -8,15 +8,29 @@ import com.cloudFileStorageSystem.module.FileEntity;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.FileRepository;
 import com.cloudFileStorageSystem.repository.UsersRepository;
+import com.cloudFileStorageSystem.security.CustomUserDetailsService;
+import com.cloudFileStorageSystem.security.CustomUserPrincipal;
 import com.cloudFileStorageSystem.service.FileService;
 import com.cloudFileStorageSystem.service.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -75,7 +89,7 @@ public class FileServiceImpl implements FileService {
                     .storagePath(storagePath)
                     .folderName(request.getFolderName())
                     .isPublic(Boolean.TRUE.equals(request.getIsPublic()))
-                    .deleted(false)
+                    .isDeleted(false)
                     .status(FileStatus.ACTIVE)
                     .category(FileCategory.OTHER)
                     .owner(owner)
@@ -118,6 +132,67 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    @Override
+    public FileEntity getFileById(Long fileId) {
+        return validateFile(fileId);
+    }
+
+
+    @Override
+    public ResponseEntity<Resource> downloadFile(Long fileId) {
+
+        FileEntity file = validateFile(fileId);
+
+        Path path = Paths.get(file.getStoragePath());
+
+        if (!Files.exists(path)) {
+            throw new RuntimeException("Physical file not found.");
+        }
+
+        Resource resource;
+        try {
+            resource = new UrlResource(path.toUri());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Unable to load file.");
+        }
+
+        String contentType;
+        try {
+            contentType = Files.probeContentType(path);
+        } catch (IOException e) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .contentLength(file.getFileSize())
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + file.getOriginalName() + "\""
+                )
+                .body(resource);
+    }
+
+
+    private FileEntity validateFile(Long fileId) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserPrincipal principal =
+                (CustomUserPrincipal) authentication.getPrincipal();
+
+        Long currentUserId = principal.getId();
+
+        FileEntity file = fileRepository.findByIdAndIsDeletedFalse(fileId)
+                .orElseThrow(() -> new RuntimeException("File not found"));
+
+        if (!file.getOwner().getId().equals(currentUserId)) {
+            throw new RuntimeException("You are not allowed to access this file.");
+        }
+
+        return file;
+    }
     private String getExtension(String fileName) {
 
         if (fileName == null || !fileName.contains(".")) {

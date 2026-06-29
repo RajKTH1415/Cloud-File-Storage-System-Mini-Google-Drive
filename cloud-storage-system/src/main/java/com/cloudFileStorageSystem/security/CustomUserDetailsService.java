@@ -6,6 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -39,15 +42,12 @@ public class CustomUserDetailsService implements UserDetailsService {
                         new UsernameNotFoundException("User not found")
                 );
 
-        return org.springframework.security.core.userdetails.User
-                .builder()
-                .username(user.getId().toString())
-                .password(user.getPassword())
-                .authorities(
-                        new SimpleGrantedAuthority(
-                                "ROLE_" + user.getRole().name()
-                        )
-                )
-                .build();
+        return new CustomUserPrincipal(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                List.of(new SimpleGrantedAuthority(
+                        "ROLE_" + user.getRole().name()))
+        );
     }
 }
