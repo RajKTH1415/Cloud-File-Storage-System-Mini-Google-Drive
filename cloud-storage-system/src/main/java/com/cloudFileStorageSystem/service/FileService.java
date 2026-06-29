@@ -34,4 +34,11 @@ public interface FileService {
             String sortBy,
             String direction
     );
+
+    PageResponse<FileSummaryResponse> getTrashFiles(
+            int page,
+            int size,
+            String sortBy,
+            String direction
+    );
 }

@@ -314,6 +314,55 @@ public class FileServiceImpl implements FileService {
                 .build();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<FileSummaryResponse> getTrashFiles(int page, int size, String sortBy, String direction) {
+
+        Long currentUserId = authenticationUtil.getCurrentUserId();
+
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<FileEntity> filePage =
+                fileRepository.findByOwnerIdAndIsDeletedTrue(
+                        currentUserId,
+                        pageable
+                );
+
+        List<FileSummaryResponse> content =
+                filePage.getContent()
+                        .stream()
+                        .map(file -> FileSummaryResponse.builder()
+                                .fileId(file.getId())
+                                .fileName(file.getOriginalName())
+                                .fileType(file.getFileType())
+                                .fileSize(file.getFileSize())
+                                .folderName(file.getFolderName())
+                                .isPublic(file.getIsPublic())
+                                .status(file.getStatus())
+                                .uploadedAt(file.getCreatedAt())
+                                .build())
+                        .toList();
+
+        return PageResponse.<FileSummaryResponse>builder()
+                .content(content)
+                .page(filePage.getNumber())
+                .size(filePage.getSize())
+                .totalElements(filePage.getTotalElements())
+                .totalPages(filePage.getTotalPages())
+                .numberOfElements(filePage.getNumberOfElements())
+                .first(filePage.isFirst())
+                .last(filePage.isLast())
+                .hasNext(filePage.hasNext())
+                .hasPrevious(filePage.hasPrevious())
+                .sortBy(sortBy)
+                .direction(direction)
+                .build();
+    }
+
     private FileEntity validateFile(Long fileId) {
 
         Authentication authentication =
@@ -342,20 +391,4 @@ public class FileServiceImpl implements FileService {
         return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
     }
 
-
-//    private Long getCurrentUserId() {
-//
-//        Authentication authentication =
-//                SecurityContextHolder.getContext().getAuthentication();
-//
-//        if (authentication == null || authentication.getPrincipal() == null) {
-//            throw new RuntimeException("User is not authenticated.");
-//        }
-//
-//        if (!(authentication.getPrincipal() instanceof CustomUserPrincipal principal)) {
-//            throw new RuntimeException("Invalid authentication principal.");
-//        }
-//
-//        return principal.getId();
-//    }
 }

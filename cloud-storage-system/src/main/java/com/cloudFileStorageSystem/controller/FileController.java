@@ -140,4 +140,23 @@ public class FileController {
 
         return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Files fetched successfully.", request.getRequestURI(), response));
     }
+
+    @GetMapping("/trash")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<PageResponse<FileSummaryResponse>>> getTrashFiles(
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "10") int size,
+
+            @RequestParam(defaultValue = "deletedAt") String sortBy,
+
+            @RequestParam(defaultValue = "desc") String direction,
+
+            HttpServletRequest request) {
+
+        PageResponse<FileSummaryResponse> response = fileService.getTrashFiles(page, size, sortBy, direction);
+
+        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Trash files fetched successfully.", request.getRequestURI(), response));
+    }
 }

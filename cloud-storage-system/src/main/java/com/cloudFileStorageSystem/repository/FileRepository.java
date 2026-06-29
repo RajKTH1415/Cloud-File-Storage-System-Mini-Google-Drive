@@ -35,4 +35,9 @@ public interface FileRepository extends JpaRepository<FileEntity,Long> {
             Long ownerId,
             Pageable pageable
     );
+
+    Page<FileEntity> findByOwnerIdAndIsDeletedTrue(
+            Long ownerId,
+            Pageable pageable
+    );
 }
