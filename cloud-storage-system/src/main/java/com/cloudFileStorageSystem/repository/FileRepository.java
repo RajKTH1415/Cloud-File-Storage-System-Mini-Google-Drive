@@ -14,6 +14,12 @@ import java.util.Optional;
 public interface FileRepository extends JpaRepository<FileEntity,Long> {
 
 
-    @Query("SELECT f FROM FileEntity f JOIN FETCH f.owner WHERE f.id = :id")
+    @Query("""
+       SELECT f
+       FROM FileEntity f
+       JOIN FETCH f.owner
+       WHERE f.id = :id
+       AND f.isDeleted = false
+       """)
     Optional<FileEntity> findByIdAndIsDeletedFalse(Long id);
 }

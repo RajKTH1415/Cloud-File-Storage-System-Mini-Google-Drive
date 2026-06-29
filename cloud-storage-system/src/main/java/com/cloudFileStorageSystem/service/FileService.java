@@ -1,6 +1,7 @@
 package com.cloudFileStorageSystem.service;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
+import com.cloudFileStorageSystem.dtos.response.DeleteFileResponse;
 import com.cloudFileStorageSystem.dtos.response.FileUploadResponse;
 import com.cloudFileStorageSystem.module.FileEntity;
 import com.cloudFileStorageSystem.module.Users;
@@ -19,4 +20,6 @@ public interface FileService {
     FileEntity getFileById(Long fileId);
 
     ResponseEntity<Resource> downloadFile(Long fileId);
+
+    DeleteFileResponse deleteFile(Long fileId);
 }

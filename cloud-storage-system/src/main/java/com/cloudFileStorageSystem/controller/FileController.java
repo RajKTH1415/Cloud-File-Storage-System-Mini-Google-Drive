@@ -2,11 +2,13 @@ package com.cloudFileStorageSystem.controller;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
 import com.cloudFileStorageSystem.dtos.response.ApiResponse;
+import com.cloudFileStorageSystem.dtos.response.DeleteFileResponse;
 import com.cloudFileStorageSystem.dtos.response.FileMetadataResponse;
 import com.cloudFileStorageSystem.dtos.response.FileUploadResponse;
 import com.cloudFileStorageSystem.module.FileEntity;
 import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.security.CustomUserDetailsService;
+import com.cloudFileStorageSystem.security.CustomUserPrincipal;
 import com.cloudFileStorageSystem.service.FileService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +52,10 @@ public class FileController {
             HttpServletRequest requestHttp
     ) {
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long userId = Long.valueOf(userDetails.getUsername());
+        CustomUserPrincipal principal =
+                (CustomUserPrincipal) authentication.getPrincipal();
 
+        Long userId = principal.getId();
         log.info(
                 "[FILE_UPLOAD] Upload request received. UserId={}, FileName={}, Size={} bytes, Folder={}, IP={}, URI={}",
                 userId,
@@ -97,19 +100,19 @@ public class FileController {
                 .downloadUrl("/api/v1/files/" + file.getId() + "/download")
                 .build();
 
-        return ResponseEntity.ok(
-                ApiResponse.success(
-                        200,
-                        "File ready for download",
-                        "/api/v1/files/" + fileId,
-                        response
-                )
-        );
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "File ready for download", "/api/v1/files/" + fileId, response));
     }
 
     @GetMapping("/{fileId}/download")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {
         return fileService.downloadFile(fileId);
+    }
+
+    @DeleteMapping("/{fileId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<DeleteFileResponse>> deleteFile(@PathVariable Long fileId, HttpServletRequest httpServletRequest) {
+        DeleteFileResponse deleteFileResponse =  fileService.deleteFile(fileId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File deleted successfully.", httpServletRequest.getRequestURI()+ fileId, deleteFileResponse));
     }
 }

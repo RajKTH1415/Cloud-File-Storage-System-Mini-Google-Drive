@@ -1,6 +1,7 @@
 package com.cloudFileStorageSystem.service.Impl;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
+import com.cloudFileStorageSystem.dtos.response.DeleteFileResponse;
 import com.cloudFileStorageSystem.dtos.response.FileUploadResponse;
 import com.cloudFileStorageSystem.enums.FileCategory;
 import com.cloudFileStorageSystem.enums.FileStatus;
@@ -31,6 +32,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -173,6 +175,38 @@ public class FileServiceImpl implements FileService {
                 .body(resource);
     }
 
+    @Override
+    @Transactional
+    public DeleteFileResponse deleteFile(Long fileId) {
+
+        FileEntity file = validateFile(fileId);
+
+        Path path = Paths.get(file.getStoragePath());
+
+        try {
+            System.out.println("Deleting file: " + path);
+            System.out.println("Exists before delete: " + Files.exists(path));
+
+            boolean deleted = Files.deleteIfExists(path);
+
+            System.out.println("Deleted: " + deleted);
+            System.out.println("Exists after delete: " + Files.exists(path));
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to delete file.");
+        }
+
+        file.setIsDeleted(true);
+        file.setStatus(FileStatus.DELETED);
+
+        fileRepository.save(file);
+
+        return DeleteFileResponse.builder()
+                .fileId(file.getId())
+                .fileName(file.getOriginalName())
+                .status(FileStatus.DELETED)
+                .deletedAt(file.getDeletedAt())
+                .build();
+    }
 
     private FileEntity validateFile(Long fileId) {
 
