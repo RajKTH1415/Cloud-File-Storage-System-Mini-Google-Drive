@@ -433,6 +433,63 @@ public class FileServiceImpl implements FileService {
                 .build();
     }
 
+    @Override
+    public PageResponse<FileListResponse> searchFiles(
+            String keyword,
+            int page,
+            int size,
+            String sortBy,
+            String direction) {
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+            throw new RuntimeException("Search keyword is required.");
+        }
+
+        Long ownerId = authenticationUtil.getCurrentUserId();
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<FileEntity> files =
+                fileRepository.searchFiles(
+                        ownerId,
+                        keyword.trim(),
+                        pageable
+                );
+
+        List<FileListResponse> content =
+                files.getContent()
+                        .stream()
+                        .map(file -> FileListResponse.builder()
+                                .fileId(file.getId())
+                                .fileName(file.getOriginalName())
+                                .fileType(file.getFileType())
+                                .fileSize(file.getFileSize())
+                                .folderName(file.getFolderName())
+                                .isPublic(file.getIsPublic())
+                                .status(file.getStatus())
+                                .uploadedAt(file.getCreatedAt())
+                                .build())
+                        .toList();
+
+        return PageResponse.<FileListResponse>builder()
+                .content(content)
+                .page(files.getNumber())
+                .size(files.getSize())
+                .totalElements(files.getTotalElements())
+                .totalPages(files.getTotalPages())
+                .numberOfElements(files.getNumberOfElements())
+                .first(files.isFirst())
+                .last(files.isLast())
+                .hasNext(files.hasNext())
+                .hasPrevious(files.hasPrevious())
+                .sortBy(sortBy)
+                .direction(direction)
+                .build();
+    }
     private FileEntity validateDeletedFile(Long fileId) {
 
         Long currentUserId = authenticationUtil.getCurrentUserId();

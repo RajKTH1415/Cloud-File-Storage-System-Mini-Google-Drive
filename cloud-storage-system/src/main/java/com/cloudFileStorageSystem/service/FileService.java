@@ -48,4 +48,12 @@ public interface FileService {
 
 
     MoveFileResponse moveFile(Long fileId, MoveFileRequest request);
+
+    PageResponse<FileListResponse> searchFiles(
+            String keyword,
+            int page,
+            int size,
+            String sortBy,
+            String direction
+    );
 }

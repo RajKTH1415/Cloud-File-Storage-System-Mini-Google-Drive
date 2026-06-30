@@ -169,4 +169,25 @@ public class FileController {
         MoveFileResponse response = fileService.moveFile(fileId, request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File moved successfully.", httpRequest.getRequestURI(), response));
     }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<PageResponse<FileListResponse>>> searchFiles(
+
+            @RequestParam String keyword,
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "10") int size,
+
+            @RequestParam(defaultValue = "originalName") String sortBy,
+
+            @RequestParam(defaultValue = "asc") String direction,
+
+            HttpServletRequest request) {
+
+        PageResponse<FileListResponse> response = fileService.searchFiles(keyword, page, size, sortBy, direction);
+
+        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "Files found successfully.", request.getRequestURI(), response));
+    }
 }
