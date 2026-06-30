@@ -3,7 +3,6 @@ package com.cloudFileStorageSystem.service;
 import com.cloudFileStorageSystem.dtos.request.*;
 import com.cloudFileStorageSystem.dtos.response.*;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

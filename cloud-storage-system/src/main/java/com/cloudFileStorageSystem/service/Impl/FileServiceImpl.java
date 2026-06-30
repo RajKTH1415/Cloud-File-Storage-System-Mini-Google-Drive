@@ -1,6 +1,7 @@
 package com.cloudFileStorageSystem.service.Impl;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
+import com.cloudFileStorageSystem.dtos.request.MoveFileRequest;
 import com.cloudFileStorageSystem.dtos.request.RenameFileRequest;
 import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.enums.FileCategory;
@@ -10,7 +11,6 @@ import com.cloudFileStorageSystem.module.Users;
 import com.cloudFileStorageSystem.repository.FileRepository;
 import com.cloudFileStorageSystem.repository.UsersRepository;
 import com.cloudFileStorageSystem.security.AuthenticationUtil;
-import com.cloudFileStorageSystem.security.CustomUserDetailsService;
 import com.cloudFileStorageSystem.security.CustomUserPrincipal;
 import com.cloudFileStorageSystem.service.FileService;
 import com.cloudFileStorageSystem.service.StorageService;
@@ -27,7 +27,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +38,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -385,9 +385,12 @@ public class FileServiceImpl implements FileService {
 
         Path path = Paths.get(file.getStoragePath());
 
+
         try {
-            Files.deleteIfExists(path);
+           Files.deleteIfExists(path);
+
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException("Unable to delete physical file.");
         }
 
@@ -398,6 +401,35 @@ public class FileServiceImpl implements FileService {
                 .fileName(file.getOriginalName())
                 .deletedAt(LocalDateTime.now())
                 .message("File permanently deleted successfully.")
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public MoveFileResponse moveFile(
+            Long fileId,
+            MoveFileRequest request) {
+
+        FileEntity file = validateFile(fileId);
+
+        String oldFolder = file.getFolderName();
+
+        String newFolder = request.getFolderName().trim();
+
+        if (oldFolder != null && oldFolder.equalsIgnoreCase(newFolder)) {
+            throw new RuntimeException("File is already in this folder.");
+        }
+
+        file.setFolderName(newFolder);
+
+        file = fileRepository.save(file);
+
+        return MoveFileResponse.builder()
+                .fileId(file.getId())
+                .fileName(file.getOriginalName())
+                .oldFolder(oldFolder)
+                .newFolder(file.getFolderName())
+                .updatedAt(file.getUpdatedAt())
                 .build();
     }
 
@@ -425,9 +457,9 @@ public class FileServiceImpl implements FileService {
                 SecurityContextHolder.getContext().getAuthentication();
 
         CustomUserPrincipal principal =
-                (CustomUserPrincipal) authentication.getPrincipal();
+                (CustomUserPrincipal) Objects.requireNonNull(authentication).getPrincipal();
 
-        Long currentUserId = principal.getId();
+        Long currentUserId = Objects.requireNonNull(principal).getId();
 
         FileEntity file = fileRepository.findByIdAndIsDeletedFalse(fileId)
                 .orElseThrow(() -> new RuntimeException("File not found"));

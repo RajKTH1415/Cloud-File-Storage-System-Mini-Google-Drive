@@ -1,10 +1,10 @@
 package com.cloudFileStorageSystem.service;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
+import com.cloudFileStorageSystem.dtos.request.MoveFileRequest;
 import com.cloudFileStorageSystem.dtos.request.RenameFileRequest;
 import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.module.FileEntity;
-import com.cloudFileStorageSystem.module.Users;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,4 +45,7 @@ public interface FileService {
     RestoreFileResponse restoreFile(Long fileId);
 
     PermanentDeleteResponse permanentDeleteFile(Long fileId);
+
+
+    MoveFileResponse moveFile(Long fileId, MoveFileRequest request);
 }

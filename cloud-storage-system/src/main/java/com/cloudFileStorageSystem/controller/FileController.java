@@ -1,11 +1,11 @@
 package com.cloudFileStorageSystem.controller;
 
 import com.cloudFileStorageSystem.dtos.request.FileUploadRequest;
+import com.cloudFileStorageSystem.dtos.request.MoveFileRequest;
 import com.cloudFileStorageSystem.dtos.request.RenameFileRequest;
 import com.cloudFileStorageSystem.dtos.response.*;
 import com.cloudFileStorageSystem.module.FileEntity;
 import com.cloudFileStorageSystem.security.AuthenticationUtil;
-import com.cloudFileStorageSystem.security.CustomUserPrincipal;
 import com.cloudFileStorageSystem.service.FileService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -15,7 +15,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -162,5 +161,12 @@ public class FileController {
     public ResponseEntity<ApiResponse<PermanentDeleteResponse>> permanentDeleteFile(@PathVariable Long fileId, HttpServletRequest request) {
         PermanentDeleteResponse response = fileService.permanentDeleteFile(fileId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File permanently deleted successfully.", request.getRequestURI(), response));
+    }
+
+    @PatchMapping("/{fileId}/move")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<MoveFileResponse>> moveFile(@PathVariable Long fileId, @Valid @RequestBody MoveFileRequest request, HttpServletRequest httpRequest) {
+        MoveFileResponse response = fileService.moveFile(fileId, request);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(HttpStatus.OK.value(), "File moved successfully.", httpRequest.getRequestURI(), response));
     }
 }

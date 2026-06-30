@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface PasswordHistoryRepository extends JpaRepository<PasswordHistory, Long> {
 
-//    List<PasswordHistory> findTop5ByEmailOrderByChangedAtDesc(String email);
 
     List<PasswordHistory> findTop5ByUserIdOrderByChangedAtDesc(String userId);
 }

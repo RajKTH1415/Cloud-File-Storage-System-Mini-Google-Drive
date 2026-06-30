@@ -1,12 +1,8 @@
 package com.cloudFileStorageSystem.service.Impl;
 
-import com.cloudFileStorageSystem.enums.AttemptStatus;
 import com.cloudFileStorageSystem.module.AuditLog;
-import com.cloudFileStorageSystem.module.LoginAttempt;
 import com.cloudFileStorageSystem.repository.AuditLogRepository;
-import com.cloudFileStorageSystem.repository.LoginAttemptRepository;
 import com.cloudFileStorageSystem.service.AuditService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
